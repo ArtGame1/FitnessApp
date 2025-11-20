@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="red">#F75564</color>
+    <color name="red_dark">#FF0000</color>
+    <color name="blue_grey">#2E4058</color>
+    <color name="grey">#F5F5F5</color>
+    <color name="green">#4CAF50</color>
+    <color name="menuColor">#62A2E3</color>
+    <color name="purple_500">#FF6200EE</color>
+    <color name="gray">#939191</color>
+    <color name="colorAccent">#FF3A5C</color>
+    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimaryDark">#303F9F</color>
+
+    <!-- Основные цвета -->
+    <color name="colorPrimary1">#E53935</color>
+    <color name="colorPrimaryDark1">#B71C1C</color>
+    <color name="colorAccent1">#FF5252</color>
+    <color name="white1">#FFFFFF</color>
+    <color name="black1">#000000</color>
+    <color name="light_gray">#F5F5F5</color>
+
+    <!-- Цвета для ночного режима -->
+    <color name="colorAccentNight">#FF6E6E</color>
+    <color name="dark_background">#121212</color>
+    <color name="dark_surface">#1E1E1E</color>
+    <color name="gray_light">#B0B0B0</color>
+</resources>

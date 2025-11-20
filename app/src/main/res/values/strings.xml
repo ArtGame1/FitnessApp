@@ -1,0 +1,50 @@
+<resources>
+    <string name="app_name">FitnessApp</string>
+    <string name="username">Имя пользователя</string>
+    <string name="password">Пароль</string>
+    <string name="login">Войти</string>
+    <string name="register">Регистрация</string>
+    <string name="app">App</string>
+    <string name="login1">Логин</string>
+    <string name="forget_pass">Забыли пароль?</string>
+    <string name="pass">Пароль</string>
+    <string name="email">Email почта</string>
+    <string name="or">OR</string>
+    <string name="fitness">Fitness</string>
+    <string name="sign_up">Зарегистрироваться</string>
+    <string name="you_aren_t_a_user">Вы не пользователь?</string>
+    <string name="log">Войти</string>
+    <string name="signUp">Зарегистрироваться</string>
+    <string name="are_you_member">Вы являетесь участником?</string>
+    <string name="logg">Авторизоваться</string>
+    <string name="name">Имя пользователя</string>
+    <string name="workout">Тренировки</string>
+    <string name="user_account">Учетная запись</string>
+    <string name="users">Управление пользователями</string>
+    <string name="user_management">Управление Пользователями</string>
+    <string name="add_new_user">Добавить нового пользователя</string>
+    <string name="name_user">Имя пользователя</string>
+    <string name="email_user">Email пользователя</string>
+    <string name="password_user">Пароль</string>
+    <string name="list_users">Список пользователей</string>
+    <string name="add_user">Добавить пользователя</string>
+    <string name="start">Start</string>
+    <string name="stop">Stop</string>
+    <string name="lastname_user">Фамилия пользователя</string>
+    <string name="facebook_app_id">YOUR_FACEBOOK_APP_ID</string>
+    <string name="facebook_client_token">YOUR_FACEBOOK_CLIENT_TOKEN</string>
+    <string name="open_navigation_drawer">Open navigation drawer</string>
+
+
+    <string name="openNavigationDrawer">Открыть меню навигации</string>
+    <string name="notifications">Уведомления</string>
+    <string name="search_hint">Поиск тренировок...</string>
+
+    <string name="search">Поиск</string>
+
+    <!-- Дополнительные строки для других иконок -->
+    <string name="home">Главная</string>
+    <string name="profile">Профиль</string>
+    <string name="settings">Настройки</string>
+    <string name="about">О приложении</string>
+</resources>

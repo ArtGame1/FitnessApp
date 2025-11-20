@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:fitsSystemWindows="true"
+    tools:context=".activities.ExerciseActivity">
+
+    <ImageView
+        android:id="@+id/backExerciseImageView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"/>
+
+    <RelativeLayout
+        android:id="@+id/topBar"
+        android:background="@color/menuColor"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_alignParentTop="true">
+        <ImageView
+            android:id="@+id/btnBackArrow"
+            android:src="@drawable/baseline_arrow_circle_left_24"
+            android:layout_width="60dp"
+            android:layout_height="60dp"/>
+        <TextView
+            android:id="@+id/textViewDayOfExercise"
+            android:text="Day 0"
+            android:textColor="@color/black"
+            android:textSize="26sp"
+            android:layout_centerInParent="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+    </RelativeLayout>
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="350dp"
+        android:layout_height="450dp"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/topBar"
+        android:layout_marginTop="15dp"
+        android:indeterminateOnly="false"
+        android:rotation="270"
+        android:progressDrawable="@drawable/custom_progress_bar"/>
+
+    <TextView
+        android:id="@+id/textViewTimer"
+        android:text="30"
+        android:textSize="75sp"
+        android:textColor="@color/white"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@id/progressBar"
+        android:layout_alignBottom="@id/progressBar"
+        android:layout_alignLeft="@id/progressBar"
+        android:layout_alignRight="@id/progressBar"
+        android:gravity="center"/>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btnStartTimer"
+        android:text="@string/start"
+        android:textSize="36sp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="80dp"
+        android:layout_marginTop="5dp"
+        android:padding="15dp"
+        android:background="@drawable/button_grey_stroke"
+        android:elevation="8dp"
+        android:translationZ="4dp"
+        android:backgroundTint="#FFFFFF"
+        android:textColor="#000000"/>
+
+    <EditText
+        android:id="@+id/editTextTimeInput"
+        android:layout_width="190dp"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_above="@id/btnStartTimer"
+        android:hint="Введите секунды"
+        android:textColor="#4D000000"
+        android:inputType="number"
+        android:textSize="20sp"
+        android:layout_marginBottom="20dp"
+        android:layout_marginTop="10dp"
+        android:padding="10dp"
+        android:background="@drawable/edittext_background"/>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btnSetTimer"
+        android:text="Установить время"
+        android:textSize="20sp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_above="@id/editTextTimeInput"
+        android:layout_marginBottom="10dp"
+        android:padding="10dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/button_grey_stroke"
+        android:elevation="8dp"
+        android:translationZ="4dp"
+        android:backgroundTint="#FFFFFF"
+        android:textColor="#000000"/>
+</RelativeLayout>

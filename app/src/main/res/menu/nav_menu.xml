@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_my_profile"
+            android:icon="@drawable/ic_person"
+            android:title="Мой профиль"/>
+        <item
+            android:id="@+id/nav_workouts"
+            android:icon="@drawable/ic_workout"
+            android:title="Тренировки"/>
+        <item
+            android:id="@+id/nav_statistics"
+            android:icon="@drawable/ic_statistics"
+            android:title="Статистика"/>
+        <item
+            android:id="@+id/nav_settings"
+            android:icon="@drawable/ic_settings"
+            android:title="Настройки"/>
+    </group>
+
+    <group android:checkableBehavior="none">
+        <item
+            android:id="@+id/nav_night_mode"
+            android:icon="@drawable/ic_night"
+            android:title="Ночной режим"/>
+        <item
+            android:id="@+id/nav_achievements"
+            android:icon="@drawable/ic_achievement"
+            android:title="Достижения"/>
+        <item
+            android:id="@+id/nav_friends"
+            android:icon="@drawable/ic_friends"
+            android:title="Друзья"/>
+        <item
+            android:id="@+id/nav_support"
+            android:icon="@drawable/ic_support"
+            android:title="Поддержка"/>
+    </group>
+
+    <!-- Версия приложения -->
+    <group android:checkableBehavior="none">
+        <item
+            android:id="@+id/nav_version"
+            android:title="FitnessApp v1.0.0"
+            android:enabled="false"/>
+    </group>
+
+</menu>

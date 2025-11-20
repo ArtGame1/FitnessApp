@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<animation-list xmlns:android="http://schemas.android.com/apk/res/android"
+    android:oneshot="false">
+    <item android:drawable="@drawable/neo_butt_bridge_a" android:duration="200"/>
+    <item android:drawable="@drawable/neo_butt_bridge_b" android:duration="200"/>
+    <item android:drawable="@drawable/neo_butt_bridge_b" android:duration="200"/>
+</animation-list>

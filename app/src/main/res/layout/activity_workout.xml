@@ -1,0 +1,674 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/scrollView"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    
+    <LinearLayout
+        android:id="@+id/workoutsContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:background="@color/menuColor"
+            android:layout_width="match_parent"
+            android:layout_height="55dp">
+            <ImageView
+                android:id="@+id/btnBackArrowWorkout"
+                android:src="@drawable/baseline_arrow_circle_left_24"
+                android:layout_width="60dp"
+                android:layout_height="60dp"/>
+            <TextView
+                android:id="@+id/textViewDayOfExercise"
+                android:text="Программа тренировок"
+                android:textColor="@color/black"
+                android:textSize="22sp"
+                android:layout_centerInParent="true"
+                android:textAlignment="center"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+            <ImageView
+                android:id="@+id/btnMenu"
+                android:src="@drawable/ic_move_vert"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_alignParentEnd="true"
+                android:padding="12dp"/>
+        </RelativeLayout>
+
+        <!-- Карточка 1 - Running -->
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            app:cardCornerRadius="8dp"
+            app:cardElevation="4dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:id="@+id/cardViewRunning">
+            
+            <LinearLayout
+                android:id="@+id/arrowRunning"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="16dp"
+                android:gravity="center_vertical">
+                
+                <ImageView
+                    android:id="@+id/fitnessIcon1"
+                    android:layout_width="64dp"
+                    android:layout_height="64dp"
+                    android:src="@drawable/bent_leg_twist_animation"
+                    android:contentDescription="Fitness Icon"
+                    android:scaleType="centerCrop"/>
+                
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+                    
+                    <TextView
+                        android:id="@+id/fitnessTitle1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Скручивание согнутой ноги"
+                        android:textSize="18sp"
+                        android:textColor="@color/black"/>
+                    
+                    <TextView
+                        android:id="@+id/fitnessDescription1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Описание упражнения"
+                        android:textSize="14sp"
+                        android:textColor="@color/blue_grey"
+                        android:maxLines="2"
+                        android:ellipsize="end"/>
+                </LinearLayout>
+                <!--
+                <ImageButton
+                    android:id="@+id/arrowRunning"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/baseline_arrow_circle_right_24"
+                    android:background="@android:color/transparent"
+                    android:contentDescription="Перейти к упражнению"/>
+                    -->
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <!-- Карточка 2: Push-ups -->
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            app:cardCornerRadius="8dp"
+            app:cardElevation="4dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:id="@+id/cardViewPushUps">
+            
+            <LinearLayout
+                android:id="@+id/arrowPushUps"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="16dp"
+                android:layout_gravity="center_vertical">
+                
+                <ImageView
+                    android:id="@+id/fitnessIcon2"
+                    android:layout_width="64dp"
+                    android:layout_height="64dp"
+                    android:src="@drawable/bicycle_crunches_animation"
+                    android:contentDescription="Fitness Icon"
+                    android:scaleType="centerCrop"/>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+                    
+                    <TextView
+                        android:id="@+id/fitnessTitle2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Велосипедные скручивания"
+                        android:textSize="18sp"
+                        android:textColor="@color/black"/>
+                    
+                    <TextView
+                        android:id="@+id/fitnessDescription2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Описание упражнения"
+                        android:textSize="14sp"
+                        android:textColor="@color/blue_grey"
+                        android:maxLines="2"
+                        android:ellipsize="end"/>
+                </LinearLayout>
+                <!--
+                <ImageButton
+                    android:id="@+id/arrowPushUps"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/baseline_arrow_circle_right_24"
+                    android:background="@android:color/transparent"
+                    android:contentDescription="Перейти к упражнению"/>
+                    -->
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+
+        <!-- Карточка 3: Squats -->
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            app:cardCornerRadius="8dp"
+            app:cardElevation="4dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:id="@+id/cardViewSquats">
+
+            <LinearLayout
+                android:id="@+id/arrowSquats"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="16dp"
+                android:layout_gravity="center_vertical">
+
+                <ImageView
+                    android:id="@+id/fitnessIcon3"
+                    android:layout_width="64dp"
+                    android:layout_height="64dp"
+                    android:src="@drawable/butt_bridge_animation"
+                    android:contentDescription="Fitness Icon"
+                    android:scaleType="centerCrop"/>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/fitnessTitle3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Ягодичный мостик"
+                        android:textSize="18sp"
+                        android:textColor="@color/black"/>
+
+                    <TextView
+                        android:id="@+id/fitnessDescription3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Описание упражнения"
+                        android:textSize="14sp"
+                        android:textColor="@color/blue_grey"
+                        android:maxLines="2"
+                        android:ellipsize="end"/>
+                </LinearLayout>
+                <!--
+                <ImageButton
+                    android:id="@+id/arrowSquats"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/baseline_arrow_circle_right_24"
+                    android:background="@android:color/transparent"
+                    android:contentDescription="Перейти к упражнению"/>
+                    -->
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <!-- Карточка 4: Plank -->
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            app:cardCornerRadius="8dp"
+            app:cardElevation="4dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:id="@+id/cardViewPlank">
+
+            <LinearLayout
+                android:id="@+id/arrowPlank"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="16dp"
+                android:layout_gravity="center_vertical">
+
+                <ImageView
+                    android:id="@+id/fitnessIcon4"
+                    android:layout_width="64dp"
+                    android:layout_height="64dp"
+                    android:src="@drawable/plunk_animation"
+                    android:contentDescription="Fitness Icon"
+                    android:scaleType="centerCrop"/>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/fitnessTitle4"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Планка"
+                        android:textSize="18sp"
+                        android:textColor="@color/black"/>
+
+                    <TextView
+                        android:id="@+id/fitnessDescription4"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Описание упражнения"
+                        android:textSize="14sp"
+                        android:textColor="@color/blue_grey"
+                        android:maxLines="2"
+                        android:ellipsize="end"/>
+                </LinearLayout>
+                <!--
+                <ImageButton
+                    android:id="@+id/arrowPlank"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/arrow_right"
+                    android:background="@android:color/transparent"
+                    android:contentDescription="Перейти к упражнению"/>
+                    -->
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+
+        <!-- Карточка 5: Jumping jacks -->
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            app:cardCornerRadius="8dp"
+            app:cardElevation="4dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:id="@+id/cardViewJumpingJacks">
+
+            <LinearLayout
+                android:id="@+id/arrowJumpingJacks"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="16dp"
+                android:layout_gravity="center_vertical">
+
+                <ImageView
+                    android:id="@+id/fitnessIcon5"
+                    android:layout_width="64dp"
+                    android:layout_height="64dp"
+                    android:src="@drawable/clapping_crunches_animation"
+                    android:contentDescription="Fitness Icon"
+                    android:scaleType="centerCrop"/>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/fitnessTitle5"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Скручивания с хлопком"
+                        android:textSize="18sp"
+                        android:textColor="@color/black"/>
+
+                    <TextView
+                        android:id="@+id/fitnessDescription5"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Описание упражнения"
+                        android:textSize="14sp"
+                        android:textColor="@color/blue_grey"
+                        android:maxLines="2"
+                        android:ellipsize="end"/>
+                </LinearLayout>
+                <!-->
+                <ImageButton
+                    android:id="@+id/arrowJumpingJacks"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/arrow_right"
+                    android:background="@android:color/transparent"
+                    android:contentDescription="Перейти к упражнению"/>
+                    -->
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <!-- Карточка 6: Lunges -->
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            app:cardCornerRadius="8dp"
+            app:cardElevation="4dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:id="@+id/cardViewLunges">
+
+            <LinearLayout
+                android:id="@+id/arrowLunges"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="16dp"
+                android:layout_gravity="center_vertical">
+
+                <ImageView
+                    android:id="@+id/fitnessIcon6"
+                    android:layout_width="64dp"
+                    android:layout_height="64dp"
+                    android:src="@drawable/cross_arm_crunches_animation"
+                    android:contentDescription="Fitness Icon"
+                    android:scaleType="centerCrop"/>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/fitnessTitle6"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Скручивания со скрещенными руками"
+                        android:textSize="18sp"
+                        android:textColor="@color/black"/>
+
+                    <TextView
+                        android:id="@+id/fitnessDescription6"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Описание упражнения"
+                        android:textSize="14sp"
+                        android:textColor="@color/blue_grey"
+                        android:maxLines="2"
+                        android:ellipsize="end"/>
+                </LinearLayout>
+                <!--
+                <ImageButton
+                    android:id="@+id/arrowLunges"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/arrow_right"
+                    android:background="@android:color/transparent"
+                    android:contentDescription="Перейти к упражнению"/>
+                    -->
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <!-- Карточка 7: Crunches -->
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            app:cardCornerRadius="8dp"
+            app:cardElevation="4dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:id="@+id/cardViewCrunches">
+
+            <LinearLayout
+                android:id="@+id/arrowCrunches"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="16dp"
+                android:layout_gravity="center_vertical">
+
+                <ImageView
+                    android:id="@+id/fitnessIcon7"
+                    android:layout_width="64dp"
+                    android:layout_height="64dp"
+                    android:src="@drawable/dead_bug_animation"
+                    android:contentDescription="Fitness Icon"
+                    android:scaleType="centerCrop"/>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/fitnessTitle7"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Упражнение мертвый жук"
+                        android:textSize="18sp"
+                        android:textColor="@color/black"/>
+
+                    <TextView
+                        android:id="@+id/fitnessDescription7"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Описание упражнения"
+                        android:textSize="14sp"
+                        android:textColor="@color/blue_grey"
+                        android:maxLines="2"
+                        android:ellipsize="end"/>
+                </LinearLayout>
+                <!--
+                <ImageButton
+                    android:id="@+id/arrowCrunches"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/arrow_right"
+                    android:background="@android:color/transparent"
+                    android:contentDescription="Перейти к упражнению"/>
+                    -->
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+
+        <!-- Карточка 8: Bicep Curls -->
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            app:cardCornerRadius="8dp"
+            app:cardElevation="4dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:id="@+id/cardViewCurls">
+
+            <LinearLayout
+                android:id="@+id/arrowBicepCurls"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="16dp"
+                android:layout_gravity="center_vertical">
+
+                <ImageView
+                    android:id="@+id/fitnessIcon8"
+                    android:layout_width="64dp"
+                    android:layout_height="64dp"
+                    android:src="@drawable/mountain_climbers_animation"
+                    android:contentDescription="Fitness Icon"
+                    android:scaleType="centerCrop"/>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/fitnessTitle8"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Бег в упоре лежа"
+                        android:textSize="18sp"
+                        android:textColor="@color/black"/>
+
+                    <TextView
+                        android:id="@+id/fitnessDescription8"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Описание упражнения"
+                        android:textSize="14sp"
+                        android:textColor="@color/blue_grey"
+                        android:maxLines="2"
+                        android:ellipsize="end"/>
+                </LinearLayout>
+                <!--
+                <ImageButton
+                    android:id="@+id/arrowBicepCurls"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/arrow_right"
+                    android:background="@android:color/transparent"
+                    android:contentDescription="Перейти к упражнению"/>
+                    -->
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <!-- Карточка 9: Tricep Dips -->
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            app:cardCornerRadius="8dp"
+            app:cardElevation="4dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:id="@+id/cardViewTricepDips">
+
+            <LinearLayout
+                android:id="@+id/arrowTricepDips"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="16dp"
+                android:layout_gravity="center_vertical">
+
+                <ImageView
+                    android:id="@+id/fitnessIcon9"
+                    android:layout_width="64dp"
+                    android:layout_height="64dp"
+                    android:src="@drawable/neo_butt_bridge_b"
+                    android:contentDescription="Fitness Icon"
+                    android:scaleType="centerCrop"/>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/fitnessTitle9"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Упражнение для пресса"
+                        android:textSize="18sp"
+                        android:textColor="@color/black"/>
+
+                    <TextView
+                        android:id="@+id/fitnessDescription9"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Описание упражнения"
+                        android:textSize="14sp"
+                        android:textColor="@color/blue_grey"
+                        android:maxLines="2"
+                        android:ellipsize="end"/>
+                </LinearLayout>
+                <!--
+                <ImageButton
+                    android:id="@+id/arrowTricepDips"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/arrow_right"
+                    android:background="@android:color/transparent"
+                    android:contentDescription="Перейти к упражнению"/>
+                    -->
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <!-- Карточка 10: Leg Raises -->
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            app:cardCornerRadius="8dp"
+            app:cardElevation="4dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:id="@+id/cardViewLegRaises">
+
+            <LinearLayout
+                android:id="@+id/arrowLegRaises"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="16dp"
+                android:layout_gravity="center_vertical">
+
+                <ImageView
+                    android:id="@+id/fitnessIcon10"
+                    android:layout_width="64dp"
+                    android:layout_height="64dp"
+                    android:src="@drawable/bent_leg_twist_animation"
+                    android:contentDescription="Fitness Icon"
+                    android:scaleType="centerCrop"/>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/fitnessTitle10"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Скручивание согнутых ног"
+                        android:textSize="18sp"
+                        android:textColor="@color/black"/>
+
+                    <TextView
+                        android:id="@+id/fitnessDescription10"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Описание упражнения"
+                        android:textSize="14sp"
+                        android:textColor="@color/blue_grey"
+                        android:maxLines="2"
+                        android:ellipsize="end"/>
+                </LinearLayout>
+                <!--
+                <ImageButton
+                    android:id="@+id/arrowLegRaises"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/arrow_right"
+                    android:background="@android:color/transparent"
+                    android:contentDescription="Перейти к упражнению"/>
+                    -->
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+    </LinearLayout>
+</ScrollView>

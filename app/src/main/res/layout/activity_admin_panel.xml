@@ -1,0 +1,394 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp"
+    android:background="#f5f5f5">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <!-- Заголовок -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Фитнес Админ Панель"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:textColor="#333333"
+            android:gravity="center"
+            android:layout_marginBottom="24dp"
+            android:padding="12dp"
+            android:background="@android:color/white"
+            android:elevation="4dp" />
+
+        <!-- Раздел Dashboard -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@android:color/white"
+            android:padding="16dp"
+            android:layout_marginBottom="16dp"
+            android:elevation="2dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="📊 Панель управления"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:textColor="#333333"
+                android:layout_marginBottom="12dp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:weightSum="2">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:padding="8dp"
+                    android:background="#e8f5e8"
+                    android:layout_margin="4dp">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Новые пользователи"
+                        android:textSize="12sp"
+                        android:textColor="#666666" />
+                    <TextView
+                        android:id="@+id/tvNewUsers"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="156"
+                        android:textSize="20sp"
+                        android:textStyle="bold"
+                        android:textColor="#2e7d32" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:padding="8dp"
+                    android:background="#e3f2fd"
+                    android:layout_margin="4dp">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Общая выручка"
+                        android:textSize="12sp"
+                        android:textColor="#666666" />
+                    <TextView
+                        android:id="@+id/tvTotalRevenue"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="₽45,230"
+                        android:textSize="20sp"
+                        android:textStyle="bold"
+                        android:textColor="#1565c0" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/btnDashboard"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Подробная статистика"
+                android:layout_marginTop="8dp"
+                android:backgroundTint="#2196F3" />
+
+        </LinearLayout>
+
+        <!-- Раздел Пользователи -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@android:color/white"
+            android:padding="16dp"
+            android:layout_marginBottom="16dp"
+            android:elevation="2dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="👥 Управление пользователями"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:textColor="#333333"
+                android:layout_marginBottom="12dp" />
+
+            <EditText
+                android:id="@+id/etUserSearch"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Поиск пользователей..."
+                android:layout_marginBottom="8dp" />
+
+            <ListView
+                android:id="@+id/lvUsers"
+                android:layout_width="match_parent"
+                android:layout_height="150dp"
+                android:background="#f8f9fa"
+                android:layout_marginBottom="8dp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:weightSum="3">
+
+                <Button
+                    android:id="@+id/btnAddUser"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Добавить"
+                    android:textSize="8sp"
+                    android:backgroundTint="#4CAF50"
+                    android:textColor="@android:color/white" />
+
+                <Button
+                    android:id="@+id/btnEditUser"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Изменить"
+                    android:textSize="8sp"
+                    android:backgroundTint="#FF9800"
+                    android:textColor="@android:color/white" />
+
+                <Button
+                    android:id="@+id/btnBlockUser"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Блокировка"
+                    android:textSize="8sp"
+                    android:backgroundTint="#F44336"
+                    android:textColor="@android:color/white" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <!-- Раздел Контент -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@android:color/white"
+            android:padding="16dp"
+            android:layout_marginBottom="16dp"
+            android:elevation="2dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="🎬 Управление контентом"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:textColor="#333333"
+                android:layout_marginBottom="12dp" />
+
+            <Button
+                android:id="@+id/btnManageWorkouts"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Тренировки и программы"
+                android:layout_marginBottom="8dp"
+                android:backgroundTint="#9C27B0"
+                android:textColor="@android:color/white" />
+
+            <Button
+                android:id="@+id/btnManageMaterials"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Видео и материалы"
+                android:layout_marginBottom="8dp"
+                android:backgroundTint="#9C27B0"
+                android:textColor="@android:color/white" />
+
+            <Button
+                android:id="@+id/btnManageArticles"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Статьи и новости"
+                android:backgroundTint="#9C27B0"
+                android:textColor="@android:color/white" />
+
+        </LinearLayout>
+
+        <!-- Раздел Платежи -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@android:color/white"
+            android:padding="16dp"
+            android:layout_marginBottom="16dp"
+            android:elevation="2dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="💳 Платежи и подписки"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:textColor="#333333"
+                android:layout_marginBottom="12dp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:weightSum="2">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Активные подписки:"
+                    android:textSize="14sp" />
+                <TextView
+                    android:id="@+id/tvActiveSubscriptions"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="1,234"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    android:textColor="#2e7d32" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:weightSum="2">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Последние транзакции:"
+                    android:textSize="14sp" />
+                <TextView
+                    android:id="@+id/tvRecentTransactions"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="45"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    android:textColor="#1565c0" />
+
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/btnManagePayments"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Управление платежами"
+                android:layout_marginTop="8dp"
+                android:backgroundTint="#FF9800" />
+
+        </LinearLayout>
+
+        <!-- Раздел Аналитика -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@android:color/white"
+            android:padding="16dp"
+            android:layout_marginBottom="16dp"
+            android:elevation="2dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="📈 Аналитика и статистика"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:textColor="#333333"
+                android:layout_marginBottom="12dp" />
+
+            <Spinner
+                android:id="@+id/spinnerReports"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:entries="@array/report_types" />
+
+            <Button
+                android:id="@+id/btnGenerateReport"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Сгенерировать отчет"
+                android:backgroundTint="#607D8B" />
+
+        </LinearLayout>
+
+        <!-- Раздел Настройки -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@android:color/white"
+            android:padding="16dp"
+            android:layout_marginBottom="16dp"
+            android:elevation="2dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="⚙️ Настройки системы"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:textColor="#333333"
+                android:layout_marginBottom="12dp" />
+
+            <Switch
+                android:id="@+id/switchNotifications"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Уведомления"
+                android:checked="true" />
+
+            <Switch
+                android:id="@+id/switchAutoBackup"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Авто-бэкап"
+                android:checked="true" />
+
+            <Button
+                android:id="@+id/btnSystemSettings"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Расширенные настройки"
+                android:layout_marginTop="8dp"
+                android:backgroundTint="#795548" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</ScrollView>
