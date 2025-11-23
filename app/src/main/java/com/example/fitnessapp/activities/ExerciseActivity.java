@@ -8,6 +8,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -25,6 +26,9 @@ public class ExerciseActivity extends AppCompatActivity {
     TextView textViewDayOfExercise; //Текстовое поле, отображающее день упражнения
     AppCompatButton btnStartTimer; //Кнопка для запуска/остановки таймера
     AppCompatButton btnSetTimer; //Кнопка для установки таймера
+
+    TimePicker timePicker; //TimePicker для прокрутки времени
+
     EditText editTextTimeInput; //Поле ввода времени
     Boolean isTimerOn = false; //Флаг, указывающий, запущен ли таймер
     int seconds; //Время в секундах
@@ -56,13 +60,32 @@ public class ExerciseActivity extends AppCompatActivity {
 
         //Привязывает элементы пользовательского интерфейса к переменным
         backExerciseImageView = findViewById(R.id.backExerciseImageView);
-        progressBar = findViewById(R.id.progressBar);
+        //progressBar = findViewById(R.id.progressBar); // ЗАКОММЕНТИРОВАНО: убрали ProgressBar
         textViewDayOfExercise = findViewById(R.id.textViewDayOfExercise);
         textViewTimer = findViewById(R.id.textViewTimer);
         btnBackArrow = findViewById(R.id.btnBackArrow);
-        editTextTimeInput = findViewById(R.id.editTextTimeInput);
-        btnSetTimer = findViewById(R.id.btnSetTimer);
+        //editTextTimeInput = findViewById(R.id.editTextTimeInput); // ЗАКОММЕНТИРОВАНО: убрали EditText
+        //btnSetTimer = findViewById(R.id.btnSetTimer); // ЗАКОММЕНТИРОВАНО: убрали кнопку установки времени
         btnStartTimer = findViewById(R.id.btnStartTimer);
+
+        // ДОБАВЛЕНО: Инициализация TimePicker
+        timePicker = findViewById(R.id.timePicker);
+
+        // ДОБАВЛЕНО: Настройка TimePicker
+        if (timePicker != null) {
+            timePicker.setIs24HourView(true); // Устанавливаем 24-часовой формат
+            timePicker.setHour(0); // Начальное значение часов
+            timePicker.setMinute(30); // Начальное значение минут
+
+            // ДОБАВЛЕНО: Слушатель изменений TimePicker
+            timePicker.setOnTimeChangedListener(new TimePicker.OnTimeChangedListener() {
+                @Override
+                public void onTimeChanged(TimePicker view, int hourOfDay, int minute) {
+                    // Обновляем время при прокрутке
+                    updateTimeFromTimePicker();
+                }
+            });
+        }
 
         //Получает день из предыдущей активности
         day = getIntent().getIntExtra("day", 0);
@@ -74,31 +97,36 @@ public class ExerciseActivity extends AppCompatActivity {
         if (savedInstanceState != null) {
             seconds = savedInstanceState.getInt("seconds"); //Восстанавливает время
             isTimerOn = savedInstanceState.getBoolean("isTimerOn"); //Восстанавливает состояние таймера
-            progressBar.setProgress(seconds); //Устанавливает прогресс
+            //progressBar.setProgress(seconds); // ЗАКОММЕНТИРОВАНО: убрали ProgressBar
             setTimer(seconds); //Устанавливает текст таймера
             if (isTimerOn) { //Если таймер был включен...
                 startExerciseTimer(seconds); //Запускает таймер
             }
+        } else {
+            // ДОБАВЛЕНО: Устанавливаем начальное время из TimePicker
+            updateTimeFromTimePicker();
         }
 
         //Устанавливает слушатель на кнопку для установки таймера
-        btnSetTimer.setOnClickListener(v -> {
-            String input = editTextTimeInput.getText().toString(); //Получает текст из поля
-            if (!input.isEmpty()) { //Проверяет, не пустое ли поле
-                seconds = Integer.parseInt(input); //Преобразует текст в секунды
-                if (seconds > 0) { //Если введенное время положительное...
-                    progressBar.setMax(seconds); //Устанавливает максимальное значение прогресс-бара
-                    progressBar.setProgress(0); //Сбрасывает прогресс
-                    setTimer(seconds); //Устанавливает таймер
-                } else {
-                    Toast.makeText(this, "Введите положительное время", Toast.LENGTH_SHORT).show(); //Сообщает пользователю, если время отрицательное
-                }
-            }
-        });
+        //btnSetTimer.setOnClickListener(v -> { // ЗАКОММЕНТИРОВАНО: убрали старую логику установки времени
+        //    String input = editTextTimeInput.getText().toString(); //Получает текст из поля
+        //    if (!input.isEmpty()) { //Проверяет, не пустое ли поле
+        //        seconds = Integer.parseInt(input); //Преобразует текст в секунды
+        //        if (seconds > 0) { //Если введенное время положительное...
+        //            progressBar.setMax(seconds); //Устанавливает максимальное значение прогресс-бара
+        //            progressBar.setProgress(0); //Сбрасывает прогресс
+        //            setTimer(seconds); //Устанавливает таймер
+        //        } else {
+        //            Toast.makeText(this, "Введите положительное время", Toast.LENGTH_SHORT).show(); //Сообщает пользователю, если время отрицательное
+        //        }
+        //    }
+        //});
 
         //Устанавливает слушатель на кнопку для запуска/остановки таймера
         btnStartTimer.setOnClickListener(v -> {
             if (!isTimerOn) { //Если таймер не включен...
+                // ДОБАВЛЕНО: Обновляем время из TimePicker перед запуском
+                updateTimeFromTimePicker();
                 if (seconds > 0) { //Если время установлено...
                     btnStartTimer.setText(R.string.stop); //Меняет текст на "Стоп"
                     startExerciseTimer(seconds); //Запускает таймер
@@ -112,6 +140,16 @@ public class ExerciseActivity extends AppCompatActivity {
 
         //Устанавливает слушатель на кнопку "Назад"
         btnBackArrow.setOnClickListener(v -> onBackPressed()); //Возвращает к предыдущей активности
+    }
+
+    // ДОБАВЛЕНО: Метод для обновления времени из TimePicker
+    private void updateTimeFromTimePicker() {
+        if (timePicker != null) {
+            int hours = timePicker.getHour();
+            int minutes = timePicker.getMinute();
+            seconds = hours * 3600 + minutes * 60;
+            setTimer(seconds); // Обновляем отображение таймера
+        }
     }
 
     //Метод для установки случайного фонового изображения
@@ -141,7 +179,16 @@ public class ExerciseActivity extends AppCompatActivity {
 
     //Метод для установки текста таймера.
     private void setTimer(int seconds) {
-        textViewTimer.setText(String.valueOf(seconds)); // Устанавливает текстовое поле с количеством секунд.
+        // ДОБАВЛЕНО: Форматирование времени в ЧЧ:ММ:СС
+        int hours = seconds / 3600;
+        int minutes = (seconds % 3600) / 60;
+        int secs = seconds % 60;
+
+        if (hours > 0) {
+            textViewTimer.setText(String.format("%02d:%02d:%02d", hours, minutes, secs));
+        } else {
+            textViewTimer.setText(String.format("%02d:%02d", minutes, secs));
+        }
     }
 
     // Метод для запуска таймера
@@ -150,8 +197,8 @@ public class ExerciseActivity extends AppCompatActivity {
         countDownTimer = new CountDownTimer(duration * 1000L, 1000) { // Создает новый таймер с указанной продолжительностью.
             public void onTick(long millisUntilFinished) { // Метод, который вызывается каждую секунду.
                 seconds--; // Уменьшает оставшееся время на каждую секунду.
-                progressBar.setProgress(duration - seconds); // Обновляет прогресс бар на основе оставшегося времени.
-                textViewTimer.setText(String.valueOf(seconds)); // Обновляет текстовое поле таймера.
+                //progressBar.setProgress(duration - seconds); // ЗАКОММЕНТИРОВАНО: убрали ProgressBar
+                setTimer(seconds); // Обновляет текстовое поле таймера.
             }
 
             // Метод, который вызывается, когда таймер завершает обратный отсчет.
@@ -165,16 +212,16 @@ public class ExerciseActivity extends AppCompatActivity {
     private void startBreakTimer() {
         int breakDuration = 300; //Устанавливает продолжительность перерыва в секундах.
         seconds = breakDuration; //Инициализирует переменную seconds с длительностью перерыва.
-        progressBar.setMax(breakDuration); //Устанавливает максимальное значение прогресс-бара.
-        progressBar.setProgress(0); //Сбрасывает прогресс бар.
-        textViewTimer.setText(String.valueOf(breakDuration)); //Устанавливает текст таймера на значение продолжительности перерыва.
+        //progressBar.setMax(breakDuration); // ЗАКОММЕНТИРОВАНО: убрал ProgressBar
+        //progressBar.setProgress(0); // ЗАКОММЕНТИРОВАНО: убрал ProgressBar
+        setTimer(breakDuration); //Устанавливает текст таймера на значение продолжительности перерыва.
 
         //Создает новый CountDownTimer для обратного отсчета перерыва.
         countDownTimer = new CountDownTimer(breakDuration * 1000, 1000) {
             public void onTick(long millisUntilFinished) { //Метод, который вызывается каждую секунду.
                 seconds--; //Уменьшает оставшееся время.
-                progressBar.setProgress(breakDuration - seconds); //Обновляет прогресс бар.
-                textViewTimer.setText(String.valueOf(seconds)); //Обновляет текст таймера.
+                //progressBar.setProgress(breakDuration - seconds); // ЗАКОММЕНТИРОВАНО: убрали ProgressBar
+                setTimer(seconds); //Обновляет текст таймера.
             }
 
             public void onFinish() { //Метод, вызываемый по окончании перерыва.
@@ -195,8 +242,14 @@ public class ExerciseActivity extends AppCompatActivity {
     private void resetTimer() { //Метод для сброса таймера в начальное состояние.
         stopCountdownTimer(); //Останавливает таймер.
         seconds = 0; //Сбрасывает секунды до 0.
-        progressBar.setProgress(0); //Сбрасывает прогресс бар.
-        textViewTimer.setText("0"); //Устанавливает текст таймера на 0.
+        //progressBar.setProgress(0); // ЗАКОММЕНТИРОВАНО: убрали ProgressBar
+        setTimer(0); //Устанавливает текст таймера на 0.
+
+        // ДОБАВЛЕНО: Сброс TimePicker к начальным значениям
+        if (timePicker != null) {
+            timePicker.setHour(0);
+            timePicker.setMinute(30);
+        }
     }
 
     @Override

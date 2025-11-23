@@ -35,6 +35,7 @@
             android:layout_height="wrap_content"/>
     </RelativeLayout>
 
+    <!--
     <ProgressBar
         android:id="@+id/progressBar"
         android:layout_width="350dp"
@@ -58,6 +59,30 @@
         android:layout_alignLeft="@id/progressBar"
         android:layout_alignRight="@id/progressBar"
         android:gravity="center"/>
+        -->
+
+    <!-- Большой текст по центру экрана -->
+    <TextView
+        android:id="@+id/textViewTimer"
+        android:text="00:30"
+        android:textSize="75sp"
+        android:textColor="@color/white"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:gravity="center"/>
+
+    <!-- TimerPicker для прокрутки времени -->
+    <TimePicker
+        android:id="@+id/timePicker"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_above="@+id/btnStartTimer"
+        android:layout_marginBottom="20dp"
+        android:timePickerMode="spinner"
+        android:visibility="visible"/>
+
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btnStartTimer"
@@ -76,6 +101,8 @@
         android:backgroundTint="#FFFFFF"
         android:textColor="#000000"/>
 
+
+    <!--
     <EditText
         android:id="@+id/editTextTimeInput"
         android:layout_width="190dp"
@@ -107,4 +134,5 @@
         android:translationZ="4dp"
         android:backgroundTint="#FFFFFF"
         android:textColor="#000000"/>
+        -->
 </RelativeLayout>
