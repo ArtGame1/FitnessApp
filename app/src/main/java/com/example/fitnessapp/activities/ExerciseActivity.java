@@ -254,55 +254,83 @@ public class ExerciseActivity extends AppCompatActivity {
     }
 
     //МЕТОДЫ ДЛЯ МОТИВАЦИОННОГО ОКНА (ДОБАВЛЕНО)
+    /**
+     * ПОКАЗ МОТИВАЦИОННОГО ОКНА
+     * -------------------------
+     * Отображает полноценное мотивационное окно с анимацией появления
+     * и запускает анимацию звезды внутри окна
+     */
     private void showMotivationWindow() {
         motivationLayout.setVisibility(View.VISIBLE);
 
-        ObjectAnimator scaleX = ObjectAnimator.ofFloat(motivationLayout, "scaleX", 0f, 1.1f, 1f);
-        ObjectAnimator scaleY = ObjectAnimator.ofFloat(motivationLayout, "scaleY", 0f, 1.1f, 1f);
-        ObjectAnimator alpha = ObjectAnimator.ofFloat(motivationLayout, "alpha", 0f, 1f);
+        //АНИМАЦИЯ ПОЯВЛЕНИЯ ОКНА: масштабирование + прозрачность
+        ObjectAnimator scaleX = ObjectAnimator.ofFloat(motivationLayout, "scaleX", 0f, 1.1f, 1f); // Увеличение по X с эффектом "перескакивания"
+        ObjectAnimator scaleY = ObjectAnimator.ofFloat(motivationLayout, "scaleY", 0f, 1.1f, 1f); // Увеличение по Y с эффектом "перескакивания"
+        ObjectAnimator alpha = ObjectAnimator.ofFloat(motivationLayout, "alpha", 0f, 1f);         // Плавное появление из невидимого состояния
 
+        //ЗАПУСК ВСЕХ АНИМАЦИЙ ОДНОВРЕМЕННО
         AnimatorSet animatorSet = new AnimatorSet();
         animatorSet.playTogether(scaleX, scaleY, alpha);
-        animatorSet.setDuration(600);
+        animatorSet.setDuration(600); // Длительность анимации: 600ms
         animatorSet.start();
 
-        animateStar();
+        animateStar(); // Запуск отдельной анимации звезды
     }
 
+    /**
+     * СКРЫТИЕ МОТИВАЦИОННОГО ОКНА
+     * ---------------------------
+     * Плавно скрывает мотивационное окно с анимацией исчезновения
+     */
     private void hideMotivationWindow() {
-        ObjectAnimator scaleX = ObjectAnimator.ofFloat(motivationLayout, "scaleX", 1f, 0f);
-        ObjectAnimator scaleY = ObjectAnimator.ofFloat(motivationLayout, "scaleY", 1f, 0f);
-        ObjectAnimator alpha = ObjectAnimator.ofFloat(motivationLayout, "alpha", 1f, 0f);
+        //АНИМАЦИЯ ИСЧЕЗНОВЕНИЯ ОКНА: уменьшение масштаба + прозрачность
+        ObjectAnimator scaleX = ObjectAnimator.ofFloat(motivationLayout, "scaleX", 1f, 0f); // Уменьшение по X до 0
+        ObjectAnimator scaleY = ObjectAnimator.ofFloat(motivationLayout, "scaleY", 1f, 0f); // Уменьшение по Y до 0
+        ObjectAnimator alpha = ObjectAnimator.ofFloat(motivationLayout, "alpha", 1f, 0f);   // Плавное исчезновение
 
         AnimatorSet animatorSet = new AnimatorSet();
         animatorSet.playTogether(scaleX, scaleY, alpha);
-        animatorSet.setDuration(400);
+        animatorSet.setDuration(400); // Длительность анимации: 400ms (быстрее чем появление)
         animatorSet.start();
 
+        //СЛУШАТЕЛЬ ЗАВЕРШЕНИЯ АНИМАЦИИ: скрываем окно после завершения анимации
         animatorSet.addListener(new AnimatorListenerAdapter() {
             @Override
             public void onAnimationEnd(Animator animation) {
-                motivationLayout.setVisibility(View.GONE);
+                motivationLayout.setVisibility(View.GONE); // Полностью скрываем окно из layout
             }
         });
     }
 
+    /**
+     * АНИМАЦИЯ ЗВЕЗДЫ В МОТИВАЦИОННОМ ОКНЕ
+     * ------------------------------------
+     * Создает сложную анимацию для звезды: вращение + масштабирование
+     * Используется внутри мотивационного окна
+     */
     private void animateStar() {
-        ObjectAnimator rotation = ObjectAnimator.ofFloat(starImageView, "rotation", 0f, 360f);
-        ObjectAnimator scaleX = ObjectAnimator.ofFloat(starImageView, "scaleX", 0f, 1.2f, 1f);
-        ObjectAnimator scaleY = ObjectAnimator.ofFloat(starImageView, "scaleY", 0f, 1.2f, 1f);
+        //КОМБИНИРОВАННАЯ АНИМАЦИЯ ЗВЕЗДЫ:
+        ObjectAnimator rotation = ObjectAnimator.ofFloat(starImageView, "rotation", 0f, 360f);      // Полное вращение на 360 градусов
+        ObjectAnimator scaleX = ObjectAnimator.ofFloat(starImageView, "scaleX", 0f, 1.2f, 1f);      // Масштабирование по X с "перескакиванием"
+        ObjectAnimator scaleY = ObjectAnimator.ofFloat(starImageView, "scaleY", 0f, 1.2f, 1f);      // Масштабирование по Y с "перескакиванием"
 
         AnimatorSet starAnimator = new AnimatorSet();
-        starAnimator.playTogether(rotation, scaleX, scaleY);
-        starAnimator.setDuration(800);
+        starAnimator.playTogether(rotation, scaleX, scaleY); //Все анимации запускаются одновременно
+        starAnimator.setDuration(800); //Длительность анимации: 800ms
         starAnimator.start();
     }
 
+    /**
+     * ПОКАЗ ПРОСТОЙ АНИМАЦИИ ЗВЕЗДЫ (РЕЗЕРВНЫЙ ВАРИАНТ)
+     * ------------------------------------------------
+     * Альтернативная упрощенная анимация звезды без мотивационного окна
+     * Автоматически скрывается через 2 секунды
+     */
     private void showStarAnimation() {
         //Показываем звезду
         starAnimationView.setVisibility(View.VISIBLE);
 
-        //Анимация появления
+        //Анимация появления (аналогичная мотивационному окну, но для простой звезды)
         ObjectAnimator scaleX = ObjectAnimator.ofFloat(starAnimationView, "scaleX", 0f, 1.2f, 1f);
         ObjectAnimator scaleY = ObjectAnimator.ofFloat(starAnimationView, "scaleY", 0f, 1.2f, 1f);
         ObjectAnimator alpha = ObjectAnimator.ofFloat(starAnimationView, "alpha", 0f, 1f);
@@ -312,7 +340,7 @@ public class ExerciseActivity extends AppCompatActivity {
         animatorSet.setDuration(800);
         animatorSet.start();
 
-        //Автоматическое скрытие через 2 секунды
+        //Автоматическое скрытие через 2 секунды с помощью Handler
         new Handler().postDelayed(() -> hideStarAnimation(), 2000);
     }
 
