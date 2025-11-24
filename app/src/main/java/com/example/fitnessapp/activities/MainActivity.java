@@ -473,25 +473,25 @@ public class MainActivity extends AppCompatActivity {
 
     //Методы для обработки пунктов бокового меню
     private void openMyProfile() {
-        Toast.makeText(this, "Открыть профиль", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this, "Открыть профиль", Toast.LENGTH_SHORT).show();
         Intent intent = new Intent(this, AccountActivity.class);
         startActivity(intent);
     }
 
     private void openWorkouts() {
-        Toast.makeText(this, "Открыть тренировки", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this, "Открыть тренировки", Toast.LENGTH_SHORT).show();
         Intent intent = new Intent(this, WorkoutActivity.class);
         startActivity(intent);
     }
 
     private void openStatistics() {
-        Toast.makeText(this, "Открыть статистику", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this, "Открыть статистику", Toast.LENGTH_SHORT).show();
         Intent intent = new Intent(this, StatsActivity.class);
         startActivity(intent);
     }
 
     private void openSettings() {
-        Toast.makeText(this, "Открыть настройки", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this, "Открыть настройки", Toast.LENGTH_SHORT).show();
         Intent intent = new Intent(this, SettingsActivity.class);
         startActivity(intent);
     }

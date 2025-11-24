@@ -1,33 +1,102 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:fitsSystemWindows="true"
     tools:context=".activities.ExerciseActivity">
 
-    <ImageView
-        android:id="@+id/backExerciseImageView"
+    <!-- Основной контейнер для анимации упражнения -->
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:scaleType="centerCrop"/>
+        android:background="@color/blue_grey"
+        android:gravity="center">
 
+        <!-- Анимированное изображение упражнения (основной контент) -->
+        <ImageView
+            android:id="@+id/exerciseAnimationImageView"
+            android:layout_width="300dp"
+            android:layout_height="300dp"
+            android:layout_centerHorizontal="true"
+            android:layout_above="@+id/centerContainer"
+            android:scaleType="fitCenter"
+            android:contentDescription="Анимация упражнения"/>
+
+        <!-- Контейнер для таймера и TimePicker -->
+        <LinearLayout
+            android:id="@+id/centerContainer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:orientation="vertical"
+            android:gravity="center">
+
+            <!-- Таймер -->
+            <TextView
+                android:id="@+id/textViewTimer"
+                android:text="00:30"
+                android:textSize="75sp"
+                android:textColor="@color/white"
+                android:textStyle="bold"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:background="#40000000"
+                android:padding="16dp"/>
+
+            <!-- Выбор времени -->
+            <TimePicker
+                android:id="@+id/timePicker"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:timePickerMode="spinner"
+                android:background="@color/white"
+                android:textAlignment="center"/>
+
+        </LinearLayout>
+
+        <!-- Кнопка Старт/Стоп -->
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btnStartTimer"
+            android:text="@string/start"
+            android:textSize="24sp"
+            android:layout_width="200dp"
+            android:layout_height="60dp"
+            android:layout_centerHorizontal="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="50dp"
+            android:background="@drawable/button_grey_stroke"
+            android:elevation="8dp"
+            android:backgroundTint="#FFFFFF"
+            android:textColor="#000000"/>
+
+    </RelativeLayout>
+
+    <!-- Верхняя панель поверх всего -->
     <RelativeLayout
         android:id="@+id/topBar"
         android:background="@color/menuColor"
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:layout_alignParentTop="true">
+
         <ImageView
             android:id="@+id/btnBackArrow"
-            android:src="@drawable/baseline_arrow_circle_left_24"
-            android:layout_width="60dp"
-            android:layout_height="60dp"/>
+            android:src="@drawable/ic_arrow_back"
+            app:tint="@android:color/white"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="20dp"
+            android:contentDescription="Назад"/>
+
         <TextView
             android:id="@+id/textViewDayOfExercise"
-            android:text="Day 0"
+            android:text="День 0"
             android:textColor="@color/black"
             android:textSize="26sp"
             android:layout_centerInParent="true"
@@ -35,104 +104,4 @@
             android:layout_height="wrap_content"/>
     </RelativeLayout>
 
-    <!--
-    <ProgressBar
-        android:id="@+id/progressBar"
-        android:layout_width="350dp"
-        android:layout_height="450dp"
-        android:layout_centerHorizontal="true"
-        android:layout_below="@id/topBar"
-        android:layout_marginTop="15dp"
-        android:indeterminateOnly="false"
-        android:rotation="270"
-        android:progressDrawable="@drawable/custom_progress_bar"/>
-
-    <TextView
-        android:id="@+id/textViewTimer"
-        android:text="30"
-        android:textSize="75sp"
-        android:textColor="@color/white"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignTop="@id/progressBar"
-        android:layout_alignBottom="@id/progressBar"
-        android:layout_alignLeft="@id/progressBar"
-        android:layout_alignRight="@id/progressBar"
-        android:gravity="center"/>
-        -->
-
-    <!-- Большой текст по центру экрана -->
-    <TextView
-        android:id="@+id/textViewTimer"
-        android:text="00:30"
-        android:textSize="75sp"
-        android:textColor="@color/white"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:gravity="center"/>
-
-    <!-- TimerPicker для прокрутки времени -->
-    <TimePicker
-        android:id="@+id/timePicker"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_above="@+id/btnStartTimer"
-        android:layout_marginBottom="20dp"
-        android:timePickerMode="spinner"
-        android:visibility="visible"/>
-
-
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/btnStartTimer"
-        android:text="@string/start"
-        android:textSize="36sp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="80dp"
-        android:layout_marginTop="5dp"
-        android:padding="15dp"
-        android:background="@drawable/button_grey_stroke"
-        android:elevation="8dp"
-        android:translationZ="4dp"
-        android:backgroundTint="#FFFFFF"
-        android:textColor="#000000"/>
-
-
-    <!--
-    <EditText
-        android:id="@+id/editTextTimeInput"
-        android:layout_width="190dp"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_above="@id/btnStartTimer"
-        android:hint="Введите секунды"
-        android:textColor="#4D000000"
-        android:inputType="number"
-        android:textSize="20sp"
-        android:layout_marginBottom="20dp"
-        android:layout_marginTop="10dp"
-        android:padding="10dp"
-        android:background="@drawable/edittext_background"/>
-
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/btnSetTimer"
-        android:text="Установить время"
-        android:textSize="20sp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_above="@id/editTextTimeInput"
-        android:layout_marginBottom="10dp"
-        android:padding="10dp"
-        android:layout_marginTop="10dp"
-        android:background="@drawable/button_grey_stroke"
-        android:elevation="8dp"
-        android:translationZ="4dp"
-        android:backgroundTint="#FFFFFF"
-        android:textColor="#000000"/>
-        -->
 </RelativeLayout>

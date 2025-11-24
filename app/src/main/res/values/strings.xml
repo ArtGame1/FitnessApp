@@ -39,6 +39,7 @@
     <string name="openNavigationDrawer">Открыть меню навигации</string>
     <string name="notifications">Уведомления</string>
     <string name="search_hint">Поиск тренировок...</string>
+    <string name="exercise_animation_description">Анимация упражнения</string>
 
     <string name="search">Поиск</string>
 

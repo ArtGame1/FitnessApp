@@ -1,5 +1,6 @@
 package com.example.fitnessapp.activities;
 
+import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.view.View;
@@ -17,10 +18,8 @@ import androidx.appcompat.widget.AppCompatButton;
 
 import com.example.fitnessapp.R;
 
-import java.util.Random;
-
 public class ExerciseActivity extends AppCompatActivity {
-    ImageView backExerciseImageView; //Изображение для фона экрана
+    ImageView exerciseAnimationImageView; // ИЗМЕНЕНО: Теперь это основная анимация упражнения
     ImageView btnBackArrow; //Кнопка "Назад"
     TextView textViewTimer; //Текстовое поле, отображающее таймер
     TextView textViewDayOfExercise; //Текстовое поле, отображающее день упражнения
@@ -33,14 +32,18 @@ public class ExerciseActivity extends AppCompatActivity {
     Boolean isTimerOn = false; //Флаг, указывающий, запущен ли таймер
     int seconds; //Время в секундах
     int day; //Переменная для хранения дня упражнения
+    String exerciseName; // ДОБАВЛЕНО: Переменная для хранения названия упражнения
+    int exerciseImageResource; // ДОБАВЛЕНО: Переменная для хранения ресурса изображения упражнения
 
     ProgressBar progressBar; //Полоса прогресса для отображения оставшегося времени
     CountDownTimer countDownTimer; //Объект CountDownTimer для обратного отсчета
+    private int initialSeconds = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_exercise); //Устанавливает макет для этой активности
+
 
         //Скрытие статус-бара и навигационной панели
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_FULLSCREEN | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
@@ -59,7 +62,7 @@ public class ExerciseActivity extends AppCompatActivity {
         decorView.setSystemUiVisibility(uiOptions);
 
         //Привязывает элементы пользовательского интерфейса к переменным
-        backExerciseImageView = findViewById(R.id.backExerciseImageView);
+        exerciseAnimationImageView = findViewById(R.id.exerciseAnimationImageView); // ИЗМЕНЕНО: Новый ID
         //progressBar = findViewById(R.id.progressBar); // ЗАКОММЕНТИРОВАНО: убрали ProgressBar
         textViewDayOfExercise = findViewById(R.id.textViewDayOfExercise);
         textViewTimer = findViewById(R.id.textViewTimer);
@@ -89,9 +92,12 @@ public class ExerciseActivity extends AppCompatActivity {
 
         //Получает день из предыдущей активности
         day = getIntent().getIntExtra("day", 0);
+        // ДОБАВЛЕНО: Получаем название упражнения и ресурс изображения из предыдущей активности
+        exerciseName = getIntent().getStringExtra("exerciseName");
+        exerciseImageResource = getIntent().getIntExtra("exerciseImageResource", 0);
 
-        //Устанавливает случайное изображение фона
-        setRandomBackgroundImage();
+        // ДОБАВЛЕНО: Устанавливаем конкретную анимацию упражнения
+        setExerciseAnimation();
 
         //Восстанавливает состояние таймера при пересоздании активности
         if (savedInstanceState != null) {
@@ -124,17 +130,24 @@ public class ExerciseActivity extends AppCompatActivity {
 
         //Устанавливает слушатель на кнопку для запуска/остановки таймера
         btnStartTimer.setOnClickListener(v -> {
-            if (!isTimerOn) { //Если таймер не включен...
-                // ДОБАВЛЕНО: Обновляем время из TimePicker перед запуском
-                updateTimeFromTimePicker();
-                if (seconds > 0) { //Если время установлено...
-                    btnStartTimer.setText(R.string.stop); //Меняет текст на "Стоп"
-                    startExerciseTimer(seconds); //Запускает таймер
+            if (!isTimerOn) {
+                //updateTimeFromTimePicker();
+
+                if (seconds > 0) {
+                    btnStartTimer.setText(R.string.stop);
+                    startExerciseTimer(seconds); //Запускаем с текущим значением seconds
                 } else {
-                    Toast.makeText(this, "Сначала установите время", Toast.LENGTH_SHORT).show(); //Предупреждает пользователя установить время
+                    //Только если время не установлено, берем из TimePicker
+                    updateTimeFromTimePicker();
+                    if (seconds > 0) {
+                        btnStartTimer.setText(R.string.stop);
+                        startExerciseTimer(seconds);
+                    } else {
+                        Toast.makeText(this, "Сначала установите время", Toast.LENGTH_SHORT).show();
+                    }
                 }
             } else {
-                stopCountdownTimer(); //Останавливает таймер, если он уже идет
+                stopCountdownTimer();
             }
         });
 
@@ -142,44 +155,51 @@ public class ExerciseActivity extends AppCompatActivity {
         btnBackArrow.setOnClickListener(v -> onBackPressed()); //Возвращает к предыдущей активности
     }
 
-    // ДОБАВЛЕНО: Метод для обновления времени из TimePicker
+    //Метод для установки конкретной анимации упражнения
+    private void setExerciseAnimation() {
+        if (exerciseImageResource != 0) {
+            exerciseAnimationImageView.setImageResource(exerciseImageResource);
+
+            // ДОБАВЛЕНО: Сразу получаем AnimationDrawable для дальнейшего управления
+            if (exerciseAnimationImageView.getDrawable() instanceof AnimationDrawable) {
+                // Анимация будет запущена в startExerciseAnimation()
+            }
+        } else if (exerciseName != null) {
+            // Пытаемся найти анимацию по названию упражнения
+            int drawableId = getDrawableIdForExercise(exerciseName);
+            if (drawableId != 0) {
+                exerciseAnimationImageView.setImageResource(drawableId);
+            } else {
+                // Если анимация не найдена, показываем сообщение
+                Toast.makeText(this, "Анимация для упражнения не найдена", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+    //Метод для получения ID drawable по названию упражнения (fallback)
+    private int getDrawableIdForExercise(String exerciseName) {
+        String resourceName = exerciseName.toLowerCase()
+                .replace(" ", "_")
+                .replace("упражнение", "")
+                .trim();
+
+        return getResources().getIdentifier(resourceName, "drawable", getPackageName());
+    }
+
+    //Метод для обновления времени из TimePicker
     private void updateTimeFromTimePicker() {
         if (timePicker != null) {
             int hours = timePicker.getHour();
             int minutes = timePicker.getMinute();
-            seconds = hours * 3600 + minutes * 60;
-            setTimer(seconds); // Обновляем отображение таймера
-        }
-    }
-
-    //Метод для установки случайного фонового изображения
-    private void setRandomBackgroundImage() {
-        Random random = new Random(); //Создает объект Random
-        int randomImageNumber = 1 + random.nextInt(5); // Генерация случайного числа от 1 до 5
-
-        //В зависимости от сгенерированного номера, устанавливает изображение
-        switch (randomImageNumber) {
-            case 1:
-                backExerciseImageView.setImageResource(R.drawable.back_06);
-                break;
-            case 2:
-                backExerciseImageView.setImageResource(R.drawable.back_07);
-                break;
-            case 3:
-                backExerciseImageView.setImageResource(R.drawable.back_08);
-                break;
-            case 4:
-                backExerciseImageView.setImageResource(R.drawable.back_09);
-                break;
-            case 5:
-                backExerciseImageView.setImageResource(R.drawable.back_10);
-                break;
+            initialSeconds = hours * 3600 + minutes * 60; // Сохраняем исходное время
+            seconds = initialSeconds; // Устанавливаем текущее время
+            setTimer(seconds);
         }
     }
 
     //Метод для установки текста таймера.
     private void setTimer(int seconds) {
-        // ДОБАВЛЕНО: Форматирование времени в ЧЧ:ММ:СС
+        //Форматирование времени в ЧЧ:ММ:СС
         int hours = seconds / 3600;
         int minutes = (seconds % 3600) / 60;
         int secs = seconds % 60;
@@ -193,20 +213,22 @@ public class ExerciseActivity extends AppCompatActivity {
 
     // Метод для запуска таймера
     private void startExerciseTimer(int duration) {
-        isTimerOn = true; // Устанавливает флаг, что таймер работает.
-        countDownTimer = new CountDownTimer(duration * 1000L, 1000) { // Создает новый таймер с указанной продолжительностью.
-            public void onTick(long millisUntilFinished) { // Метод, который вызывается каждую секунду.
-                seconds--; // Уменьшает оставшееся время на каждую секунду.
-                //progressBar.setProgress(duration - seconds); // ЗАКОММЕНТИРОВАНО: убрали ProgressBar
-                setTimer(seconds); // Обновляет текстовое поле таймера.
+        isTimerOn = true;
+
+        //Убедимся что анимация запущена при старте упражнения
+        startExerciseAnimation();
+
+        countDownTimer = new CountDownTimer(duration * 1000L, 1000) {
+            public void onTick(long millisUntilFinished) {
+                seconds--;
+                setTimer(seconds);
             }
 
-            // Метод, который вызывается, когда таймер завершает обратный отсчет.
             public void onFinish() {
-                Toast.makeText(ExerciseActivity.this, "Упражнение завершено, начинаем перерыв", Toast.LENGTH_SHORT).show(); // Показывает сообщение о завершении упражнения.
-                startBreakTimer(); // Запускает таймер перерыва.
+                Toast.makeText(ExerciseActivity.this, "Упражнение завершено, начинаем перерыв", Toast.LENGTH_SHORT).show();
+                startBreakTimer();
             }
-        }.start(); // Запускает таймер.
+        }.start();
     }
 
     private void startBreakTimer() {
@@ -231,6 +253,26 @@ public class ExerciseActivity extends AppCompatActivity {
         }.start(); //Запускает таймер перерыва.
     }
 
+    //Метод для запуска анимации упражнения
+    private void startExerciseAnimation() {
+        if (exerciseAnimationImageView.getDrawable() instanceof AnimationDrawable) {
+            AnimationDrawable animation = (AnimationDrawable) exerciseAnimationImageView.getDrawable();
+            if (!animation.isRunning()) {
+                animation.start();
+            }
+        }
+    }
+
+    //Метод для остановки анимации упражнения
+    private void stopExerciseAnimation() {
+        if (exerciseAnimationImageView.getDrawable() instanceof AnimationDrawable) {
+            AnimationDrawable animation = (AnimationDrawable) exerciseAnimationImageView.getDrawable();
+            if (animation.isRunning()) {
+                animation.stop();
+            }
+        }
+    }
+
     private void stopCountdownTimer() { //Метод для остановки текущего таймера.
         if (countDownTimer != null) { //Проверяет, что таймер существует.
             countDownTimer.cancel(); //Отменяет активный таймер.
@@ -239,17 +281,19 @@ public class ExerciseActivity extends AppCompatActivity {
         }
     }
 
-    private void resetTimer() { //Метод для сброса таймера в начальное состояние.
-        stopCountdownTimer(); //Останавливает таймер.
-        seconds = 0; //Сбрасывает секунды до 0.
-        //progressBar.setProgress(0); // ЗАКОММЕНТИРОВАНО: убрали ProgressBar
-        setTimer(0); //Устанавливает текст таймера на 0.
+    private void resetTimer() {
+        stopCountdownTimer();
+        seconds = initialSeconds; // Сбрасываем к исходному времени, а не к 0
+        setTimer(seconds);
 
-        // ДОБАВЛЕНО: Сброс TimePicker к начальным значениям
-        if (timePicker != null) {
+        //Сброс TimePicker к начальным значениям
+        /*if (timePicker != null) {
             timePicker.setHour(0);
             timePicker.setMinute(30);
-        }
+        }*/
+
+        //Перезапускаем анимацию при сбросе таймера
+        startExerciseAnimation();
     }
 
     @Override
@@ -257,5 +301,19 @@ public class ExerciseActivity extends AppCompatActivity {
         outState.putInt("seconds", seconds); //Сохраняет текущее значение секунд.
         outState.putBoolean("isTimerOn", isTimerOn); //Сохраняет состояние активного таймера.
         super.onSaveInstanceState(outState); //Вызывает родительский метод для сохранения состояния.
+    }
+
+    //Перезапуск анимации при возвращении на экран
+    @Override
+    protected void onResume() {
+        super.onResume();
+        startExerciseAnimation();
+    }
+
+    //Остановка анимации при уходе с экрана (опционально)
+    @Override
+    protected void onPause() {
+        super.onPause();
+        stopExerciseAnimation();
     }
 }

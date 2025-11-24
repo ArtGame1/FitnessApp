@@ -20,6 +20,8 @@ import androidx.cardview.widget.CardView;
 
 import com.example.fitnessapp.R;
 
+import java.util.Random;
+
 public class WorkoutActivity extends AppCompatActivity {
 
     private ImageView btnBackArrowWorkout, btnMenu; //Кнопка "Назад" и добавляем btnMenu
@@ -64,8 +66,8 @@ public class WorkoutActivity extends AppCompatActivity {
         //Скрытие статус-бара и навигационной панели
         getWindow().getDecorView().setSystemUiVisibility(
                 View.SYSTEM_UI_FLAG_FULLSCREEN |
-                View.SYSTEM_UI_FLAG_HIDE_NAVIGATION |
-                View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                        View.SYSTEM_UI_FLAG_HIDE_NAVIGATION |
+                        View.SYSTEM_UI_FLAG_LAYOUT_STABLE
         );
 
 
@@ -197,8 +199,8 @@ public class WorkoutActivity extends AppCompatActivity {
 
     private void startAllAnimations() {
         //Устанавливаем анимации для каждого ImageView
-        fitnessIcon1.setImageResource(R.drawable.bicycle_crunches_animation);
-        fitnessIcon2.setImageResource(R.drawable.bent_leg_twist_animation);
+        fitnessIcon1.setImageResource(R.drawable.bent_leg_twist_animation);
+        fitnessIcon2.setImageResource(R.drawable.bicycle_crunches_animation);
         fitnessIcon3.setImageResource(R.drawable.butt_bridge_animation);
         fitnessIcon4.setImageResource(R.drawable.plunk_animation);
         fitnessIcon5.setImageResource(R.drawable.clapping_crunches_animation);
@@ -222,9 +224,11 @@ public class WorkoutActivity extends AppCompatActivity {
     }
 
     private void startAnimationForView(ImageView imageView) {
-        AnimationDrawable animation = (AnimationDrawable) imageView.getDrawable();
-        if (animation != null) {
-            animation.start();
+        if (imageView.getDrawable() instanceof AnimationDrawable) {
+            AnimationDrawable animation = (AnimationDrawable) imageView.getDrawable();
+            if (!animation.isRunning()) {
+                animation.start();
+            }
         }
     }
 
@@ -369,6 +373,14 @@ public class WorkoutActivity extends AppCompatActivity {
             contentLayout.setGravity(Gravity.CENTER_VERTICAL);
             contentLayout.setPadding(dpToPx(16), dpToPx(16), dpToPx(16), dpToPx(16));
 
+            // Создаем ImageView для иконки упражнения
+            ImageView exerciseIcon = new ImageView(this);
+            exerciseIcon.setLayoutParams(new LinearLayout.LayoutParams(
+                    dpToPx(64),
+                    dpToPx(64)
+            ));
+            exerciseIcon.setScaleType(ImageView.ScaleType.CENTER_CROP);
+
             // Создаем TextView для текста
             LinearLayout textLayout = new LinearLayout(this);
             textLayout.setOrientation(LinearLayout.VERTICAL);
@@ -402,7 +414,18 @@ public class WorkoutActivity extends AppCompatActivity {
                     dpToPx(24)
             ));
 
+            // Устанавливаем анимацию в зависимости от названия упражнения
+            int exerciseImageResource = getExerciseImageResource(title);
+            exerciseIcon.setImageResource(exerciseImageResource);
+
+            // Запускаем анимацию
+            AnimationDrawable animation = (AnimationDrawable) exerciseIcon.getDrawable();
+            if (animation != null) {
+                animation.start();
+            }
+
             // Добавляем элементы в layout
+            contentLayout.addView(exerciseIcon);
             contentLayout.addView(textLayout);
             contentLayout.addView(arrowImage);
 
@@ -412,8 +435,9 @@ public class WorkoutActivity extends AppCompatActivity {
             // Добавляем обработчик клика
             cardView.setOnClickListener(v -> {
                 Intent intent = new Intent(WorkoutActivity.this, ExerciseActivity.class);
-                intent.putExtra("exercise_title", title);
-                intent.putExtra("exercise_description", description);
+                intent.putExtra("day", 1);
+                intent.putExtra("exerciseName", title);
+                intent.putExtra("exerciseImageResource", exerciseImageResource);
                 startActivity(intent);
             });
 
@@ -423,6 +447,46 @@ public class WorkoutActivity extends AppCompatActivity {
             Toast.makeText(this, "Тренировка добавлена", Toast.LENGTH_SHORT).show();
         } else {
             Toast.makeText(this, "Ошибка: контейнер не найден", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    // Метод для получения ресурса изображения по названию упражнения
+    private int getExerciseImageResource(String exerciseName) {
+        switch (exerciseName.toLowerCase()) {
+            case "скручивание согнутой ноги":
+                return R.drawable.bent_leg_twist_animation;
+            case "велосипедные скручивания":
+                return R.drawable.bicycle_crunches_animation;
+            case "ягодичный мостик":
+                return R.drawable.butt_bridge_animation;
+            case "планка":
+                return R.drawable.plunk_animation;
+            case "скручивания с хлопком":
+                return R.drawable.clapping_crunches_animation;
+            case "скручивания со скрещенными руками":
+                return R.drawable.cross_arm_crunches_animation;
+            case "упражнение мертвый жук":
+                return R.drawable.dead_bug_animation;
+            case "бег в упоре лежа":
+                return R.drawable.mountain_climbers_animation;
+            case "упражнение для пресса":
+                return R.drawable.neo_butt_bridge_b;
+            case "скручивание согнутых ног":
+                return R.drawable.bent_leg_twist_animation;
+            default:
+                // Если упражнение не распознано, используем случайную анимацию
+                int[] availableAnimations = {
+                        R.drawable.bent_leg_twist_animation,
+                        R.drawable.bicycle_crunches_animation,
+                        R.drawable.butt_bridge_animation,
+                        R.drawable.plunk_animation,
+                        R.drawable.clapping_crunches_animation,
+                        R.drawable.cross_arm_crunches_animation,
+                        R.drawable.dead_bug_animation,
+                        R.drawable.mountain_climbers_animation
+                };
+                Random random = new Random();
+                return availableAnimations[random.nextInt(availableAnimations.length)];
         }
     }
 
@@ -453,51 +517,81 @@ public class WorkoutActivity extends AppCompatActivity {
      */
     private void openRunningActivity() {
         Intent intent = new Intent(this, ExerciseActivity.class);
+        intent.putExtra("day", 1);
+        intent.putExtra("exerciseName", "Скручивание согнутой ноги");
+        intent.putExtra("exerciseImageResource", R.drawable.bent_leg_twist_animation);
         startActivity(intent);
     }
 
     private void openPushUpsActivity() {
         Intent intent = new Intent(this, ExerciseActivity.class);
+        intent.putExtra("day", 1);
+        intent.putExtra("exerciseName", "Велосипедные скручивания");
+        intent.putExtra("exerciseImageResource", R.drawable.bicycle_crunches_animation);
         startActivity(intent);
     }
 
     private void openSquatsActivity() {
         Intent intent = new Intent(this, ExerciseActivity.class);
+        intent.putExtra("day", 1);
+        intent.putExtra("exerciseName", "Ягодичный мостик");
+        intent.putExtra("exerciseImageResource", R.drawable.butt_bridge_animation);
         startActivity(intent);
     }
 
     private void openJumpingJacksActivity() {
         Intent intent = new Intent(this, ExerciseActivity.class);
+        intent.putExtra("day", 1);
+        intent.putExtra("exerciseName", "Скручивания с хлопком");
+        intent.putExtra("exerciseImageResource", R.drawable.clapping_crunches_animation);
         startActivity(intent);
     }
 
     private void openPlankActivity() {
         Intent intent = new Intent(this, ExerciseActivity.class);
+        intent.putExtra("day", 1);
+        intent.putExtra("exerciseName", "Планка");
+        intent.putExtra("exerciseImageResource", R.drawable.plunk_animation);
         startActivity(intent);
     }
 
     private void openLungesActivity() {
         Intent intent = new Intent(this, ExerciseActivity.class);
+        intent.putExtra("day", 1);
+        intent.putExtra("exerciseName", "Скручивания со скрещенными руками");
+        intent.putExtra("exerciseImageResource", R.drawable.cross_arm_crunches_animation);
         startActivity(intent);
     }
 
     private void openCrunchesActivity() {
         Intent intent = new Intent(this, ExerciseActivity.class);
+        intent.putExtra("day", 1);
+        intent.putExtra("exerciseName", "Упражнение мертвый жук");
+        intent.putExtra("exerciseImageResource", R.drawable.dead_bug_animation);
         startActivity(intent);
     }
 
     private void openBicepCurclsActivity() {
         Intent intent = new Intent(this, ExerciseActivity.class);
+        intent.putExtra("day", 1);
+        intent.putExtra("exerciseName", "Бег в упоре лежа");
+        intent.putExtra("exerciseImageResource", R.drawable.mountain_climbers_animation);
         startActivity(intent);
     }
 
     private void openTricepDipsActivity() {
         Intent intent = new Intent(this, ExerciseActivity.class);
+        intent.putExtra("day", 1);
+        intent.putExtra("exerciseName", "Упражнение для пресса");
+        intent.putExtra("exerciseImageResource", R.drawable.neo_butt_bridge_b);
         startActivity(intent);
     }
 
     private void openLegRaisesActivity() {
         Intent intent = new Intent(this, ExerciseActivity.class);
+        intent.putExtra("day", 1);
+        intent.putExtra("exerciseName", "Скручивание согнутых ног");
+        intent.putExtra("exerciseImageResource", R.drawable.bent_leg_twist_animation);
         startActivity(intent);
     }
 }
