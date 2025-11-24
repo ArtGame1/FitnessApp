@@ -26,7 +26,7 @@
             android:scaleType="fitCenter"
             android:contentDescription="Анимация упражнения"/>
 
-        <!-- Контейнер для таймера и TimePicker -->
+        <!-- Контейнер для таймера и пикеров -->
         <LinearLayout
             android:id="@+id/centerContainer"
             android:layout_width="wrap_content"
@@ -38,7 +38,7 @@
             <!-- Таймер -->
             <TextView
                 android:id="@+id/textViewTimer"
-                android:text="00:30"
+                android:text="00:30:00"
                 android:textSize="75sp"
                 android:textColor="@color/white"
                 android:textStyle="bold"
@@ -49,25 +49,110 @@
                 android:padding="16dp"
                 android:layout_marginTop="10dp"/>
 
-            <!-- Выбор времени -->
-            <TimePicker
-                android:id="@+id/timePicker"
+            <!-- Контейнер для всех трех пикеров -->
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="50dp"
-                android:timePickerMode="spinner"
+                android:orientation="horizontal"
+                android:gravity="center"
+                android:layout_marginTop="30dp"
                 android:background="@color/white"
-                android:textAlignment="center"/>
+                android:padding="20dp">
 
+                <!-- Часы -->
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    android:layout_marginEnd="15px">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Часы"
+                        android:textSize="16sp"
+                        android:textColor="@color/black"
+                        android:layout_marginBottom="5dp"/>
+
+                    <NumberPicker
+                        android:id="@+id/numberPickerHours"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+
+                </LinearLayout>
+
+                <!-- Разделитель -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=":"
+                    android:textSize="24sp"
+                    android:textColor="@color/black"
+                    android:layout_marginEnd="15px"/>
+
+                <!-- Минуты -->
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    android:layout_marginEnd="15px">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Минуты"
+                        android:textSize="16sp"
+                        android:textColor="@color/black"
+                        android:layout_marginBottom="5dp"/>
+
+                    <NumberPicker
+                        android:id="@+id/numberPickerMinutes"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+
+                </LinearLayout>
+
+                <!-- Разделитель -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=":"
+                    android:textSize="24sp"
+                    android:textColor="@color/black"
+                    android:layout_marginEnd="15px"/>
+
+                <!-- Секунды -->
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:gravity="center">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Секунды"
+                        android:textSize="16sp"
+                        android:textColor="@color/black"
+                        android:layout_marginBottom="5dp"/>
+
+                    <NumberPicker
+                        android:id="@+id/numberPickerSeconds"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+                </LinearLayout>
+            </LinearLayout>
         </LinearLayout>
 
         <!-- Кнопка Старт/Стоп -->
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btnStartTimer"
             android:text="@string/start"
-            android:textSize="24sp"
-            android:layout_width="200dp"
-            android:layout_height="60dp"
+            android:textSize="35sp"
+            android:layout_width="210dp"
+            android:layout_height="70dp"
             android:layout_centerHorizontal="true"
             android:layout_alignParentBottom="true"
             android:layout_marginBottom="55dp"
@@ -76,9 +161,9 @@
             android:elevation="8dp"
             android:backgroundTint="#FFFFFF"
             android:textColor="#000000"/>
-
     </RelativeLayout>
 
+    <!-- Остальная разметка без изменений -->
     <!-- Верхняя панель поверх всего -->
     <RelativeLayout
         android:id="@+id/topBar"
@@ -107,4 +192,73 @@
             android:layout_height="wrap_content"/>
     </RelativeLayout>
 
+    <!-- Анимация звезды -->
+    <ImageView
+        android:id="@+id/starAnimationView"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:layout_centerInParent="true"
+        android:visibility="gone"
+        android:src="@drawable/star"
+        android:scaleType="fitXY"
+        android:contentDescription="Мотивационная звезда"/>
+
+    <!-- Мотивационное окно -->
+    <RelativeLayout
+        android:id="@+id/motivationLayout"
+        android:layout_width="300dp"
+        android:layout_height="350dp"
+        android:layout_centerInParent="true"
+        android:background="@drawable/motivation_background"
+        android:visibility="gone"
+        android:padding="20dp"
+        android:elevation="16dp">
+
+        <ImageView
+            android:id="@+id/starImageView"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="20dp"
+            android:src="@drawable/star"
+            android:scaleType="fitXY"
+            android:contentDescription="Звезда достижения"/>
+
+        <TextView
+            android:id="@+id/motivationText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/starImageView"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="20dp"
+            android:text="Молодец!"
+            android:textSize="24sp"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            android:gravity="center"/>
+
+        <TextView
+            android:id="@+id/motivationSubText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/motivationText"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="10dp"
+            android:text="Упражнение выполнено!"
+            android:textSize="16sp"
+            android:textColor="@color/white"
+            android:gravity="center"/>
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btnCloseMotivation"
+            android:layout_width="120dp"
+            android:layout_height="40dp"
+            android:layout_below="@id/motivationSubText"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="20dp"
+            android:text="Продолжить"
+            android:textSize="14sp"
+            android:background="@drawable/button_grey_stroke"
+            android:backgroundTint="@color/white"/>
+    </RelativeLayout>
 </RelativeLayout>
