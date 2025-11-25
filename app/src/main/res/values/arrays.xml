@@ -6,4 +6,12 @@
         <item>Активность приложения</item>
         <item>Популярность тренировок</item>
     </string-array>
+
+    <string-array name="difficulty_levels">
+        <item>Новичок</item>
+        <item>Легкий</item>
+        <item>Средний</item>
+        <item>Продвинутый</item>
+        <item>Эксперт</item>
+    </string-array>
 </resources>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="red">#F75564</color>
@@ -27,4 +27,31 @@
     <color name="dark_background">#121212</color>
     <color name="dark_surface">#1E1E1E</color>
     <color name="gray_light">#B0B0B0</color>
+
+    <color name="primary_color">#FF6B35</color>
+    <color name="background_color">#FAFAFA</color>
+    <color name="text_primary">#212121</color>
+    <color name="text_secondary">#757575</color>
+
+
+    <!-- Цвета для ошибок и статусов -->
+    <color name="error_color">#F44336</color>
+    <color name="success_color">#4CAF50</color>
+    <color name="warning_color">#FF9800</color>
+    <color name="info_color">#2196F3</color>
+
+    <!-- Дополнительные цвета для приложения -->
+    <color name="gray_medium">#9E9E9E</color>
+    <color name="gray_dark">#616161</color>
+
+    <!-- Цвета для карточек и фонов -->
+    <color name="card_background">#FFFFFF</color>
+    <color name="divider_color">#E0E0E0</color>
+    <color name="hover_color">#F5F5F5</color>
+
+    <!-- Градиентные цвета для фитнес-приложения -->
+    <color name="fitness_primary">#FF6B35</color>
+    <color name="fitness_secondary">#FF8E53</color>
+    <color name="fitness_accent">#4ECDC4</color>
+    <color name="fitness_success">#45B7AF</color>
 </resources>

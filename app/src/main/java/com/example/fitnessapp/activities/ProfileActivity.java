@@ -66,13 +66,13 @@ public class ProfileActivity extends AppCompatActivity {
         });
 
         edtProfile.setOnClickListener(v -> { //Устанавливает слушатель нажатия на текст "Редактировать профиль".
-            Intent intent = new Intent(ProfileActivity.this, SettingsActivity.class); //Создает Intent для перехода на SettingsActivity.
+            Intent intent = new Intent(ProfileActivity.this, UserManagementActivity.class); //Создает Intent для перехода на SettingsActivity.
             intent.putExtra("MODE", "EDIT_PROFILE"); //Передает дополнительную информацию о режиме редактирования профиля.
             startActivityForResult(intent, 1); //Запускает SettingsActivity с ожиданием результата.
         });
 
         chgPassword.setOnClickListener(v -> { //Устанавливает слушатель нажатия на текст "Сменить пароль".
-            Intent intent = new Intent(ProfileActivity.this, SettingsActivity.class); //Создает Intent для перехода на SettingsActivity.
+            Intent intent = new Intent(ProfileActivity.this, UserManagementActivity.class); //Создает Intent для перехода на SettingsActivity.
             intent.putExtra("MODE", "CHANGE_PASSWORD"); //Передает дополнительную информацию о режиме смены пароля.
             startActivity(intent); // Запускает SettingsActivity.
         });
@@ -128,7 +128,7 @@ public class ProfileActivity extends AppCompatActivity {
 
         Toast.makeText(this, "Пользователь успешно добавлен!", Toast.LENGTH_SHORT).show(); //Показывает сообщение об успешном добавлении пользователя.
 
-        Intent intent = new Intent(this, SettingsActivity.class); //Создает Intent для перехода на SettingsActivity.
+        Intent intent = new Intent(this, UserManagementActivity.class); //Создает Intent для перехода на SettingsActivity.
         startActivity(intent); //Запускает SettingsActivity.
     }
 

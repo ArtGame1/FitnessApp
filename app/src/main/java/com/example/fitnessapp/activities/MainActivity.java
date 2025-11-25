@@ -3,16 +3,12 @@ package com.example.fitnessapp.activities;
 import android.Manifest;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -27,10 +23,10 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
-import androidx.core.app.NotificationCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -136,7 +132,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         settingsBtn.setOnClickListener(v -> { //Устанавливает слушатель нажатия для кнопки "Настройки".
-            Intent intent = new Intent(MainActivity.this, SettingsActivity.class); //Создает новый Intent для перехода на SettingsActivity.
+            Intent intent = new Intent(MainActivity.this, UserManagementActivity.class); //Создает новый Intent для перехода на SettingsActivity.
             startActivity(intent); //Запускает активность SettingsActivity.
             //finish(); //Завершает текущую активность
         });
@@ -164,6 +160,11 @@ public class MainActivity extends AppCompatActivity {
                 //Intent для перехода к тренировкам
                 intent = new Intent(this, WorkoutActivity.class);
             }
+            else if (item.getItemId() == R.id.nav_settings)
+            {
+                //Intent для перехода к настройкам приложения
+                intent = new Intent(this, SettingsActivity.class);
+            }
             else if (item.getItemId() == R.id.nav_profile)
             {
                 //Intent для перехода к профилю (через экран логина)
@@ -186,6 +187,16 @@ public class MainActivity extends AppCompatActivity {
             return true; //Возвращаем true чтобы показать что выбор обработан
         });
         //checkAdminAccess(); //Проверка для администратора
+
+        //Применяем сохраненную тему при запуске приложения
+        SharedPreferences prefs = getSharedPreferences("FitnessAppSettings", MODE_PRIVATE);
+        boolean isDarkMode = prefs.getBoolean("dark_mode", false);
+
+        if (isDarkMode) {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+        } else {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+        }
     }
 
     /**
@@ -399,18 +410,18 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    // Метод для проверки существования тренировки
+    //Метод для проверки существования тренировки
     private boolean isWorkoutExists(String searchQuery) {
-        // Здесь должна быть ваша реальная логика проверки
-        // Например, поиск в базе данных, списке тренировок и т.д.
+        //Здесь должна быть ваша реальная логика проверки
+        //Например, поиск в базе данных, списке тренировок и т.д.
 
-        // Временный пример - список существующих тренировок
+        //Временный пример - список существующих тренировок
         List<String> availableWorkouts = Arrays.asList(
                 "Скручивание согнутой ноги", "Велосипедные скручивания", "Ягодичный мостик", "Планка", "Скручивания с хлопком",
                 "Скручивания со скрещенными руками", "Упражнение мертвый жук", "Бег в упоре лежа", "Упражнение для пресса", "Скручивание согнутых ног"
         );
 
-        // Проверяем совпадение (можно сделать более сложную логику)
+        //Проверяем совпадение (можно сделать более сложную логику)
         for (String workout : availableWorkouts) {
             if (workout.toLowerCase().contains(searchQuery.toLowerCase())) {
                 return true;
@@ -419,7 +430,7 @@ public class MainActivity extends AppCompatActivity {
         return false;
     }
 
-    // Дополнительный метод для показа похожих тренировок
+    //Дополнительный метод для показа похожих тренировок
     private void showSimilarWorkouts(String searchQuery) {
         List<String> similarWorkouts = findSimilarWorkouts(searchQuery);
 
@@ -429,7 +440,7 @@ public class MainActivity extends AppCompatActivity {
 
             String[] workoutsArray = similarWorkouts.toArray(new String[0]);
             builder.setItems(workoutsArray, (dialog, which) -> {
-                // При выборе похожей тренировки переходим на неё
+                //При выборе похожей тренировки переходим на неё
                 Intent intent = new Intent(MainActivity.this, WorkoutActivity.class);
                 intent.putExtra("search_query", similarWorkouts.get(which));
                 startActivity(intent);
@@ -440,7 +451,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    // Поиск похожих тренировок
+    //Поиск похожих тренировок
     private List<String> findSimilarWorkouts(String searchQuery) {
         List<String> allWorkouts = Arrays.asList(
                 "Скручивание согнутой ноги", "Велосипедные скручивания", "Ягодичный мостик", "Планка", "Скручивания с хлопком",
@@ -499,19 +510,19 @@ public class MainActivity extends AppCompatActivity {
     private void toggleNightMode() {
         isNightMode = !isNightMode;
 
-        // Сохраняем настройку
+        //Сохраняем настройку
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putBoolean(KEY_NIGHT_MODE, isNightMode);
         editor.apply();
 
-        // Перезапускаем активность для применения темы
+        //Перезапускаем активность для применения темы
         recreate();
 
-        // Показываем сообщение
+        //Показываем сообщение
         String message = isNightMode ? "Ночной режим включен" : "Дневной режим включен";
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
 
-        // Обновляем иконку в меню (опционально)
+        //Обновляем иконку в меню (опционально)
         updateNightModeIcon();
     }
 
@@ -535,13 +546,13 @@ public class MainActivity extends AppCompatActivity {
      * Применение цветов для динамических элементов
      */
     private void applyDynamicColors() {
-        // Пример применения цветов к элементам, которые не меняются через тему
+        //Пример применения цветов к элементам, которые не меняются через тему
         if (isNightMode) {
-            // Устанавливаем темные цвета для конкретных элементов
+            //Устанавливаем темные цвета для конкретных элементов
             toolbar.setBackgroundColor(ContextCompat.getColor(this, R.color.dark_surface));
-            // Другие элементы...
+            //Другие элементы...
         } else {
-            // Устанавливаем светлые цвета
+            //Устанавливаем светлые цвета
             toolbar.setBackgroundColor(ContextCompat.getColor(this, R.color.colorPrimary));
         }
     }
