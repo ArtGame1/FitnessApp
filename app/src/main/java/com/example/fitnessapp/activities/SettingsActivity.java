@@ -1,5 +1,6 @@
 package com.example.fitnessapp.activities;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
@@ -15,7 +16,6 @@ import android.widget.Toast;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.appcompat.app.AppCompatDelegate;
 
 import com.example.fitnessapp.R;
 
@@ -70,12 +70,19 @@ public class SettingsActivity extends AppCompatActivity {
     private void setupToolbar() {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle("Настройки");
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);  //Показываем кнопку "Назад"
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
 
-        //Обработчик нажатия на кнопку "Назад"
-        toolbar.setNavigationOnClickListener(v -> onBackPressed());
+        //Добавить кнопку назад в Toolbar
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
+            getSupportActionBar().setTitle("Настройки");
+        }
+
+        //Обработчик клика по кнопке назад
+        toolbar.setNavigationOnClickListener(v -> {
+            Intent intent = new Intent(SettingsActivity.this, MainActivity.class);
+            startActivity(intent);
+        });
     }
 
     /**
