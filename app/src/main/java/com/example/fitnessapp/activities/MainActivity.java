@@ -165,6 +165,23 @@ public class MainActivity extends AppCompatActivity {
                 //Intent для перехода к настройкам приложения
                 intent = new Intent(this, SettingsActivity.class);
             }
+            else if (item.getItemId() == R.id.nav_about)
+            {
+                //Показываем диалоговое окно "О приложении"
+                new AlertDialog.Builder(this)
+                        .setTitle("О приложении")
+                        .setMessage("Fitness App Pro\n\n" +
+                                "Ваш персональный фитнес-помощник!\n\n" +
+                                "Версия: 1.0.0\n" +
+                                "Приложение поможет вам:\n" +
+                                "• Следить за тренировками\n" +
+                                "• Отслеживать прогресс\n" +
+                                "• Достигать спортивных целей")
+                        .setPositiveButton("OK", (dialog, which) -> dialog.dismiss())
+                        .setIcon(R.mipmap.ic_fitness) //Иконка приложения
+                        .show();
+                return true; //Возвращаем true, но не запускаем новую активность
+            }
             else if (item.getItemId() == R.id.nav_profile)
             {
                 //Intent для перехода к профилю (через экран логина)
