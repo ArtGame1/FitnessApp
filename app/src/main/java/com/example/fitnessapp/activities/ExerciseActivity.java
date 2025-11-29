@@ -4,10 +4,12 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
+import android.content.SharedPreferences;
 import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.EditText;
@@ -55,6 +57,19 @@ public class ExerciseActivity extends AppCompatActivity {
     private TextView motivationText, motivationSubText; //Основной текст ("Молодец!", "Отлично!" и т.д.)
     private ImageView starImageView; //Анимированная звезда внутри мотивационного окна
     private AppCompatButton btnCloseMotivation; //Кнопка "Продолжить" для закрытия окна
+    private int remainingSeconds = 0; //Добавляем переменную для хранения оставшегося времени
+    private boolean isExerciseCompleted = false; //Флаг завершения упражнения
+
+    //КОНСТАНТЫ ДЛЯ СОХРАНЕНИЯ
+    private static final String PREFS_NAME = "ExerciseTimerPrefs";
+    private static final String KEY_REMAINING_SECONDS = "remainingSeconds";
+    private static final String KEY_IS_EXERCISE_COMPLETED = "isExerciseCompleted";
+    private static final String KEY_INITIAL_SECONDS = "initialSeconds";
+
+    //Константы для звезд
+    private static final String STATS_PREFS_NAME = "FitnessAppStats";
+    private static final String KEY_STARS_COUNT = "stars_count";
+    private boolean starAlreadySaved = false; //Флаг чтобы предотвратить дублирование сохранения
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,7 +79,7 @@ public class ExerciseActivity extends AppCompatActivity {
         //Скрытие статус-бара и навигационной панели
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_FULLSCREEN | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
 
-        // Установите флаг, чтобы скрыть строку состояния.
+        //Установите флаг, чтобы скрыть строку состояния.
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
@@ -150,48 +165,54 @@ public class ExerciseActivity extends AppCompatActivity {
         exerciseName = getIntent().getStringExtra("exerciseName");
         exerciseImageResource = getIntent().getIntExtra("exerciseImageResource", 0);
 
-        // ДОБАВЛЕНО: Устанавливаем конкретную анимацию упражнения
+        //Устанавливаем конкретную анимацию упражнения
         setExerciseAnimation();
 
-        //Восстанавливает состояние таймера при пересоздании активности
+        //ПРАВИЛЬНОЕ ВОССТАНОВЛЕНИЕ СОСТОЯНИЯ
         if (savedInstanceState != null) {
-            seconds = savedInstanceState.getInt("seconds"); //Восстанавливает время
-            isTimerOn = savedInstanceState.getBoolean("isTimerOn"); //Восстанавливает состояние таймера
-            //progressBar.setProgress(seconds); //Убираем ProgressBar
-            setTimer(seconds); //Устанавливает текст таймера
-            if (isTimerOn) { //Если таймер был включен...
-                startExerciseTimer(seconds); //Запускает таймер
-            }
+            //Восстанавливаем из Bundle (поворот экрана)
+            seconds = savedInstanceState.getInt("seconds", 0);
+            isTimerOn = savedInstanceState.getBoolean("isTimerOn", false);
+            remainingSeconds = savedInstanceState.getInt("remainingSeconds", 0);
+            isExerciseCompleted = savedInstanceState.getBoolean("isExerciseCompleted", false);
+            initialSeconds = savedInstanceState.getInt("initialSeconds", 0);
+            starAlreadySaved = savedInstanceState.getBoolean("starAlreadySaved", false);
         } else {
-            //Устанавливаем начальное время из NumberPickers
+            //Восстанавливаем из SharedPreferences (перезапуск приложения)
+            restoreTimerStateFromPreferences();
+        }
+
+        //ВОССТАНАВЛИВАЕМ ВРЕМЯ В ЗАВИСИМОСТИ ОТ СИТУАЦИИ
+        if (isTimerOn) {
+            //Если таймер был активен, продолжаем отсчет
+            setTimer(seconds);
+            startExerciseTimer(seconds);
+        } else if (remainingSeconds > 0 && !isExerciseCompleted) {
+            //Если есть незавершенное упражнение, показываем оставшееся время
+            seconds = remainingSeconds;
+            setTimer(seconds);
+            updateNumberPickersFromSeconds(seconds);
+        } else {
+            //Иначе устанавливаем начальное время
             updateTimeFromNumberPickers();
         }
 
-        //Устанавливает слушатель на кнопку для установки таймера
-        //btnSetTimer.setOnClickListener(v -> { //Убираем старую логику установки времени
-        //    String input = editTextTimeInput.getText().toString(); //Получает текст из поля
-        //    if (!input.isEmpty()) { //Проверяет, не пустое ли поле
-        //        seconds = Integer.parseInt(input); //Преобразует текст в секунды
-        //        if (seconds > 0) { //Если введенное время положительное...
-        //            progressBar.setMax(seconds); //Устанавливает максимальное значение прогресс-бара
-        //            progressBar.setProgress(0); //Сбрасывает прогресс
-        //            setTimer(seconds); //Устанавливает таймер
-        //        } else {
-        //            Toast.makeText(this, "Введите положительное время", Toast.LENGTH_SHORT).show(); //Сообщает пользователю, если время отрицательное
-        //        }
-        //    }
-        //});
-
-        //Устанавливает слушатель на кнопку для запуска/остановки таймера
+        //Измененный слушатель кнопки Start/Stop
         btnStartTimer.setOnClickListener(v -> {
             if (!isTimerOn) {
-                //updateTimeFromTimePicker();
-
-                if (seconds > 0) {
+                //ЕСЛИ ЕСТЬ ОСТАВШЕЕСЯ ВРЕМЯ - ПРОДОЛЖАЕМ С НЕГО
+                if (remainingSeconds > 0 && !isExerciseCompleted) {
+                    seconds = remainingSeconds;
                     btnStartTimer.setText(R.string.stop);
-                    startExerciseTimer(seconds); //Запускаем с текущим значением seconds
-                } else {
-                    //Только если время не установлено, берем из NumberPickers
+                    startExerciseTimer(seconds);
+                }
+                //ЕСЛИ ВРЕМЯ УЖЕ УСТАНОВЛЕНО - ЗАПУСКАЕМ
+                else if (seconds > 0) {
+                    btnStartTimer.setText(R.string.stop);
+                    startExerciseTimer(seconds);
+                }
+                //ЕСЛИ ВРЕМЯ НЕ УСТАНОВЛЕНО - БЕРЕМ ИЗ NUMBERPICKERS
+                else {
                     updateTimeFromNumberPickers();
                     if (seconds > 0) {
                         btnStartTimer.setText(R.string.stop);
@@ -207,9 +228,63 @@ public class ExerciseActivity extends AppCompatActivity {
 
         //Устанавливает слушатель на кнопку "Назад"
         btnBackArrow.setOnClickListener(v -> onBackPressed()); //Возвращает к предыдущей активности
+    }
 
-        //При завершении упражнения
-        //showStarAnimation(); //Убираем отсюда, будем показывать мотивационное окно
+    //Метод для обновления NumberPickers из секунд
+    private void updateNumberPickersFromSeconds(int totalSeconds) {
+        if (totalSeconds <= 0) return;
+
+        int hours = totalSeconds / 3600;
+        int minutes = (totalSeconds % 3600) / 60;
+        int secondsValue = totalSeconds % 60;
+
+        if (numberPickerHours != null) numberPickerHours.setValue(hours);
+        if (numberPickerMinutes != null) numberPickerMinutes.setValue(minutes);
+        if (numberPickerSeconds != null) numberPickerSeconds.setValue(secondsValue);
+    }
+
+    //МЕТОДЫ ДЛЯ СОХРАНЕНИЯ МЕЖДУ СЕССИЯМИ
+
+    /**
+     * Сохраняет состояние таймера в SharedPreferences
+     */
+    private void saveTimerStateToPreferences() {
+        SharedPreferences prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putInt(KEY_REMAINING_SECONDS, remainingSeconds);
+        editor.putBoolean(KEY_IS_EXERCISE_COMPLETED, isExerciseCompleted);
+        editor.putInt(KEY_INITIAL_SECONDS, initialSeconds);
+        editor.apply();
+    }
+
+    /**
+     * Восстанавливает состояние таймера из SharedPreferences
+     */
+    private void restoreTimerStateFromPreferences() {
+        SharedPreferences prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+        remainingSeconds = prefs.getInt(KEY_REMAINING_SECONDS, 0);
+        isExerciseCompleted = prefs.getBoolean(KEY_IS_EXERCISE_COMPLETED, false);
+        initialSeconds = prefs.getInt(KEY_INITIAL_SECONDS, 0);
+
+        //Если есть сохраненное состояние, используем его
+        if (remainingSeconds > 0 && !isExerciseCompleted) {
+            seconds = remainingSeconds;
+        } else {
+            //Иначе устанавливаем начальное время из NumberPickers
+            updateTimeFromNumberPickers();
+        }
+    }
+
+    /**
+     * Очищает сохраненное состояние таймера
+     */
+    private void clearTimerStateFromPreferences() {
+        SharedPreferences prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.remove(KEY_REMAINING_SECONDS);
+        editor.remove(KEY_IS_EXERCISE_COMPLETED);
+        editor.remove(KEY_INITIAL_SECONDS);
+        editor.apply();
     }
 
     //МЕТОД ДЛЯ НАСТРОЙКИ NUMBERPICKERS (ДОБАВЛЕНО)
@@ -222,7 +297,7 @@ public class ExerciseActivity extends AppCompatActivity {
         //Настройка минут (0-59)
         numberPickerMinutes.setMinValue(0);
         numberPickerMinutes.setMaxValue(59);
-        numberPickerMinutes.setValue(30);
+        numberPickerMinutes.setValue(0);
 
         //Настройка секунд (0-59)
         numberPickerSeconds.setMinValue(0);
@@ -251,6 +326,9 @@ public class ExerciseActivity extends AppCompatActivity {
         initialSeconds = hours * 3600 + minutes * 60 + secondsValue;
         seconds = initialSeconds;
         setTimer(seconds);
+
+        //Сохраняем initialSeconds при изменении
+        saveTimerStateToPreferences();
     }
 
     //МЕТОДЫ ДЛЯ МОТИВАЦИОННОГО ОКНА (ДОБАВЛЕНО)
@@ -274,7 +352,7 @@ public class ExerciseActivity extends AppCompatActivity {
         animatorSet.setDuration(600); // Длительность анимации: 600ms
         animatorSet.start();
 
-        animateStar(); // Запуск отдельной анимации звезды
+        animateStar(); //Запуск отдельной анимации звезды
     }
 
     /**
@@ -318,58 +396,6 @@ public class ExerciseActivity extends AppCompatActivity {
         starAnimator.playTogether(rotation, scaleX, scaleY); //Все анимации запускаются одновременно
         starAnimator.setDuration(800); //Длительность анимации: 800ms
         starAnimator.start();
-    }
-
-    /**
-     * ПОКАЗ ПРОСТОЙ АНИМАЦИИ ЗВЕЗДЫ (РЕЗЕРВНЫЙ ВАРИАНТ)
-     * ------------------------------------------------
-     * Альтернативная упрощенная анимация звезды без мотивационного окна
-     * Автоматически скрывается через 2 секунды
-     */
-    private void showStarAnimation() {
-        //Показываем звезду
-        starAnimationView.setVisibility(View.VISIBLE);
-
-        //Анимация появления (аналогичная мотивационному окну, но для простой звезды)
-        ObjectAnimator scaleX = ObjectAnimator.ofFloat(starAnimationView, "scaleX", 0f, 1.2f, 1f);
-        ObjectAnimator scaleY = ObjectAnimator.ofFloat(starAnimationView, "scaleY", 0f, 1.2f, 1f);
-        ObjectAnimator alpha = ObjectAnimator.ofFloat(starAnimationView, "alpha", 0f, 1f);
-
-        AnimatorSet animatorSet = new AnimatorSet();
-        animatorSet.playTogether(scaleX, scaleY, alpha);
-        animatorSet.setDuration(800);
-        animatorSet.start();
-
-        //Автоматическое скрытие через 2 секунды с помощью Handler
-        new Handler().postDelayed(() -> hideStarAnimation(), 2000);
-    }
-
-    private void hideStarAnimation() {
-        //Создаем анимацию для уменьшения масштаба по оси X до 0 (скрытие)
-        ObjectAnimator scaleX = ObjectAnimator.ofFloat(starAnimationView, "scaleX", 1f, 0f);
-        //Создаем анимацию для уменьшения масштаба по оси Y до 0 (скрытие)
-        ObjectAnimator scaleY = ObjectAnimator.ofFloat(starAnimationView, "scaleY", 1f, 0f);
-        //Создаем анимацию для постепенного исчезновения (альфа-канал от 1 до 0)
-        ObjectAnimator alpha = ObjectAnimator.ofFloat(starAnimationView, "alpha", 1f, 0f);
-
-        //Объединяем все созданные анимации в один набор
-        AnimatorSet animatorSet = new AnimatorSet();
-        //Запускаем все анимации одновременно
-        animatorSet.playTogether(scaleX, scaleY, alpha);
-        //Устанавливаем продолжительность анимации в 500 миллисекунд
-        animatorSet.setDuration(500);
-        //Запускаем набор анимаций
-        animatorSet.start();
-
-        //Добавляем слушатель для обработки окончания анимации
-        animatorSet.addListener(new AnimatorListenerAdapter() {
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                //После завершения анимации, устанавливаем видимость view в GONE,
-                //чтобы оно перестало занимать место на экране
-                starAnimationView.setVisibility(View.GONE);
-            }
-        });
     }
 
     //Метод для установки конкретной анимации упражнения
@@ -431,27 +457,36 @@ public class ExerciseActivity extends AppCompatActivity {
         textViewTimer.setText(String.format("%02d:%02d:%02d", hours, minutes, secs));
     }
 
-    //Метод для запуска таймера
+    //ИСПРАВЛЕННЫЙ МЕТОД ДЛЯ ЗАПУСКА ТАЙМЕРА УПРАЖНЕНИЯ
     private void startExerciseTimer(int duration) {
         isTimerOn = true;
+        isExerciseCompleted = false; //Сбрасываем флаг завершения
+        starAlreadySaved = false; // Сбрасываем флаг сохранения звезды
 
-        //Убедимся что анимация запущена при старте упражнения
         startExerciseAnimation();
 
         countDownTimer = new CountDownTimer(duration * 1000L, 1000) {
             public void onTick(long millisUntilFinished) {
-                seconds = (int) (millisUntilFinished / 1000); //Вычисляем оставшееся время
+                seconds = (int) (millisUntilFinished / 1000);
+                remainingSeconds = seconds; //Сохраняем оставшееся время
                 setTimer(seconds);
             }
 
             public void onFinish() {
                 seconds = 0;
+                remainingSeconds = 0;
+                isExerciseCompleted = true; //Упражнение завершено полностью
                 setTimer(0);
-                //showStarAnimation(); //Показываем мотивационное окно вместо простой звезды
-                showMotivationWindow(); //Показываем мотивационное окно
+
+                //Сохраняем звезду при завершении упражнения - ЗДЕСЬ!
+                if (!starAlreadySaved) {
+                    saveStarToStats();
+                    starAlreadySaved = true;
+                }
+
+                showMotivationWindow();
                 Toast.makeText(ExerciseActivity.this, "Упражнение завершено, начинаем перерыв", Toast.LENGTH_SHORT).show();
 
-                //Автоматически запускаем перерыв через 3 секунды (ДОБАВЛЕНО)
                 new Handler().postDelayed(() -> {
                     if (motivationLayout.getVisibility() == View.VISIBLE) {
                         hideMotivationWindow();
@@ -462,27 +497,29 @@ public class ExerciseActivity extends AppCompatActivity {
         }.start();
     }
 
+    // ИСПРАВЛЕННЫЙ МЕТОД ДЛЯ ПЕРЕРЫВА
     private void startBreakTimer() {
         int breakDuration = 300; //Устанавливает продолжительность перерыва в секундах.
         seconds = breakDuration; //Инициализирует переменную seconds с длительностью перерыва.
-        //progressBar.setMax(breakDuration); //Убираем ProgressBar
-        //progressBar.setProgress(0); //Убираем ProgressBar
         setTimer(breakDuration); //Устанавливает текст таймера на значение продолжительности перерыва.
 
         //Создает новый CountDownTimer для обратного отсчета перерыва.
         countDownTimer = new CountDownTimer(breakDuration * 1000, 1000) {
             public void onTick(long millisUntilFinished) { //Метод, который вызывается каждую секунду.
                 seconds = (int) (millisUntilFinished / 1000); //Вычисляет оставшееся время.
-                //progressBar.setProgress(breakDuration - seconds); //Убираем ProgressBar
                 setTimer(seconds); //Обновляет текст таймера.
             }
 
-            public void onFinish() {//Метод, вызываемый по окончании перерыва.
-                seconds = 0; //Устанавливаем 0.
+            public void onFinish() {
+                seconds = 0;
+                remainingSeconds = 0;
+                isExerciseCompleted = true; //Упражнение завершено полностью
                 setTimer(0);
-                //Показываем мотивационное окно и для завершения перерыва (ДОБАВЛЕНО)
-                motivationSubText.setText("Перерыв завершен!");
                 showMotivationWindow();
+
+                //УБРАТЬ отсюда сохранение звезды: saveStarToStats();
+
+                Toast.makeText(ExerciseActivity.this, "Перерыв завершен!", Toast.LENGTH_SHORT).show();
 
                 new Handler().postDelayed(() -> {
                     if (motivationLayout.getVisibility() == View.VISIBLE) {
@@ -514,58 +551,123 @@ public class ExerciseActivity extends AppCompatActivity {
         }
     }
 
-    private void stopCountdownTimer() { //Метод для остановки текущего таймера.
-        if (countDownTimer != null) { //Проверяет, что таймер существует.
-            countDownTimer.cancel(); //Отменяет активный таймер.
-            isTimerOn = false; //Устанавливает флаг, что таймер не работает.
-            btnStartTimer.setText(R.string.start); //Меняет текст кнопки на "Начать".
+    //Измененный метод остановки таймера
+    private void stopCountdownTimer() {
+        if (countDownTimer != null) {
+            countDownTimer.cancel();
+            isTimerOn = false;
+            btnStartTimer.setText(R.string.start);
+
+            //Сохраняем оставшееся время для возможности продолжения
+            if (seconds > 0) {
+                remainingSeconds = seconds;
+                isExerciseCompleted = false;
+                //Обновляем NumberPickers чтобы показать текущее оставшееся время
+                updateNumberPickersFromSeconds(seconds);
+            }
         }
     }
 
+    //Измененный метод сброса таймера
     private void resetTimer() {
         stopCountdownTimer();
-        seconds = initialSeconds; //Сбрасываем к исходному времени, а не к 0
+
+        //Сбрасываем только если упражнение было завершено
+        if (isExerciseCompleted || remainingSeconds == 0) {
+            seconds = initialSeconds;
+            remainingSeconds = 0;
+            starAlreadySaved = false; // Сбрасываем флаг сохранения звезды
+            // ДОБАВЛЕНО: Очищаем сохраненное состояние при полном сбросе
+            clearTimerStateFromPreferences();
+        } else {
+            //Иначе продолжаем с оставшегося времени
+            seconds = remainingSeconds;
+        }
+
         setTimer(seconds);
 
-        //Сброс TimePicker к начальным значениям
-        if (timePicker != null) {
-            timePicker.setHour(0);
-            timePicker.setMinute(30);
+        //Сброс NumberPickers к начальным значениям только при полном сбросе
+        if (isExerciseCompleted || remainingSeconds == 0) {
+            if (numberPickerHours != null) {
+                numberPickerHours.setValue(0);
+            }
+            if (numberPickerMinutes != null) {
+                numberPickerMinutes.setValue(0);
+            }
+            if (numberPickerSeconds != null) {
+                numberPickerSeconds.setValue(0);
+            }
         }
-
-        //Сброс NumberPickers к начальным значениям (ДОБАВЛЕНО)
-        if (numberPickerHours != null) {
-            numberPickerHours.setValue(0);
-        }
-        if (numberPickerMinutes != null) {
-            numberPickerMinutes.setValue(30);
-        }
-        if (numberPickerSeconds != null) {
-            numberPickerSeconds.setValue(0);
-        }
-
-        //Перезапускаем анимацию при сбросе таймера
         startExerciseAnimation();
     }
 
-    @Override
-    protected void onSaveInstanceState(@NonNull Bundle outState) { //Переопределяет метод для сохранения состояния активности.
-        outState.putInt("seconds", seconds); //Сохраняет текущее значение секунд.
-        outState.putBoolean("isTimerOn", isTimerOn); //Сохраняет состояние активного таймера.
-        super.onSaveInstanceState(outState); //Вызывает родительский метод для сохранения состояния.
+    /**
+     * УЛУЧШЕННЫЙ МЕТОД СОХРАНЕНИЯ ЗВЕЗДЫ ПРИ ЗАВЕРШЕНИИ УПРАЖНЕНИЯ
+     */
+    private void saveStarToStats() {
+        try {
+            SharedPreferences statsPrefs = getSharedPreferences(STATS_PREFS_NAME, MODE_PRIVATE);
+            int currentStars = statsPrefs.getInt(KEY_STARS_COUNT, 0);
+
+            //Максимум 5 звезд
+            if (currentStars < 5) {
+                currentStars++;
+                SharedPreferences.Editor editor = statsPrefs.edit();
+                editor.putInt(KEY_STARS_COUNT, currentStars);
+
+                // Используем commit() для немедленного сохранения
+                boolean success = editor.commit();
+
+                if (success) {
+                    // Показываем сообщение о получении звезды
+                    Toast.makeText(this, "⭐ Получена звезда! Всего звезд: " + currentStars, Toast.LENGTH_LONG).show();
+
+                    // Логируем для отладки
+                    Log.d("StarSystem", "Звезда сохранена успешно. Всего звезд: " + currentStars);
+                } else {
+                    Toast.makeText(this, "Ошибка сохранения звезды", Toast.LENGTH_SHORT).show();
+                    Log.e("StarSystem", "Ошибка сохранения звезды");
+                }
+            } else {
+                Toast.makeText(this, "🎉 У вас уже максимальное количество звезд!", Toast.LENGTH_SHORT).show();
+            }
+        } catch (Exception e) {
+            Log.e("StarSystem", "Ошибка при сохранении звезды: " + e.getMessage());
+            Toast.makeText(this, "Ошибка при сохранении звезды", Toast.LENGTH_SHORT).show();
+        }
     }
 
-    //Перезапуск анимации при возвращении на экран
+    //Обновленный метод сохранения состояния
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt("seconds", seconds);
+        outState.putBoolean("isTimerOn", isTimerOn);
+        outState.putInt("remainingSeconds", remainingSeconds);
+        outState.putBoolean("isExerciseCompleted", isExerciseCompleted);
+        outState.putInt("initialSeconds", initialSeconds);
+        outState.putBoolean("starAlreadySaved", starAlreadySaved);
+    }
+
+    //Восстанавливаем состояние при возврате на экран
     @Override
     protected void onResume() {
         super.onResume();
+
+        //Если есть оставшееся время и упражнение не завершено, показываем его
+        if (remainingSeconds > 0 && !isExerciseCompleted && !isTimerOn) {
+            seconds = remainingSeconds;
+            setTimer(seconds);
+        }
         startExerciseAnimation();
     }
 
-    //Остановка анимации при уходе с экрана (опционально)
+    //Обновленный метод onPause для сохранения при выходе
     @Override
     protected void onPause() {
         super.onPause();
+        //Сохраняем состояние при уходе с экрана
+        saveTimerStateToPreferences();
         stopExerciseAnimation();
     }
 }
