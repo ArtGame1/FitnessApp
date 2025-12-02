@@ -36,6 +36,10 @@ public class LoginActivity extends AppCompatActivity {
     public static final String ADMIN_EMAIL = "admin@fitnessapp.com"; //Email администратора
     public static final String ADMIN_PASSWORD = "admin123"; //Пароль администратора
 
+    //Данные для тренера
+    public static final String COACH_EMAIL = "coach@fitnessapp.com"; //Email тренера
+    public static final String COACH_PASSWORD = "coach123"; //Пароль тренера
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -124,6 +128,10 @@ public class LoginActivity extends AppCompatActivity {
                 if (isEmailLogin && email.equals(ADMIN_EMAIL) && password.equals(ADMIN_PASSWORD)) {
                     Intent intent = new Intent(LoginActivity.this, AdminPanel.class); //Переход
                     //на AdminPanel для администратора
+                    startActivity(intent);
+                }
+                else if (isEmailLogin && email.equals(COACH_EMAIL) && password.equals(COACH_PASSWORD)) {
+                    Intent intent = new Intent(LoginActivity.this, CoachActivity.class);
                     startActivity(intent);
                 }
                 //Проверка для обычного пользователя по email

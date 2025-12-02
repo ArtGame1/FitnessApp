@@ -8,7 +8,7 @@
             android:title="Мой профиль"/>
         <item
             android:id="@+id/nav_workouts"
-            android:icon="@drawable/ic_workout"
+            android:icon="@drawable/ic_fitness_center"
             android:title="Тренировки"/>
         <item
             android:id="@+id/nav_statistics"
