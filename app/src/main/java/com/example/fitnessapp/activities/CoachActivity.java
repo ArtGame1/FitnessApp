@@ -4,6 +4,8 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
@@ -16,6 +18,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
 import com.example.fitnessapp.R;
+import com.example.fitnessapp.chat.ChatActivity;
+import com.google.firebase.auth.FirebaseAuth;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -28,6 +32,7 @@ public class CoachActivity extends AppCompatActivity {
     private ImageView workBtn;
     private ImageView statsBtn;
     private ImageView settBtn;
+    private ImageView chatBtn;
 
     //Массив типов тренировок для выпадающего списка
     private final String[] WORKOUT_TYPES = {
@@ -64,6 +69,11 @@ public class CoachActivity extends AppCompatActivity {
 
         btnAddSession = findViewById(R.id.btnAddSession);
 
+        chatBtn = findViewById(R.id.chatBtn);
+        chatBtn.setOnClickListener(v -> {
+            checkAuthAndOpenChat();
+        });
+
         btnAddSession.setOnClickListener(v -> {
             showAddWorkoutDialog();
         });
@@ -88,6 +98,33 @@ public class CoachActivity extends AppCompatActivity {
             Intent intent = new Intent(this, SettingsActivity.class);
             startActivity(intent);
         });
+    }
+
+    private void checkAuthAndOpenChat() {
+        //Проверяем, авторизован ли пользователь
+        FirebaseAuth auth = FirebaseAuth.getInstance();
+
+        if (auth.getCurrentUser() == null) {
+            //Пользователь авторизован - открываем чат
+            Intent intent = new Intent(CoachActivity.this, ChatActivity.class);
+            startActivity(intent);
+        } else {
+            //Пользователь не авторизован - показываем диалог
+            showAuthDialog();
+        }
+    }
+
+    private void showAuthDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Авторизация")
+                .setMessage("Для доступа к чату необходимо войти в аккаунт")
+                .setPositiveButton("Войти", (dialog, which) -> {
+                    //Переходим на экран логина
+                    Intent intent = new Intent(CoachActivity.this, ChatActivity.class);
+                    startActivity(intent);
+                })
+                .setNegativeButton("Отмена", null)
+                .show();
     }
 
     private void showAddWorkoutDialog() {

@@ -79,7 +79,7 @@ public class LoginActivity extends AppCompatActivity {
         //Секретная подсказка по долгому нажатию на логотип
         CircleImageView logo = findViewById(R.id.imageView);
         logo.setOnLongClickListener(v -> {
-            Toast.makeText(LoginActivity.this, "Админ доступ: admin@fitnessapp.com / admin123", Toast.LENGTH_SHORT).show();
+            Toast.makeText(LoginActivity.this, "Админ доступ: admin@fitnessapp.com / admin123\nТренера доступ: coach@fitnessapp.com / coach123", Toast.LENGTH_SHORT).show();
             return true;
         });
 
