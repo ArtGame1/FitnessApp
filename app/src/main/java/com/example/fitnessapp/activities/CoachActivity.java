@@ -8,10 +8,12 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
 import com.example.fitnessapp.R;
 
@@ -22,6 +24,10 @@ import java.util.Locale;
 public class CoachActivity extends AppCompatActivity {
 
     private Button btnAddSession;
+
+    private ImageView workBtn;
+    private ImageView statsBtn;
+    private ImageView settBtn;
 
     //Массив типов тренировок для выпадающего списка
     private final String[] WORKOUT_TYPES = {
@@ -37,7 +43,7 @@ public class CoachActivity extends AppCompatActivity {
             "Танцы"
     };
 
-    // Массив уровней сложности
+    //Массив уровней сложности
     private final String[] DIFFICULTY_LEVELS = {
             "Начинающий",
             "Легкий",
@@ -51,10 +57,36 @@ public class CoachActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_coach);
 
+        //РЕШЕНИЕ ПРОБЛЕМЫ - сделать статус бар синим
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+            getWindow().setStatusBarColor(ContextCompat.getColor(this, R.color.menuColor));
+        }
+
         btnAddSession = findViewById(R.id.btnAddSession);
 
         btnAddSession.setOnClickListener(v -> {
             showAddWorkoutDialog();
+        });
+
+        workBtn = findViewById(R.id.workBtn);
+
+        workBtn.setOnClickListener(v -> {
+            Intent intent = new Intent(this, WorkoutActivity.class);
+            startActivity(intent);
+        });
+
+        statsBtn = findViewById(R.id.statsBtn);
+
+        statsBtn.setOnClickListener(v -> {
+            Intent intent = new Intent(this, StatsActivity.class);
+            startActivity(intent);
+        });
+
+        settBtn = findViewById(R.id.settBtn);
+
+        settBtn.setOnClickListener(v -> {
+            Intent intent = new Intent(this, SettingsActivity.class);
+            startActivity(intent);
         });
     }
 

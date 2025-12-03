@@ -147,6 +147,7 @@
                             android:padding="8dp">
 
                             <ImageView
+                                android:id="@+id/workBtn"
                                 android:layout_width="40dp"
                                 android:layout_height="40dp"
                                 android:src="@drawable/ic_fitness_center"
@@ -220,6 +221,7 @@
                             android:padding="8dp">
 
                             <ImageView
+                                android:id="@+id/statsBtn"
                                 android:layout_width="40dp"
                                 android:layout_height="40dp"
                                 android:src="@drawable/ic_statistics"
@@ -286,6 +288,7 @@
                             android:padding="8dp">
 
                             <ImageView
+                                android:id="@+id/settBtn"
                                 android:layout_width="40dp"
                                 android:layout_height="40dp"
                                 android:src="@drawable/ic_settings"
