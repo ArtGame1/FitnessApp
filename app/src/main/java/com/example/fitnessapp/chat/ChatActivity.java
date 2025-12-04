@@ -9,6 +9,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.emoji2.widget.EmojiEditText;
 
 import com.example.fitnessapp.R;
@@ -32,20 +33,25 @@ public class ChatActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
 
-        // Инициализация
+        //РЕШЕНИЕ ПРОБЛЕМЫ - сделать статус бар синим
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+            getWindow().setStatusBarColor(ContextCompat.getColor(this, R.color.menuColor));
+        }
+
+        //Инициализация
         activity_chat = findViewById(R.id.activity_chat);
         submitBtn = findViewById(R.id.submitBtn);
         emojiBtn = findViewById(R.id.emojiBtn);
         emojiEditText = findViewById(R.id.textField);
         listOfMessages = findViewById(R.id.listOfMessages);
 
-        // Показываем чат сразу БЕЗ проверки авторизации
+        //Показываем чат сразу БЕЗ проверки авторизации
         Toast.makeText(this, "Добро пожаловать в чат!", Toast.LENGTH_SHORT).show();
 
-        // Загружаем сообщения
+        //Загружаем сообщения
         displayAllMessages();
 
-        // Обработка отправки сообщения
+        //Обработка отправки сообщения
         submitBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -64,18 +70,18 @@ public class ChatActivity extends AppCompatActivity {
     }
 
     private void displayAllMessages() {
-        // 1. Создаем запрос к базе данных
+        //1. Создаем запрос к базе данных
         DatabaseReference databaseRef = FirebaseDatabase.getInstance().getReference("messages");
         Query query = databaseRef.orderByChild("timestamp");
 
-        // 2. Создаем опции для адаптера
+        //2. Создаем опции для адаптера
         FirebaseListOptions<Message> options = new FirebaseListOptions.Builder<Message>()
                 .setQuery(query, Message.class)
                 .setLayout(R.layout.list_item)
                 .setLifecycleOwner(this)
                 .build();
 
-        // 3. Создаем адаптер
+        //3. Создаем адаптер
         adapter = new FirebaseListAdapter<Message>(options) {
             @Override
             protected void populateView(@NonNull View v, @NonNull Message model, int position) {
@@ -94,7 +100,7 @@ public class ChatActivity extends AppCompatActivity {
             }
         };
 
-        // 4. Устанавливаем адаптер в ListView
+        //4. Устанавливаем адаптер в ListView
         listOfMessages.setAdapter(adapter);
     }
 
