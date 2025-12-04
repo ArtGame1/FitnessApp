@@ -28,8 +28,8 @@
     <string name="password_user">Пароль</string>
     <string name="list_users">Список пользователей</string>
     <string name="add_user">Добавить пользователя</string>
-    <string name="start">Start</string>
-    <string name="stop">Stop</string>
+    <string name="start">Старт</string>
+    <string name="stop">Стоп</string>
     <string name="lastname_user">Фамилия пользователя</string>
     <string name="facebook_app_id">YOUR_FACEBOOK_APP_ID</string>
     <string name="facebook_client_token">YOUR_FACEBOOK_CLIENT_TOKEN</string>
