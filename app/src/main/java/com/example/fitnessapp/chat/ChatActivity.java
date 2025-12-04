@@ -24,29 +24,31 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 
+//Основной класс активности чата, реализующий интерфейс для обработки кликов по эмодзи
 public class ChatActivity extends AppCompatActivity implements EmojiAdapter.EmojiClickListener {
 
-    private ListView listOfMessages;
-    private RelativeLayout activity_chat;
-    private FirebaseListAdapter<Message> adapter;
-    private EmojiEditText emojiEditText;
-    private ImageView emojiBtn, submitBtn;
-    private FrameLayout emojiContainer;
-    private RecyclerView emojiRecyclerView;
-    private boolean isEmojiPickerVisible = false;
-    private EmojiAdapter emojiAdapter;
+    //Переменные для UI элементов и адаптеров
+    private ListView listOfMessages; //Список для отображения сообщений
+    private RelativeLayout activity_chat; //Основной контейнер активности
+    private FirebaseListAdapter<Message> adapter; //Адаптер для сообщений из Firebase
+    private EmojiEditText emojiEditText; //Поле ввода текста с поддержкой эмодзи
+    private ImageView emojiBtn, submitBtn; //Кнопки для эмодзи и отправки
+    private FrameLayout emojiContainer; //Контейнер для выбора эмодзи
+    private RecyclerView emojiRecyclerView; //RecyclerView для отображения эмодзи
+    private boolean isEmojiPickerVisible = false; //Флаг видимости панели эмодзи
+    private EmojiAdapter emojiAdapter; //Адаптер для списка эмодзи
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_chat);
+        setContentView(R.layout.activity_chat); //Установка макета активности
 
-        //Решение проблемы - сделать статус бар синим
+        //Изменение цвета статус-бара на синий для Android 5.0+
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
             getWindow().setStatusBarColor(ContextCompat.getColor(this, R.color.menuColor));
         }
 
-        //Инициализация
+        //Инициализация UI элементов
         activity_chat = findViewById(R.id.activity_chat);
         submitBtn = findViewById(R.id.submitBtn);
         emojiBtn = findViewById(R.id.emojiBtn);
@@ -55,29 +57,27 @@ public class ChatActivity extends AppCompatActivity implements EmojiAdapter.Emoj
         emojiContainer = findViewById(R.id.emojiContainer);
         emojiRecyclerView = findViewById(R.id.emojiRecyclerView);
 
-        //Настройка Emoji RecyclerView
-        setupEmojiPicker();
+        setupEmojiPicker(); //Настройка панели выбора эмодзи
 
-        //Показываем чат сразу БЕЗ проверки авторизации
+        //Приветственное сообщение без проверки авторизации
         Toast.makeText(this, "Добро пожаловать в чат!", Toast.LENGTH_SHORT).show();
 
-        //Загружаем сообщения
-        displayAllMessages();
+        displayAllMessages(); // Загрузка и отображение всех сообщений
 
-        //Обработка отправки сообщения
+        //Обработчик нажатия кнопки отправки сообщения
         submitBtn.setOnClickListener(v -> sendMessage());
 
-        //Обработка нажатия на emojiBtn
+        //Обработчик нажатия кнопки эмодзи
         emojiBtn.setOnClickListener(v -> toggleEmojiPicker());
 
-        //Скрываем emoji picker при наборе текста
+        //Скрытие панели эмодзи при вводе текста
         emojiEditText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                // Автоматически скрываем emoji picker при наборе текста
+                //Автоматическое скрытие панели эмодзи при вводе текста
                 if (isEmojiPickerVisible) {
                     hideEmojiPicker();
                 }
@@ -87,7 +87,7 @@ public class ChatActivity extends AppCompatActivity implements EmojiAdapter.Emoj
             public void afterTextChanged(Editable s) {}
         });
 
-        //Скрытие emoji picker при нажатии на список сообщений
+        //Скрытие панели эмодзи при нажатии на список сообщений
         listOfMessages.setOnTouchListener((v, event) -> {
             if (isEmojiPickerVisible) {
                 hideEmojiPicker();
@@ -97,16 +97,16 @@ public class ChatActivity extends AppCompatActivity implements EmojiAdapter.Emoj
         });
     }
 
+    //Настройка RecyclerView для отображения эмодзи
     private void setupEmojiPicker() {
-        //Настройка RecyclerView для эмодзи
-        emojiAdapter = new EmojiAdapter(this, this);
-        emojiRecyclerView.setLayoutManager(new GridLayoutManager(this, 8)); // 8 колонок
-        emojiRecyclerView.setAdapter(emojiAdapter);
+        emojiAdapter = new EmojiAdapter(this, this); //Создание адаптера с передачей контекста и слушателя
+        emojiRecyclerView.setLayoutManager(new GridLayoutManager(this, 8)); //Установка сетки 8 колонок
+        emojiRecyclerView.setAdapter(emojiAdapter); //Назначение адаптера
 
-        //Скрываем контейнер по умолчанию
-        emojiContainer.setVisibility(View.GONE);
+        emojiContainer.setVisibility(View.GONE); //Скрытие контейнера по умолчанию
     }
 
+    //Переключение видимости панели эмодзи
     private void toggleEmojiPicker() {
         if (isEmojiPickerVisible) {
             hideEmojiPicker();
@@ -115,28 +115,29 @@ public class ChatActivity extends AppCompatActivity implements EmojiAdapter.Emoj
         }
     }
 
+    //Показать панель эмодзи
     private void showEmojiPicker() {
         isEmojiPickerVisible = true;
         emojiContainer.setVisibility(View.VISIBLE);
-        emojiBtn.setImageResource(R.drawable.ic_keyboard); //Меняем иконку на клавиатуру
-        emojiContainer.bringToFront();
+        emojiBtn.setImageResource(R.drawable.ic_keyboard); //Смена иконки на клавиатуру
+        emojiContainer.bringToFront(); //Поднятие контейнера на передний план
 
-        //Прокручиваем RecyclerView к началу
-        emojiRecyclerView.scrollToPosition(0);
+        emojiRecyclerView.scrollToPosition(0); //Прокрутка к началу списка эмодзи
     }
 
+    //Скрыть панель эмодзи
     private void hideEmojiPicker() {
         isEmojiPickerVisible = false;
         emojiContainer.setVisibility(View.GONE);
-        emojiBtn.setImageResource(R.drawable.smile); //Возвращаем иконку эмодзи
+        emojiBtn.setImageResource(R.drawable.smile); //Возврат иконки смайлика
 
-        //Фокусируемся на поле ввода
-        emojiEditText.requestFocus();
+        emojiEditText.requestFocus(); //Установка фокуса на поле ввода
     }
 
+    //Обработка клика по эмодзи (реализация интерфейса)
     @Override
     public void onEmojiClick(String emoji) {
-        //Вставляем эмодзи в поле ввода
+        //Вставка выбранного эмодзи в поле ввода
         int start = emojiEditText.getSelectionStart();
         int end = emojiEditText.getSelectionEnd();
 
@@ -144,7 +145,7 @@ public class ChatActivity extends AppCompatActivity implements EmojiAdapter.Emoj
             //Если нет выделения, добавляем в конец
             emojiEditText.append(emoji);
         } else {
-            //Заменяем выделенный текст
+            //Замена выделенного текста
             emojiEditText.getText().replace(
                     Math.min(start, end),
                     Math.max(start, end),
@@ -154,48 +155,51 @@ public class ChatActivity extends AppCompatActivity implements EmojiAdapter.Emoj
             );
         }
 
-        //Прокручиваем к последнему эмодзи (опционально)
+        //Прокрутка к последнему эмодзи в списке (опционально)
         emojiRecyclerView.scrollToPosition(emojiAdapter.getItemCount() - 1);
     }
 
+    //Отправка сообщения
     private void sendMessage() {
         String messageText = emojiEditText.getText().toString().trim();
         if (!messageText.isEmpty()) {
-            //Отправляем как "Пользователь" без авторизации
+            //Создание объекта сообщения с фиксированным именем "Пользователь"
             Message message = new Message("Пользователь", messageText);
+            //Сохранение в Firebase с автоматическим ключом
             FirebaseDatabase.getInstance().getReference("messages")
                     .push()
                     .setValue(message);
 
-            emojiEditText.setText("");
+            emojiEditText.setText(""); //Очистка поля ввода
 
-            //Скрываем emoji picker после отправки
+            //Скрытие панели эмодзи после отправки
             if (isEmojiPickerVisible) {
                 hideEmojiPicker();
             }
 
-            //Прокручиваем список сообщений вниз
+            //Автоматическая прокрутка к последнему сообщению
             listOfMessages.post(() -> listOfMessages.smoothScrollToPosition(adapter.getCount() - 1));
         }
     }
 
+    //Загрузка и отображение всех сообщений из Firebase
     private void displayAllMessages() {
-        //1. Создаем запрос к базе данных
+        //Создание запроса к базе данных с сортировкой по времени
         DatabaseReference databaseRef = FirebaseDatabase.getInstance().getReference("messages");
         Query query = databaseRef.orderByChild("timestamp");
 
-        //2. Создаем опции для адаптера
+        //Настройка опций для FirebaseListAdapter
         FirebaseListOptions<Message> options = new FirebaseListOptions.Builder<Message>()
                 .setQuery(query, Message.class)
-                .setLayout(R.layout.list_item)
-                .setLifecycleOwner(this)
+                .setLayout(R.layout.list_item) //Макет для каждого элемента
+                .setLifecycleOwner(this) //Привязка к жизненному циклу активности
                 .build();
 
-        //3. Создаем адаптер
+        //Создание адаптера для ListView
         adapter = new FirebaseListAdapter<Message>(options) {
             @Override
             protected void populateView(@NonNull View v, @NonNull Message model, int position) {
-                //Находим View элементы и заполняем их
+                //Привязка данных сообщения к элементам макета
                 androidx.appcompat.widget.AppCompatTextView messageText = v.findViewById(R.id.message_text);
                 androidx.appcompat.widget.AppCompatTextView messageUser = v.findViewById(R.id.message_user);
                 androidx.appcompat.widget.AppCompatTextView messageTime = v.findViewById(R.id.message_time);
@@ -203,6 +207,7 @@ public class ChatActivity extends AppCompatActivity implements EmojiAdapter.Emoj
                 messageUser.setText(model.getUserName());
                 messageText.setText(model.getTextMessage());
 
+                //Форматирование времени сообщения
                 if (model.getMessageTime() != null) {
                     messageTime.setText(android.text.format.DateFormat.format("HH:mm",
                             model.getMessageTime()));
@@ -210,15 +215,14 @@ public class ChatActivity extends AppCompatActivity implements EmojiAdapter.Emoj
             }
         };
 
-        //4. Устанавливаем адаптер в ListView
-        listOfMessages.setAdapter(adapter);
+        listOfMessages.setAdapter(adapter); //Установка адаптера в ListView
     }
 
     @Override
     protected void onStart() {
         super.onStart();
         if (adapter != null) {
-            adapter.startListening();
+            adapter.startListening(); //Начало прослушивания изменений в Firebase
         }
     }
 
@@ -226,12 +230,13 @@ public class ChatActivity extends AppCompatActivity implements EmojiAdapter.Emoj
     protected void onStop() {
         super.onStop();
         if (adapter != null) {
-            adapter.stopListening();
+            adapter.stopListening(); //Остановка прослушивания Firebase
         }
     }
 
     @Override
     public void onBackPressed() {
+        //Обработка кнопки "Назад": сначала скрыть панель эмодзи, если открыта
         if (isEmojiPickerVisible) {
             hideEmojiPicker();
         } else {
