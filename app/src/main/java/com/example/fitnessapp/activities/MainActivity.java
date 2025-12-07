@@ -9,6 +9,7 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -83,9 +84,10 @@ public class MainActivity extends AppCompatActivity {
     private Button workoutBtn; //Объявляем переменную для кнопки "Тренировки"
     private Button profileBtn; //Объявляем переменную для кнопки "Профиль"
     private Button settingsBtn; //Объявляем переменную для кнопки "Настройки"
+    private Button addAccountBtn; //Объявляем переменную для кнопки "Добавить аккаунт"
     private AdminManager adminManager;
 
-    // Менеджер уведомлений
+    //Менеджер уведомлений
     private NotificationManager notificationManager;
     private static final String CHANNEL_ID = "fitness_app_channel";
     private static final int NOTIFICATION_ID = 1;
@@ -244,8 +246,25 @@ public class MainActivity extends AppCompatActivity {
         notificationsBtn = findViewById(R.id.notifications_btn); //Кнопка для уведомлений
         searchBtn = findViewById(R.id.search_btn); //Кнопка поиска
 
-        // Инициализируем менеджер уведомлений
+        //Инициализируем менеджер уведомлений
         notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+
+        //Получаем заголовок NavigationView
+        View headerView = navigationView.getHeaderView(0);
+
+        //Находим кнопку "Добавить аккаунт" в заголовке
+        if (headerView != null)
+        {
+            addAccountBtn = headerView.findViewById(R.id.add_account_btn);
+
+            //Для отладки можно проверить, нашлась ли кнопка
+            if (addAccountBtn == null)
+            {
+                Log.e("MainActivity", "Кнопка add_account_btn не найдена!");
+            } else {
+                Log.d("MainActivity", "Кнопка add_account_btn успешно инициализирована!");
+            }
+        }
 
         //Устанавливаем кастомный Toolbar в качестве ActionBar для активности
         //Это позволяет использовать стандартные функции ActionBar с кастомным видом
@@ -370,6 +389,27 @@ public class MainActivity extends AppCompatActivity {
                 showFitnessSearch();
             }
         });
+
+        //Обработчик для кнопки "Добавить аккаунт"
+        if (addAccountBtn != null)
+        {
+            addAccountBtn.setOnClickListener(new View.OnClickListener()
+            {
+                @Override
+                public void onClick(View v)
+                {
+                    //Закрываем боковое меню при нажатии
+                    if (drawerLayout.isDrawerOpen(GravityCompat.START))
+                    {
+                        drawerLayout.closeDrawer(GravityCompat.START);
+                    }
+                    //Вызываем метод для показа диалога добавления аккаунта
+                    showAddAccountDialog();
+                }
+            });
+        } else {
+            Log.e("MainActivity", "addAccountBtn is null, не удалось установить обработчик");
+        }
     }
 
     private void showFitnessNotification() {
@@ -602,7 +642,37 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void showAddAccountDialog() {
-        Toast.makeText(this, "Добавить аккаунт", Toast.LENGTH_SHORT).show();
+        //Создание функционального диалога
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Выберите тип аккаунта:");
+
+        String[] options = {
+                "➕ Создать новый аккаунт",
+                "🔐 Войти в существующий аккаунт",
+                "⚙️ Войти как администратор",
+                "❌ Отмена"
+        };
+
+        builder.setItems(options, (dialog, which) -> {
+            switch (which) {
+                case 0: //Новый пользователь
+                    Intent registerIntent = new Intent(this, RegisterActivity.class);
+                    startActivity(registerIntent);
+                    break;
+                case 1: //Существующий пользователь
+                    Intent loginIntent = new Intent(this, LoginActivity.class);
+                    startActivity(loginIntent);
+                    break;
+                case 2: //Администратор
+                    checkAdminAccess();
+                    break;
+                case 3: //Отмена
+                    dialog.dismiss();
+                    break;
+            }
+        });
+
+        builder.show();
     }
 
     /* Проверка доступа к админ-панели */
