@@ -322,13 +322,28 @@ public class MainActivity extends AppCompatActivity {
                 openSettings(); //Открыть настройки
             } else if (id == R.id.nav_night_mode) {
                 toggleNightMode(); //Переключить ночной режим
-            } else if (id == R.id.nav_achievements) {
+            } else if (id == R.id.nav_about) {
+                //Показываем диалоговое окно "О приложении"
+                new AlertDialog.Builder(this)
+                        .setTitle("О приложении")
+                        .setMessage("Fitness App Pro\n\n" +
+                                "Ваш персональный фитнес-помощник!\n\n" +
+                                "Версия: 1.0.0\n" +
+                                "Приложение поможет вам:\n" +
+                                "• Следить за тренировками\n" +
+                                "• Отслеживать прогресс\n" +
+                                "• Достигать спортивных целей")
+                        .setPositiveButton("OK", (dialog, which) -> dialog.dismiss())
+                        .setIcon(R.mipmap.ic_fitness) //Иконка приложения
+                        .show();
+                return true; //Возвращаем true, но не запускаем новую активность
+            } /*else if (id == R.id.nav_achievements) {
                 openAchievements(); //Открыть достижения
             } else if (id == R.id.nav_friends) {
                 openFriends(); //Открыть раздел друзей
             } else if (id == R.id.nav_support) {
                 openSupport(); //Откыть поддержку
-            }
+            }*/
 
             //Закрываем боковое меню после выбора пункта
             //GravityCompat.START - закрывает меню с начала (слева для LTR, справа для RTL)
@@ -412,17 +427,17 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
 
-        // Проверяем существование тренировки
+        //Проверяем существование тренировки
         if (isWorkoutExists(searchQuery)) {
-            // Если тренировка найдена - переходим
+            //Если тренировка найдена - переходим
             Intent intent = new Intent(MainActivity.this, WorkoutActivity.class);
             intent.putExtra("search_query", searchQuery);
             startActivity(intent);
         } else {
-            // Если тренировка не найдена - показываем сообщение
+            //Если тренировка не найдена - показываем сообщение
             Toast.makeText(MainActivity.this, "Тренировка '" + searchQuery + "' не найдена", Toast.LENGTH_LONG).show();
 
-            // Можно предложить похожие тренировки
+            //Можно предложить похожие тренировки
             showSimilarWorkouts(searchQuery);
         }
     }

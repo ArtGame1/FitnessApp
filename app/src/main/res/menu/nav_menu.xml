@@ -25,6 +25,7 @@
             android:id="@+id/nav_night_mode"
             android:icon="@drawable/ic_night"
             android:title="Ночной режим"/>
+        <!--
         <item
             android:id="@+id/nav_achievements"
             android:icon="@drawable/ic_achievement"
@@ -37,6 +38,11 @@
             android:id="@+id/nav_support"
             android:icon="@drawable/ic_support"
             android:title="Поддержка"/>
+            -->
+        <item
+            android:id="@+id/nav_about"
+            android:icon="@drawable/ic_info"
+            android:title="О приложении"/>
     </group>
 
     <!-- Версия приложения -->
