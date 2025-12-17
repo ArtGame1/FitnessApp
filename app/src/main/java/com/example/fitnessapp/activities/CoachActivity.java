@@ -8,6 +8,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -28,6 +29,7 @@ public class CoachActivity extends AppCompatActivity {
     private ImageView statsBtn;
     private ImageView settBtn;
     private ImageView chatBtn;
+    private TextView tvDate;
 
     //Массив типов тренировок для выпадающего списка
     private final String[] WORKOUT_TYPES = {
@@ -62,6 +64,10 @@ public class CoachActivity extends AppCompatActivity {
             getWindow().setStatusBarColor(ContextCompat.getColor(this, R.color.menuColor));
         }
 
+        //Находим TextView для даты
+        tvDate = findViewById(R.id.tvDate);
+        updateDate(); //Обновляем дату
+
         btnAddSession = findViewById(R.id.btnAddSession);
 
         chatBtn = findViewById(R.id.chatBtn);
@@ -93,6 +99,19 @@ public class CoachActivity extends AppCompatActivity {
             Intent intent = new Intent(this, SettingsActivity.class);
             startActivity(intent);
         });
+    }
+
+    //Метод для обновления даты
+    private void updateDate() {
+        //Получаем текущую дату
+        Date currentDate = new Date();
+
+        //Форматируем дату в нужный вид (русский язык)
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMMM yyyy", new Locale("ru"));
+        String formattedDate = dateFormat.format(currentDate);
+
+        //Устанавливаем текст
+        tvDate.setText("Сегодня: " + formattedDate);
     }
 
     private void checkAuthAndOpenChat() {
