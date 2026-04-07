@@ -37,6 +37,7 @@ import com.example.fitnessapp.admin.AdminLoginDialog;
 import com.example.fitnessapp.admin.AdminManager;
 import com.example.fitnessapp.admin.AdminPanel;
 import com.example.fitnessapp.admin.AdminRegisterDialog;
+import com.example.fitnessapp.utils.NotificationHelper;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
 
@@ -96,6 +97,15 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main); //Устанавливаем макет (XML файл) активности из ресурсов
+
+
+        NotificationHelper.createNotificationChannel(this); //Создаем канал уведомлений
+
+        SharedPreferences prefs = getSharedPreferences("FitnessAppSettings", MODE_PRIVATE);
+        boolean notificationsEnabled = prefs.getBoolean("notifications", true);
+        if (notificationsEnabled) {
+            NotificationHelper.scheduleDailyReminder(this);
+        }
 
         //Загружаем настройки темы перед setContentView
         setupTheme();
@@ -208,8 +218,8 @@ public class MainActivity extends AppCompatActivity {
         //checkAdminAccess(); //Проверка для администратора
 
         //Применяем сохраненную тему при запуске приложения
-        SharedPreferences prefs = getSharedPreferences("FitnessAppSettings", MODE_PRIVATE);
-        boolean isDarkMode = prefs.getBoolean("dark_mode", false);
+        SharedPreferences pref = getSharedPreferences("FitnessAppSettings", MODE_PRIVATE);
+        boolean isDarkMode = pref.getBoolean("dark_mode", false);
 
         if (isDarkMode) {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);

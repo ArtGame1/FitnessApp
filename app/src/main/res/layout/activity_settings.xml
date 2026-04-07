@@ -3,10 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:padding="0dp"
-    android:background="@color/background_color"
-    tools:context=".activities.SettingsActivity">
+    android:background="@color/background_color">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -22,6 +19,18 @@
             android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
             app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
 
+        <!-- ===== ОСНОВНЫЕ НАСТРОЙКИ ===== -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Основные настройки"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textColor="@color/text_primary"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="8dp"
+            android:paddingStart="16dp"/>
+
         <!-- Уведомления -->
         <LinearLayout
             android:layout_width="match_parent"
@@ -29,7 +38,9 @@
             android:orientation="horizontal"
             android:padding="16dp"
             android:background="@drawable/settings_item_background"
-            android:layout_marginTop="8dp">
+            android:layout_marginTop="4dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp">
 
             <ImageView
                 android:layout_width="24dp"
@@ -43,13 +54,12 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:orientation="vertical"
-                android:paddingStart="16dp"
-                android:paddingEnd="16dp">
+                android:paddingStart="16dp">
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Уведомления"
+                    android:text="Напоминания"
                     android:textSize="16sp"
                     android:textColor="@color/text_primary"
                     android:textStyle="bold"/>
@@ -57,7 +67,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Получать уведомления о тренировках"
+                    android:text="Напоминать о тренировках"
                     android:textSize="14sp"
                     android:textColor="@color/text_secondary"
                     android:layout_marginTop="4dp"/>
@@ -79,7 +89,9 @@
             android:orientation="horizontal"
             android:padding="16dp"
             android:background="@drawable/settings_item_background"
-            android:layout_marginTop="8dp">
+            android:layout_marginTop="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp">
 
             <ImageView
                 android:layout_width="24dp"
@@ -93,8 +105,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:orientation="vertical"
-                android:paddingStart="16dp"
-                android:paddingEnd="16dp">
+                android:paddingStart="16dp">
 
                 <TextView
                     android:layout_width="match_parent"
@@ -107,7 +118,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Звуковые оповещения во время тренировки"
+                    android:text="Звук таймера и упражнений"
                     android:textSize="14sp"
                     android:textColor="@color/text_secondary"
                     android:layout_marginTop="4dp"/>
@@ -121,55 +132,6 @@
                 android:layout_gravity="center_vertical"/>
         </LinearLayout>
 
-        <!-- Темная тема -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:padding="16dp"
-            android:background="@drawable/settings_item_background"
-            android:layout_marginTop="8dp">
-
-            <ImageView
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:src="@drawable/ic_dark_mode"
-                android:layout_gravity="center_vertical"
-                app:tint="@color/primary_color"/>
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="vertical"
-                android:paddingStart="16dp"
-                android:paddingEnd="16dp">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Темная тема"
-                    android:textSize="16sp"
-                    android:textColor="@color/text_primary"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Включить темную тему приложения"
-                    android:textSize="14sp"
-                    android:textColor="@color/text_secondary"
-                    android:layout_marginTop="4dp"/>
-
-            </LinearLayout>
-
-            <Switch
-                android:id="@+id/switch_dark_mode"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"/>
-        </LinearLayout>
-
         <!-- Автопауза -->
         <LinearLayout
             android:layout_width="match_parent"
@@ -177,7 +139,9 @@
             android:orientation="horizontal"
             android:padding="16dp"
             android:background="@drawable/settings_item_background"
-            android:layout_marginTop="8dp">
+            android:layout_marginTop="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp">
 
             <ImageView
                 android:layout_width="24dp"
@@ -191,8 +155,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:orientation="vertical"
-                android:paddingStart="16dp"
-                android:paddingEnd="16dp">
+                android:paddingStart="16dp">
 
                 <TextView
                     android:layout_width="match_parent"
@@ -205,7 +168,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Автоматически ставить на паузу при бездействии"
+                    android:text="Автоматическая пауза между упражнениями"
                     android:textSize="14sp"
                     android:textColor="@color/text_secondary"
                     android:layout_marginTop="4dp"/>
@@ -220,7 +183,7 @@
 
         </LinearLayout>
 
-        <!-- НАСТРОЙКИ ТРЕНИРОВОК -->
+        <!-- ===== НАСТРОЙКИ ТРЕНИРОВОК ===== -->
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -230,16 +193,18 @@
             android:textColor="@color/text_primary"
             android:layout_marginTop="24dp"
             android:layout_marginBottom="8dp"
-            android:paddingStart="8dp"/>
+            android:paddingStart="16dp"/>
 
-        <!-- Продолжительность отдыха -->
+        <!-- Время отдыха -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:padding="16dp"
             android:background="@drawable/settings_item_background"
-            android:layout_marginTop="8dp">
+            android:layout_marginTop="4dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp">
 
             <ImageView
                 android:layout_width="24dp"
@@ -253,8 +218,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:orientation="vertical"
-                android:paddingStart="16dp"
-                android:paddingEnd="16dp">
+                android:paddingStart="16dp">
 
                 <TextView
                     android:layout_width="match_parent"
@@ -284,14 +248,16 @@
                 style="@style/Widget.AppCompat.Button.Borderless"/>
         </LinearLayout>
 
-        <!-- Количество повторений по умолчанию -->
+        <!-- Повторения по умолчанию -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:padding="16dp"
             android:background="@drawable/settings_item_background"
-            android:layout_marginTop="8dp">
+            android:layout_marginTop="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp">
 
             <ImageView
                 android:layout_width="24dp"
@@ -305,8 +271,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:orientation="vertical"
-                android:paddingStart="16dp"
-                android:paddingEnd="16dp">
+                android:paddingStart="16dp">
 
                 <TextView
                     android:layout_width="match_parent"
@@ -332,99 +297,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Изменить"
-                android:backgroundTint="@color/red"
                 android:layout_gravity="center_vertical"
-                android:textColor="@android:color/white"/>
+                style="@style/Widget.AppCompat.Button.Borderless"/>
         </LinearLayout>
 
-        <!-- Сложность тренировки -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:padding="16dp"
-            android:background="@drawable/settings_item_background"
-            android:layout_marginTop="8dp">
-
-            <ImageView
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:src="@drawable/ic_difficulty"
-                android:layout_gravity="center_vertical"
-                app:tint="@color/primary_color"/>
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="vertical"
-                android:paddingStart="16dp"
-                android:paddingEnd="16dp">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Уровень сложности"
-                    android:textSize="16sp"
-                    android:textColor="@color/text_primary"
-                    android:textStyle="bold"/>
-
-                <TextView
-                    android:id="@+id/tv_difficulty"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Средний"
-                    android:textSize="14sp"
-                    android:textColor="@color/primary_color"
-                    android:textStyle="bold"
-                    android:layout_marginTop="4dp"/>
-            </LinearLayout>
-
-            <Spinner
-                android:id="@+id/spinner_difficulty"
-                android:layout_width="120dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:entries="@array/difficulty_levels"/>
-        </LinearLayout>
-
-        <!-- Раздел Единицы измерения -->
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Единицы измерения"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            android:textColor="@color/text_primary"
-            android:layout_marginTop="24dp"
-            android:layout_marginBottom="8dp"
-            android:paddingStart="8dp"/>
-
-        <!-- Единицы измерения - RadioGroup -->
-        <RadioGroup
-            android:id="@+id/radio_group_units"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/settings_item_background"
-            android:padding="16dp">
-
-            <RadioButton
-                android:id="@+id/radio_metric"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Метрическая система (кг, см)"
-                android:textSize="16sp"/>
-
-            <RadioButton
-                android:id="@+id/radio_imperial"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Имперская система (фунты, дюймы)"
-                android:textSize="16sp"
-                android:layout_marginTop="8dp"/>
-        </RadioGroup>
-
-        <!-- УПРАВЛЕНИЕ ДАННЫМИ -->
+        <!-- ===== УПРАВЛЕНИЕ ДАННЫМИ ===== -->
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -434,31 +311,32 @@
             android:textColor="@color/text_primary"
             android:layout_marginTop="24dp"
             android:layout_marginBottom="8dp"
-            android:paddingStart="8dp"/>
+            android:paddingStart="16dp"/>
 
-        <!-- Сброс прогресса упражнений -->
+        <!-- Сброс прогресса -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:padding="16dp"
             android:background="@drawable/settings_item_background"
-            android:layout_marginTop="8dp">
+            android:layout_marginTop="4dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp">
 
             <ImageView
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:src="@drawable/ic_reset"
                 android:layout_gravity="center_vertical"
-                app:tint="@color/primary_color"/>
+                app:tint="@color/red"/>
 
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:orientation="vertical"
-                android:paddingStart="16dp"
-                android:paddingEnd="16dp">
+                android:paddingStart="16dp">
 
                 <TextView
                     android:layout_width="match_parent"
@@ -471,7 +349,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Обнулить все выполненные упражнения"
+                    android:text="Сбросить всю статистику тренировок"
                     android:textSize="14sp"
                     android:textColor="@color/text_secondary"
                     android:layout_marginTop="4dp"/>
@@ -484,18 +362,21 @@
                 android:layout_height="wrap_content"
                 android:text="Сбросить"
                 android:layout_gravity="center_vertical"
-                android:backgroundTint="@color/red"/>
-
+                android:backgroundTint="@color/red"
+                android:textColor="@android:color/white"/>
         </LinearLayout>
 
-        <!-- Экспорт данных -->
+        <!-- Экспорт данных (опционально) -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:padding="16dp"
             android:background="@drawable/settings_item_background"
-            android:layout_marginTop="8dp">
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="16dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp">
 
             <ImageView
                 android:layout_width="24dp"
@@ -509,8 +390,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:orientation="vertical"
-                android:paddingStart="16dp"
-                android:paddingEnd="16dp">
+                android:paddingStart="16dp">
 
                 <TextView
                     android:layout_width="match_parent"
@@ -523,7 +403,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Сохранить историю тренировок в файл"
+                    android:text="Сохранить историю в файл"
                     android:textSize="14sp"
                     android:textColor="@color/text_secondary"
                     android:layout_marginTop="4dp"/>
@@ -540,14 +420,33 @@
 
         </LinearLayout>
 
-        <!-- Кнопка сохранения -->
-        <Button
-            android:id="@+id/btn_save_settings"
+        <!-- Кнопки действий -->
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Сохранить настройки"
-            android:layout_marginTop="24dp"
+            android:orientation="horizontal"
+            android:layout_marginTop="16dp"
             android:layout_marginBottom="32dp"
-            android:backgroundTint="@color/red"/>
+            android:padding="16dp">
+
+            <Button
+                android:id="@+id/btn_cancel_settings"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Отмена"
+                android:backgroundTint="@color/red"
+                android:layout_marginEnd="8dp"/>
+
+            <Button
+                android:id="@+id/btn_save_settings"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Сохранить"
+                android:backgroundTint="@color/red"
+                android:layout_marginStart="8dp"/>
+
+        </LinearLayout>
     </LinearLayout>
 </ScrollView>
