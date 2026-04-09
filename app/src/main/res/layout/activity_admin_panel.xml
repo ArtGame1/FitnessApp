@@ -110,7 +110,8 @@
                 android:layout_height="wrap_content"
                 android:text="Подробная статистика"
                 android:layout_marginTop="8dp"
-                android:backgroundTint="#2196F3" />
+                android:backgroundTint="@color/red"/>
+                <!--android:backgroundTint="#2196F3" -->
 
         </LinearLayout>
 
@@ -160,8 +161,9 @@
                     android:layout_weight="1"
                     android:text="Добавить"
                     android:textSize="8sp"
-                    android:backgroundTint="#4CAF50"
+                    android:backgroundTint="@color/red"
                     android:textColor="@android:color/white" />
+                    <!-- android:backgroundTint="#4CAF50" -->
 
                 <Button
                     android:id="@+id/btnEditUser"
@@ -170,8 +172,9 @@
                     android:layout_weight="1"
                     android:text="Изменить"
                     android:textSize="8sp"
-                    android:backgroundTint="#FF9800"
+                    android:backgroundTint="@color/red"
                     android:textColor="@android:color/white" />
+                    <!-- android:backgroundTint="#FF9800" -->
 
                 <Button
                     android:id="@+id/btnBlockUser"
@@ -180,8 +183,9 @@
                     android:layout_weight="1"
                     android:text="Блокировка"
                     android:textSize="8sp"
-                    android:backgroundTint="#F44336"
+                    android:backgroundTint="@color/red"
                     android:textColor="@android:color/white" />
+                    <!-- android:backgroundTint="#F44336" -->
 
             </LinearLayout>
 
@@ -212,8 +216,9 @@
                 android:layout_height="wrap_content"
                 android:text="Тренировки и программы"
                 android:layout_marginBottom="8dp"
-                android:backgroundTint="#9C27B0"
+                android:backgroundTint="@color/red"
                 android:textColor="@android:color/white" />
+                <!-- android:backgroundTint="#9C27B0" -->
 
             <Button
                 android:id="@+id/btnManageMaterials"
@@ -221,16 +226,18 @@
                 android:layout_height="wrap_content"
                 android:text="Видео и материалы"
                 android:layout_marginBottom="8dp"
-                android:backgroundTint="#9C27B0"
+                android:backgroundTint="@color/red"
                 android:textColor="@android:color/white" />
+                <!-- android:backgroundTint="#9C27B0" -->
 
             <Button
                 android:id="@+id/btnManageArticles"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Статьи и новости"
-                android:backgroundTint="#9C27B0"
+                android:backgroundTint="@color/red"
                 android:textColor="@android:color/white" />
+                <!-- android:backgroundTint="#9C27B0" -->
 
         </LinearLayout>
 
@@ -307,7 +314,8 @@
                 android:layout_height="wrap_content"
                 android:text="Управление платежами"
                 android:layout_marginTop="8dp"
-                android:backgroundTint="#FF9800" />
+                android:backgroundTint="@color/red" />
+                <!-- android:backgroundTint="#FF9800" -->
 
         </LinearLayout>
 
@@ -342,7 +350,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Сгенерировать отчет"
-                android:backgroundTint="#607D8B" />
+                android:backgroundTint="@color/red" />
+                <!-- android:backgroundTint="#607D8B" -->
 
         </LinearLayout>
 
@@ -385,7 +394,8 @@
                 android:layout_height="wrap_content"
                 android:text="Расширенные настройки"
                 android:layout_marginTop="8dp"
-                android:backgroundTint="#795548" />
+                android:backgroundTint="@color/red" />
+                <!-- android:backgroundTint="#795548" -->
 
         </LinearLayout>
 

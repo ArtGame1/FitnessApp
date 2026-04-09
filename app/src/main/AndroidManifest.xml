@@ -66,6 +66,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <receiver android:name=".activities.CoachActivity$ReminderBroadcast"
+            android:exported="false" />
         <receiver
             android:name=".utils.NotificationReceiver"
             android:enabled="true"
