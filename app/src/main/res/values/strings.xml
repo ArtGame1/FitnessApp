@@ -48,4 +48,5 @@
     <string name="profile">Профиль</string>
     <string name="settings">Настройки</string>
     <string name="about">О приложении</string>
+    <string name="passConfirm">Подтвердите пароль</string>
 </resources>

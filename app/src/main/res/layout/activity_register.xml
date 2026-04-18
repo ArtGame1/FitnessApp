@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
     android:layout_width="match_parent"
@@ -15,7 +16,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical" >
+            android:orientation="vertical">
 
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/imageView"
@@ -24,17 +25,6 @@
                 android:layout_marginTop="36dp"
                 android:layout_gravity="center"
                 android:src="@drawable/fitness"/>
-
-            <!--
-            <ImageView
-                android:id="@+id/imageView"
-                android:layout_width="115dp"
-                android:layout_height="110dp"
-                android:layout_marginTop="48dp"
-                android:scaleType="centerCrop"
-                android:layout_gravity="center"
-                android:src="@drawable/fitness"/>
-                -->
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -62,21 +52,7 @@
                     android:textSize="45sp"/>
             </LinearLayout>
 
-            <!--            <EditText-->
-            <!--                android:id="@+id/userEdt"-->
-            <!--                android:layout_width="match_parent"-->
-            <!--                android:layout_height="50dp"-->
-            <!--                android:layout_marginTop="45dp"-->
-            <!--                android:layout_marginEnd="32dp"-->
-            <!--                android:layout_marginStart="32dp"-->
-            <!--                android:hint="@string/name"-->
-            <!--                android:textAlignment="center"-->
-            <!--                android:textColorHint="@color/blue_grey"-->
-            <!--                android:textSize="16sp"-->
-            <!--                android:ems="10"-->
-            <!--                android:background="@drawable/edittext_background"-->
-            <!--                android:inputType="text"/>-->
-
+            <!-- Поле Email (без глаза) -->
             <EditText
                 android:id="@+id/emailEdt"
                 android:layout_width="match_parent"
@@ -92,37 +68,47 @@
                 android:background="@drawable/edittext_background"
                 android:inputType="textEmailAddress"/>
 
-            <!-- ДОБАВЛЕН ПОЛЕ ДЛЯ ВВОДА НОМЕРА ТЕЛЕФОНА -->
-
-            <!--            <EditText-->
-            <!--                android:id="@+id/phoneEdt"-->
-            <!--                android:layout_width="match_parent"-->
-            <!--                android:layout_height="50dp"-->
-            <!--                android:layout_marginTop="18dp"-->
-            <!--                android:layout_marginEnd="32dp"-->
-            <!--                android:layout_marginStart="32dp"-->
-            <!--                android:hint="Номер телефона"-->
-            <!--                android:textAlignment="center"-->
-            <!--                android:textColorHint="@color/blue_grey"-->
-            <!--                android:textSize="16sp"-->
-            <!--                android:ems="10"-->
-            <!--                android:background="@drawable/edittext_background"-->
-            <!--                android:inputType="phone"/>-->
-
-            <EditText
-                android:id="@+id/passEdt"
+            <!-- Поле Пароль с глазом -->
+            <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="18dp"
                 android:layout_marginEnd="32dp"
                 android:layout_marginStart="32dp"
-                android:hint="@string/pass"
-                android:textAlignment="center"
-                android:textColorHint="@color/blue_grey"
-                android:textSize="16sp"
-                android:ems="10"
-                android:background="@drawable/edittext_background"
-                android:inputType="textPassword"/>
+                app:passwordToggleEnabled="true"
+                app:passwordToggleTint="@color/blue_grey">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/passEdt"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:hint="@string/pass"
+                    android:layout_gravity="center"
+                    android:textSize="16sp"
+                    android:background="@drawable/edittext_background"
+                    android:inputType="textPassword"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!-- Поле Подтверждение пароля с глазом -->
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="18dp"
+                android:layout_marginEnd="32dp"
+                android:layout_marginStart="32dp"
+                app:passwordToggleEnabled="true"
+                app:passwordToggleTint="@color/blue_grey">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/passConfirm"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:hint="@string/passConfirm"
+                    android:layout_gravity="center"
+                    android:textSize="16sp"
+                    android:background="@drawable/edittext_background"
+                    android:inputType="textPassword"/>
+            </com.google.android.material.textfield.TextInputLayout>
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/signupBtn"
@@ -141,7 +127,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_marginTop="45dp"
+                android:layout_marginTop="20dp"
                 android:orientation="horizontal">
 
                 <TextView
@@ -163,12 +149,13 @@
                     android:textColor="@color/black"
                     android:textSize="15sp"/>
             </LinearLayout>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:gravity="center_horizontal"
-                android:layout_marginTop="50dp"
+                android:layout_marginTop="40dp"
                 android:layout_marginBottom="16dp"
                 android:paddingHorizontal="24dp">
 
@@ -181,29 +168,6 @@
                     android:textSize="10sp"
                     android:gravity="center"
                     android:background="@android:color/white"/>
-
-                <!--
-                <de.hdodenhof.circleimageview.CircleImageView
-                    android:id="@+id/btn_login_vk"
-                    android:layout_width="48dp"
-                    android:layout_height="48dp"
-                    android:layout_marginHorizontal="8dp"
-                    android:src="@drawable/vk"/>
-
-                <de.hdodenhof.circleimageview.CircleImageView
-                    android:id="@+id/btn_login_max"
-                    android:layout_width="48dp"
-                    android:layout_height="48dp"
-                    android:layout_marginHorizontal="8dp"
-                    android:src="@drawable/max"/>
-
-                <de.hdodenhof.circleimageview.CircleImageView
-                    android:id="@+id/btn_login_telegram"
-                    android:layout_width="48dp"
-                    android:layout_height="48dp"
-                    android:layout_marginHorizontal="8dp"
-                    android:src="@drawable/telegram"/>
-                    -->
             </LinearLayout>
         </LinearLayout>
     </ScrollView>

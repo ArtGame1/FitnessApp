@@ -250,6 +250,8 @@ public class RegisterActivity extends AppCompatActivity {
     private EditText emailEditText;      //Поле для ввода email — основной идентификатор пользователя в Firebase
     //private EditText phoneEditText;    //Поле для ввода телефона (ЗАКОММЕНТИРОВАНО, будет использоваться позже с Firestore)
     private EditText passwordEditText;   //Поле для ввода пароля — секретный ключ для доступа к аккаунту
+
+    private EditText passwordConfirmEditText; //Поле для ввода подтверждения пароля
     private Button registerButton;       //Кнопка "Зарегистрироваться" — запускает процесс регистрации
     private TextView loginTextView;      //Текст "Войти" — ссылка для перехода на экран входа
 
@@ -281,6 +283,7 @@ public class RegisterActivity extends AppCompatActivity {
         emailEditText = findViewById(R.id.emailEdt);      //Поиск поля для ввода email по ID "emailEdt"
         //phoneEditText = findViewById(R.id.phoneEdt);   //Поиск поля для ввода телефона (ЗАКОММЕНТИРОВАНО)
         passwordEditText = findViewById(R.id.passEdt);    //Поиск поля для ввода пароля по ID "passEdt"
+        passwordConfirmEditText = findViewById(R.id.passConfirm); //Поиск поля для ввода подтверждения пароля по ID "passConfirm"
         registerButton = findViewById(R.id.signupBtn);    //Поиск кнопки регистрации по ID "signupBtn"
         loginTextView = findViewById(R.id.textView4);     //Поиск текста "Войти" по ID "textView4"
 
@@ -296,6 +299,8 @@ public class RegisterActivity extends AppCompatActivity {
 
             //String phone = phoneEditText.getText().toString().trim(); //Получение телефона (ЗАКОММЕНТИРОВАНО)
             String password = passwordEditText.getText().toString().trim(); //Получение пароля
+
+            String passwordConfirm = passwordConfirmEditText.getText().toString().trim(); //Подтверждение пароля
 
             //ПРОВЕРКА EMAIL (ВАЛИДАЦИЯ)
             //TextUtils.isEmpty() — проверяет, является ли строка пустой или null
@@ -313,6 +318,13 @@ public class RegisterActivity extends AppCompatActivity {
                 passwordEditText.setError("Введите пароль");
                 passwordEditText.requestFocus();
                 return; //Прерываем выполнение
+            }
+
+            //ПРОВЕРКА СОВПАДЕНИЯ ПАРОЛЕЙ
+            if (!password.equals(passwordConfirm)) {
+                passwordConfirmEditText.setError("Пароли не совпадают");
+                passwordConfirmEditText.requestFocus();
+                return;
             }
 
             //ПРОВЕРКА ДЛИНЫ ПАРОЛЯ
