@@ -2,7 +2,7 @@ package com.example.fitnessapp.activities;
 
 /**
  * =============================================================================
- * ДОКУМЕНТАЦИЯ К МОДУЛЮ LoginActivity
+ * ДОКУМЕНТАЦИЯ К МОДУЛЮ LoginActivity (ЭКРАН ВХОДА С FIREBASE)
  * =============================================================================
  *
  *
@@ -11,12 +11,12 @@ package com.example.fitnessapp.activities;
  *
  * LoginActivity является экраном авторизации в приложении Fitness App.
  * Сюда пользователь попадает при запуске приложения. Здесь он может войти
- * в свой аккаунт, используя email и пароль или номер телефона. Также есть
- * возможность перейти на экран регистрации, если у пользователя ещё нет аккаунта.
+ * в свой аккаунт, используя email и пароль.
  *
- * Экран поддерживает три роли пользователей: обычный пользователь, тренер и
- * администратор. В зависимости от роли после входа открывается соответствующий
- * главный экран.
+ * Экран поддерживает три роли пользователей:
+ * - Администратор (локальная проверка, переход на AdminPanel)
+ * - Тренер (локальная проверка, переход на CoachActivity)
+ * - Обычный пользователь (проверка через Firebase, переход на MainActivity)
  *
  *
  * ЧАСТЬ 2. СТРУКТУРА ЭКРАНА
@@ -27,110 +27,63 @@ package com.example.fitnessapp.activities;
  * - Логотип приложения (CircleImageView) — при долгом нажатии показывает
  *   всплывающую подсказку с данными для входа администратора и тренера.
  *
- * - Переключатель "Email / Телефон" (RadioGroup с двумя RadioButton) —
- *   позволяет выбрать способ входа: по email или по номеру телефона.
+ * - Поле ввода email (emailEditText / userEdt) — для ввода электронной почты
  *
- * - Поле ввода email или телефона (EditText) — в зависимости от выбранного
- *   способа отображается либо поле для email, либо поле для телефона.
+ * - Поле ввода пароля (passwordEditText / passEdt) — для ввода пароля
  *
- * - Поле ввода пароля (EditText) — общее для обоих способов входа.
+ * - Кнопка "Войти" (loginButton / loginBtn) — выполняет проверку введённых
+ *   данных и перенаправляет пользователя на соответствующий экран.
  *
- * - Кнопка "Войти" (loginButton) — выполняет проверку введённых данных и
- *   перенаправляет пользователя на соответствующий экран.
- *
- * - Текст "Регистрация" (signUp) — при нажатии открывает экран регистрации
- *   нового пользователя (RegisterActivity).
+ * - Текст "Регистрация" (signUp / sin) — при нажатии открывает экран
+ *   регистрации нового пользователя (RegisterActivity).
  *
  *
- * ЧАСТЬ 3. ПЕРЕКЛЮЧЕНИЕ МЕЖДУ EMAIL И ТЕЛЕФОНОМ (ДЕТАЛЬНО)
- * ---------------------------------------------------------
- *
- * Когда пользователь выбирает "Email", поле для телефона скрывается,
- * а поле для email становится видимым. Хинт поля меняется на "Email почта".
- *
- * Когда пользователь выбирает "Телефон", поле для email скрывается,
- * а поле для телефона становится видимым. Хинт поля меняется на "Номер телефона".
- *
- * Это реализовано через слушатель OnCheckedChangeListener на RadioGroup.
- *
- *
- * ЧАСТЬ 4. ВХОДНЫЕ ДАННЫЕ (ТЕСТОВЫЕ УЧЁТНЫЕ ЗАПИСИ)
+ * ЧАСТЬ 3. АУТЕНТИФИКАЦИЯ ЧЕРЕЗ FIREBASE (ДЕТАЛЬНО)
  * --------------------------------------------------
  *
- * В текущей версии используется статическая проверка учётных данных
- * (без подключения к Firebase или базе данных). Доступны следующие аккаунты:
+ * Firebase Authentication — это сервис Google, который позволяет:
+ * - Выполнять вход существующих пользователей с email и паролем
+ * - Обеспечивать безопасное хранение учётных данных
+ * - Управлять пользователями через консоль Firebase
  *
- * ОБЫЧНЫЙ ПОЛЬЗОВАТЕЛЬ (по email):
- * - Email: test@example.com
- * - Пароль: password123
- *
- * ОБЫЧНЫЙ ПОЛЬЗОВАТЕЛЬ (по телефону):
- * - Телефон: 71234567890 (без пробелов и скобок)
- * - Пароль: password123
- *
- * ТРЕНЕР (только по email):
- * - Email: coach@fitnessapp.com
- * - Пароль: coach123
- * - После входа открывается CoachActivity
- *
- * АДМИНИСТРАТОР (только по email):
- * - Email: admin@fitnessapp.com
- * - Пароль: admin123
- * - После входа открывается AdminPanel
+ * Для работы с Firebase используется объект FirebaseAuth, который
+ * предоставляет метод signInWithEmailAndPassword() для входа.
  *
  *
- * ЧАСТЬ 5. ВАЛИДАЦИЯ ВВОДИМЫХ ДАННЫХ (ДЕТАЛЬНО)
- * ----------------------------------------------
+ * ЧАСТЬ 4. ПРОЦЕСС ВХОДА (ДЕТАЛЬНО)
+ * ----------------------------------
  *
- * Перед попыткой входа система проверяет следующие условия:
- *
- * 1. Проверка на пустоту:
- *    - Если выбран вход по email, проверяется что поле email не пустое
- *    - Если выбран вход по телефону, проверяется что поле телефона не пустое
- *    - Если поле пустое, показывается ошибка и фокус ставится на это поле
- *
- * 2. Проверка пароля на пустоту:
- *    - Если пароль не введён, показывается ошибка "Введите пароль"
- *
- * 3. Проверка длины пароля:
- *    - Пароль должен содержать не менее 6 символов
- *    - Если короче, показывается ошибка с требованием увеличить длину
- *
- * 4. Проверка наличия цифры в пароле:
- *    - Пароль должен содержать хотя бы одну цифру
- *    - Если цифр нет, показывается соответствующая ошибка
- *
- * 5. Проверка соответствия учётным данным:
- *    - Сравнение введённого email/телефона и пароля с тестовыми значениями
- *    - Если данные не совпадают, показывается Toast с сообщением об ошибке
+ * 1. Пользователь вводит email и пароль
+ * 2. Нажимает кнопку "Войти"
+ * 3. Выполняется валидация введённых данных
+ * 4. Сначала проверяются локальные учётные данные (админ, тренер)
+ * 5. Если не админ и не тренер — выполняется вход через Firebase
+ * 6. Firebase проверяет существование пользователя и правильность пароля
+ * 7. При успехе — открывается соответствующий главный экран
+ * 8. При ошибке — показывается сообщение с причиной
  *
  *
- * ЧАСТЬ 6. РАСПРЕДЕЛЕНИЕ ПО РОЛЯМ (ДЕТАЛЬНО)
- * -------------------------------------------
+ * ЧАСТЬ 5. ЛОКАЛЬНЫЕ УЧЁТНЫЕ ЗАПИСИ (АДМИН И ТРЕНЕР)
+ * --------------------------------------------------
  *
- * После успешной проверки учётных данных пользователь перенаправляется
- * на разные экраны в зависимости от роли:
+ * Для удобства тестирования и администрирования реализованы локальные
+ * учётные записи, которые не хранятся в Firebase:
  *
  * АДМИНИСТРАТОР:
- * - Проверяется совпадение email с ADMIN_EMAIL и пароля с ADMIN_PASSWORD
- * - При успехе открывается AdminPanel (панель управления администратора)
+ * - Email: admin@fitnessapp.com
+ * - Пароль: admin123
+ * - После входа открывается AdminPanel (панель управления администратора)
  *
  * ТРЕНЕР:
- * - Проверяется совпадение email с COACH_EMAIL и пароля с COACH_PASSWORD
- * - При успехе открывается CoachActivity (главный экран тренера)
+ * - Email: coach@fitnessapp.com
+ * - Пароль: coach123
+ * - После входа открывается CoachActivity (главный экран тренера)
  *
- * ОБЫЧНЫЙ ПОЛЬЗОВАТЕЛЬ (по email):
- * - Проверяется совпадение email с CORRECT_EMAIL
- * - Проверяется пароль через метод isValidPassword()
- * - При успехе открывается MainActivity (главный экран пользователя)
- *
- * ОБЫЧНЫЙ ПОЛЬЗОВАТЕЛЬ (по телефону):
- * - Проверяется номер телефона через метод isValidPhoneNumber()
- * - Проверяется пароль через метод isValidPassword()
- * - При успехе открывается MainActivity
+ * Эти проверки выполняются ДО обращения к Firebase, что позволяет
+ * администратору и тренеру входить даже при отсутствии интернета.
  *
  *
- * ЧАСТЬ 7. СЕКРЕТНАЯ ПОДСКАЗКА (ДОЛГОЕ НАЖАТИЕ НА ЛОГОТИП)
+ * ЧАСТЬ 6. СЕКРЕТНАЯ ПОДСКАЗКА (ДОЛГОЕ НАЖАТИЕ НА ЛОГОТИП)
  * ---------------------------------------------------------
  *
  * Для удобства тестирования реализована скрытая функция:
@@ -141,26 +94,45 @@ package com.example.fitnessapp.activities;
  * не забыли данные для входа в админку или кабинет тренера.
  *
  *
- * ЧАСТЬ 8. МЕТОДЫ ПРОВЕРКИ (ДЕТАЛЬНО)
- * ------------------------------------
+ * ЧАСТЬ 7. ВАЛИДАЦИЯ ВВОДИМЫХ ДАННЫХ (ДЕТАЛЬНО)
+ * ----------------------------------------------
  *
- * containsDigit(String password):
- * - Назначение: проверяет, содержит ли пароль хотя бы одну цифру
- * - Реализация: проходим по каждому символу строки, если находим цифру,
- *   возвращаем true. Если цифр нет — false.
- * - Используется для надёжности пароля
+ * Перед отправкой данных в Firebase выполняется последовательная проверка:
  *
- * isValidPassword(String password):
- * - Назначение: проверяет, соответствует ли введённый пароль эталонному
- * - Реализация: сравнивает строку пароля с константой CORRECT_PASSWORD
- * - Возвращает true только для пароля "password123"
+ * 7.1. Проверка email на пустоту:
+ * - Проверяется, что поле email не пустое
+ * - Если поле пустое, показывается ошибка "Введите email"
+ * - Фокус устанавливается на поле email
  *
- * isValidPhoneNumber(String phone):
- * - Назначение: проверяет, соответствует ли введённый номер телефона эталонному
- * - Реализация: удаляет из строки все пробелы, дефисы и скобки с помощью
- *   регулярного выражения, затем сравнивает с эталоном "71234567890"
- * - Это позволяет пользователю вводить номер в разных форматах:
- *   +7 (123) 456-78-90 → 71234567890
+ * 7.2. Проверка пароля на пустоту:
+ * - Проверяется, что поле пароля не пустое
+ * - Если поле пустое, показывается ошибка "Введите пароль"
+ * - Фокус устанавливается на поле пароля
+ *
+ * 7.3. Проверка длины пароля:
+ * - Пароль должен содержать не менее 6 символов
+ * - Firebase требует минимум 6 символов
+ * - Если пароль короче, показывается ошибка
+ *
+ * 7.4. Проверка наличия цифры в пароле:
+ * - Пароль должен содержать хотя бы одну цифру
+ * - Если цифр нет, показывается ошибка
+ *
+ *
+ * ЧАСТЬ 8. ОБРАБОТКА ОШИБОК FIREBASE (ДЕТАЛЬНО)
+ * ----------------------------------------------
+ *
+ * Firebase может вернуть следующие ошибки при входе:
+ *
+ * | Ошибка | Описание | Решение |
+ * |--------|----------|---------|
+ * | ERROR_USER_NOT_FOUND | Пользователь не найден | Зарегистрироваться сначала |
+ * | ERROR_WRONG_PASSWORD | Неверный пароль | Попробовать другой пароль |
+ * | ERROR_INVALID_EMAIL | Неверный формат email | Ввести корректный email |
+ * | ERROR_USER_DISABLED | Аккаунт отключён | Обратиться к администратору |
+ * | ERROR_NETWORK_REQUEST_FAILED | Нет интернета | Проверить подключение |
+ *
+ * Все ошибки выводятся пользователю через Toast.
  *
  *
  * ЧАСТЬ 9. ПОЛНОЭКРАННЫЙ РЕЖИМ
@@ -174,246 +146,352 @@ package com.example.fitnessapp.activities;
  * без отвлекающих элементов интерфейса Android.
  *
  *
- * ЧАСТЬ 10. НАВИГАЦИЯ
- * -------------------
+ * ЧАСТЬ 10. МЕТОД containsDigit() (ДЕТАЛЬНО)
+ * ------------------------------------------
  *
- * Кнопка "Войти" (loginButton):
- * - После успешной авторизации открывает соответствующий главный экран
- * - Текущая LoginActivity при этом НЕ завершается (нет finish()),
- *   поэтому пользователь может вернуться назад кнопкой "Назад"
+ * Назначение:
+ * Проверяет, содержит ли строка пароля хотя бы одну цифру.
  *
- * Текст "Регистрация" (signUp):
- * - При нажатии открывается RegisterActivity
- * - Пользователь может создать новый аккаунт
+ * Реализация:
+ * - Преобразует строку пароля в массив символов
+ * - Проходит по каждому символу в цикле
+ * - Для каждого символа проверяет, является ли он цифрой через Character.isDigit()
+ * - Если найдена хотя бы одна цифра, метод возвращает true
+ * - Если после прохода всех символов цифра не найдена, возвращает false
+ *
+ * Примеры:
+ * - "password123" → true (содержит цифры 1, 2, 3)
+ * - "mypassword" → false (не содержит цифр)
+ * - "pass123word" → true (содержит цифры)
  *
  *
- * ЧАСТЬ 11. ИЗВЕСТНЫЕ ОГРАНИЧЕНИЯ И ПЛАНЫ ПО ДОРАБОТКЕ
+ * ЧАСТЬ 11. НАВИГАЦИЯ (ДЕТАЛЬНО)
+ * -------------------------------
+ *
+ * 11.1. Вход для администратора:
+ * - Проверка email и пароля с ADMIN_EMAIL и ADMIN_PASSWORD
+ * - При успехе открывается AdminPanel
+ *
+ * 11.2. Вход для тренера:
+ * - Проверка email и пароля с COACH_EMAIL и COACH_PASSWORD
+ * - При успехе открывается CoachActivity
+ *
+ * 11.3. Вход для обычного пользователя:
+ * - Проверка через Firebase Authentication
+ * - При успехе открывается MainActivity
+ * - Текущая активность завершается через finish()
+ *
+ * 11.4. Переход на регистрацию:
+ * - При нажатии на signUp открывается RegisterActivity
+ * - finish() не вызывается, чтобы пользователь мог вернуться
+ *
+ *
+ * ЧАСТЬ 12. ПОРЯДОК ПРОВЕРКИ ПРИ ВХОДЕ (СХЕМА)
+ * ---------------------------------------------
+ *
+ * Нажатие на кнопку "Войти"
+ *         ↓
+ * Проверка email (не пустой?)
+ *         ↓
+ * Проверка пароля (не пустой?)
+ *         ↓
+ * Проверка длины пароля (≥ 6 символов?)
+ *         ↓
+ * Проверка наличия цифры (containsDigit?)
+ *         ↓
+ * Админ? (admin@fitnessapp.com / admin123)
+ *         ↓ (НЕТ)
+ * Тренер? (coach@fitnessapp.com / coach123)
+ *         ↓ (НЕТ)
+ * Вход через Firebase
+ *         ↓
+ * Успех? → MainActivity
+ *         ↓ (НЕТ)
+ * Показать ошибку
+ *
+ *
+ * ЧАСТЬ 13. ОСНОВНЫЕ МЕТОДЫ (КРАТКОЕ ОПИСАНИЕ)
+ * --------------------------------------------
+ *
+ * onCreate() — инициализация активности: установка полноэкранного режима,
+ *              поиск View-компонентов, установка слушателей для кнопки
+ *              входа, текста регистрации и долгого нажатия на логотип
+ *
+ * containsDigit() — проверяет наличие хотя бы одной цифры в пароле
+ *
+ *
+ * ЧАСТЬ 14. ИЗВЕСТНЫЕ ОГРАНИЧЕНИЯ И ПЛАНЫ ПО ДОРАБОТКЕ
  * -----------------------------------------------------
  *
- * 1. Отсутствие подключения к Firebase:
- *    - Сейчас все учётные данные хранятся в виде констант в коде
- *    - В планах — подключить Firebase Authentication для реальной работы
- *
- * 2. Нет проверки на существование email в системе:
- *    - Сейчас проверяется только совпадение с одним тестовым email
- *    - Нужно добавить запрос к базе данных
- *
- * 3. Телефон только один тестовый:
- *    - Сейчас доступен только номер 71234567890
- *    - В будущем нужно добавить поддержку любых номеров из БД
- *
- * 4. Нет восстановления пароля:
- *    - Нет кнопки "Забыли пароль?"
- *    - Нужно добавить функцию сброса пароля по email
- *
- * 5. Нет сохранения сессии:
+ * 1. Нет сохранения сессии:
  *    - При каждом запуске приложения нужно вводить логин и пароль заново
  *    - Нужно добавить "Запомнить меня" и автоматический вход
  *
- * 6. Нет биометрической авторизации:
+ * 2. Нет восстановления пароля:
+ *    - Нет кнопки "Забыли пароль?"
+ *    - Нужно добавить функцию сброса пароля по email
+ *
+ * 3. Нет биометрической авторизации:
  *    - Нет входа по отпечатку пальца или Face ID
  *    - Можно добавить в будущем
  *
+ * 4. Админ и тренер не в Firebase:
+ *    - Их учётные данные хранятся локально в коде
+ *    - Нужно перенести их в Firebase или Firestore
  *
- * ЧАСТЬ 12. ЗАВИСИМОСТИ И ТРЕБОВАНИЯ
+ *
+ * ЧАСТЬ 15. ЗАВИСИМОСТИ И ТРЕБОВАНИЯ
  * -----------------------------------
  *
  * Для работы модуля необходимы следующие библиотеки:
  * - AndroidX AppCompat (для совместимости с разными версиями Android)
+ * - Firebase Authentication (com.google.firebase:firebase-auth)
  * - CircleImageView (для круглого логотипа)
  *
  * Минимальная версия Android: API 21 (Android 5.0 Lollipop)
  *
  *
- * КОНЕЦ ДОКУМЕНТАЦИИ
+ * ЧАСТЬ 16. ИТОГИ
+ * ----------------
+ *
+ * LoginActivity — это экран входа с интеграцией Firebase Authentication.
+ * Он выполняет все необходимые проверки вводимых данных: email, длина пароля
+ * (не менее 6 символов), наличие цифры в пароле.
+ *
+ * Поддерживаются три роли: администратор, тренер и обычный пользователь.
+ * При успешном входе пользователь перенаправляется на соответствующий экран.
+ * При ошибке показывается конкретная причина.
+ *
  * =============================================================================
  */
 
-import android.content.Intent;
-import android.os.Bundle;
-import android.text.TextUtils;
-import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
-import android.widget.TextView;
-import android.widget.Toast;
+import android.content.Intent;          //Импорт для создания Intent (переходов между экранами)
+import android.os.Bundle;              //Импорт для сохранения состояния активности
+import android.text.TextUtils;         //Импорт для проверки строк на пустоту
+import android.view.View;              //Импорт для работы с системными панелями (скрытие статус-бара)
+import android.widget.Button;          //Импорт для работы с кнопкой
+import android.widget.EditText;        //Импорт для работы с полем ввода текста
+import android.widget.TextView;        //Импорт для работы с текстовым полем (TextView)
+import android.widget.Toast;           //Импорт для показа всплывающих сообщений
 
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.annotation.NonNull;     //Импорт для аннотации NonNull (указывает, что параметр не может быть null)
+import androidx.appcompat.app.AppCompatActivity; //Импорт базового класса для активности с поддержкой ActionBar
 
-import com.example.fitnessapp.R;
-import com.example.fitnessapp.admin.AdminPanel;
+import com.example.fitnessapp.R;       //Импорт ресурсов приложения (R.java)
+import com.example.fitnessapp.admin.AdminPanel; //Импорт AdminPanel (панель администратора)
+import com.google.android.gms.tasks.OnCompleteListener; //Импорт слушателя завершения задачи Firebase
+import com.google.android.gms.tasks.Task;              //Импорт класса Task для асинхронных операций Firebase
+import com.google.firebase.auth.AuthResult;           //Импорт результата аутентификации Firebase
+import com.google.firebase.auth.FirebaseAuth;         //Импорт главного класса для аутентификации Firebase
 
-import de.hdodenhof.circleimageview.CircleImageView;
+import de.hdodenhof.circleimageview.CircleImageView;  //Импорт CircleImageView для круглого логотипа
 
 public class LoginActivity extends AppCompatActivity {
 
-    private EditText emailEditText; //Объявляем переменную для поля ввода email
-    private EditText passwordEditText; //Объявляем переменную для поля ввода пароля
-    private EditText phoneEditText; //Объявляем переменную для поля ввода телефона
-    private RadioGroup loginTypeGroup; //Объявляем переменную для группы переключателя (Email/Телефон)
-    private RadioButton radioEmail, radioPhone; //Объявляем переменные для кнопок переключателя (Email и Телефон)
-    private Button loginButton; //Объявляем переменную для кнопки "Войти"
-    private TextView signUp; //Объявляем переменную для текста регистрации
+    private EditText emailEditText;      //Поле для ввода email — основной идентификатор пользователя
+    private EditText passwordEditText;   //Поле для ввода пароля — секретный ключ для доступа к аккаунту
+    private Button loginButton;          //Кнопка "Войти" — запускает процесс авторизации
+    private TextView signUp;             //Текст "Регистрация" — ссылка для перехода на экран регистрации
 
+    //Объект FirebaseAuth — главный класс для работы с аутентификацией
+    //getInstance() возвращает единственный экземпляр (Singleton) для всего приложения
+    private FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
 
-    private static final String CORRECT_EMAIL = "test@example.com"; //Определяет корректный email для входа.
-    private static final String CORRECT_PASSWORD = "password123"; //Определяет корректный пароль для входа.
+    //ЛОКАЛЬНЫЕ УЧЁТНЫЕ ДАННЫЕ (АДМИНИСТРАТОР И ТРЕНЕР)
+    //Эти данные не хранятся в Firebase, а проверяются локально.
+    //Это позволяет администратору и тренеру входить даже без интернета.
 
-    //Данные для администратора
-    public static final String ADMIN_EMAIL = "admin@fitnessapp.com"; //Email администратора
-    public static final String ADMIN_PASSWORD = "admin123"; //Пароль администратора
+    public static final String ADMIN_EMAIL = "admin@fitnessapp.com";     //Email администратора
+    public static final String ADMIN_PASSWORD = "admin123";              //Пароль администратора
+    public static final String COACH_EMAIL = "coach@fitnessapp.com";     //Email тренера
+    public static final String COACH_PASSWORD = "coach123";              //Пароль тренера
 
-    //Данные для тренера
-    public static final String COACH_EMAIL = "coach@fitnessapp.com"; //Email тренера
-    public static final String COACH_PASSWORD = "coach123"; //Пароль тренера
+    //МЕТОД onCreate() — ЖИЗНЕННЫЙ ЦИКЛ АКТИВНОСТИ
+    //Вызывается при создании активности. Здесь происходит вся начальная настройка:
+    // - Установка макета (layout)
+    // - Инициализация UI компонентов
+    // - Настройка слушателей событий
+    // - Скрытие системных панелей
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        //Вызов родительского метода onCreate для корректной работы активности
+        //Bundle savedInstanceState содержит сохранённое состояние (если активность пересоздаётся)
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login); //Устанавливаем макет (XML файл) активности из ресурсов
 
-        //Скрытие статус-бара и навигационной панели
+        //Установка макета (layout) для этой активности
+        //R.layout.activity_login — это XML файл с интерфейсом экрана входа
+        setContentView(R.layout.activity_login);
+
+        //СКРЫТИЕ СТАТУС-БАРА И НАВИГАЦИОННОЙ ПАНЕЛИ (ПОЛНОЭКРАННЫЙ РЕЖИМ)
+        //getWindow() — возвращает окно активности
+        //getDecorView() — возвращает корневое представление окна
+        //setSystemUiVisibility() — устанавливает флаги системного интерфейса
         getWindow().getDecorView().setSystemUiVisibility(
+                //SYSTEM_UI_FLAG_FULLSCREEN — скрывает статус-бар (часы, батарея, сигнал)
                 View.SYSTEM_UI_FLAG_FULLSCREEN |
+                        //SYSTEM_UI_FLAG_HIDE_NAVIGATION — скрывает навигационную панель (кнопки Назад, Домой)
                         View.SYSTEM_UI_FLAG_HIDE_NAVIGATION |
+                        //SYSTEM_UI_FLAG_LAYOUT_STABLE — стабилизирует макет при скрытии/показе панелей
                         View.SYSTEM_UI_FLAG_LAYOUT_STABLE
         );
 
-        emailEditText = findViewById(R.id.userEdt); //Ищет поле ввода email по его ID и присваивает переменной
-        passwordEditText = findViewById(R.id.passEdt); //Ищет поле ввода пароля по его ID и присваивает переменной
-        phoneEditText = findViewById(R.id.phoneEdt); //Ищет поле ввода телефона по его ID
-        loginTypeGroup = findViewById(R.id.loginTypeGroup);
-        radioEmail = findViewById(R.id.radioEmail);
-        radioPhone = findViewById(R.id.radioPhone);
-        loginButton = findViewById(R.id.loginBtn); //Ищет кнопку "Войти" по её ID и присваивает переменной
-        signUp = findViewById(R.id.sin); //Ищет кнопку "Зарегистрироваться" по её ID и присваивает переменной
+        //ИНИЦИАЛИЗАЦИЯ UI КОМПОНЕНТОВ (СВЯЗЫВАНИЕ КОДА С XML)
+        //findViewById() — находит View по его ID в XML и возвращает его как объект Java
 
+        emailEditText = findViewById(R.id.userEdt);      //Поиск поля для ввода email по ID "userEdt"
+        passwordEditText = findViewById(R.id.passEdt);   //Поиск поля для ввода пароля по ID "passEdt"
+        loginButton = findViewById(R.id.loginBtn);       //Поиск кнопки входа по ID "loginBtn"
+        signUp = findViewById(R.id.sin);                 //Поиск текста регистрации по ID "sin"
 
-        //Обработчик переключения между email и телефоном
-        loginTypeGroup.setOnCheckedChangeListener((group, checkedId) -> {
-            if (checkedId == R.id.radioEmail) {
-                emailEditText.setVisibility(View.VISIBLE);
-                phoneEditText.setVisibility(View.GONE);
-                emailEditText.setHint("Email почта");
-            } else {
-                emailEditText.setVisibility(View.GONE);
-                phoneEditText.setVisibility(View.VISIBLE);
-                phoneEditText.setHint("Номер телефона");
-            }
-        });
-
-
-        //Секретная подсказка по долгому нажатию на логотип
+        //СЕКРЕТНАЯ ПОДСКАЗКА (ДОЛГОЕ НАЖАТИЕ НА ЛОГОТИП)
+        //Находим логотип по ID "imageView"
         CircleImageView logo = findViewById(R.id.imageView);
+
+        //setOnLongClickListener() — устанавливает обработчик ДОЛГОГО нажатия
+        //(пользователь зажимает палец на логотипе)
         logo.setOnLongClickListener(v -> {
-            Toast.makeText(LoginActivity.this, "Админ доступ: admin@fitnessapp.com / admin123\nТренера доступ: coach@fitnessapp.com / coach123", Toast.LENGTH_SHORT).show();
-            return true;
+            //Показываем всплывающее сообщение с данными для входа администратора и тренера
+            //\n — символ переноса строки
+            Toast.makeText(LoginActivity.this, "Админ доступ: admin@fitnessapp.com / admin123\nТренер доступ: coach@fitnessapp.com / coach123", Toast.LENGTH_SHORT).show();
+            return true; //Возвращаем true, означая что событие обработано
         });
 
-
-        //Обработчик нажатия на кнопку "Войти"
+        //НАСТРОЙКА СЛУШАТЕЛЯ ДЛЯ КНОПКИ "ВОЙТИ"
+        //setOnClickListener() — устанавливает обработчик нажатия на кнопку
+        //v -> { ... } — это Lambda-выражение (сокращённая запись анонимного класса)
         loginButton.setOnClickListener(v -> {
-            String email = emailEditText.getText().toString().trim(); //Получает текст из поля
-            //ввода email и удаляет пробелы.
-            String phone = phoneEditText.getText().toString().trim(); //Получает текст из поля телефона
-            String password = passwordEditText.getText().toString().trim(); //Получает текст из
-            //поля ввода пароля и удаляет пробелы.
+            //ПОЛУЧЕНИЕ ВВЕДЁННЫХ ДАННЫХ ИЗ ПОЛЕЙ
+            //getText() — возвращает Editable объект с текстом из поля
+            //toString() — преобразует Editable в String
+            //trim() — удаляет пробелы в начале и конце строки
+            String email = emailEditText.getText().toString().trim();    //Получение email
+            String password = passwordEditText.getText().toString().trim(); //Получение пароля
 
-            // Определяем, какой способ входа выбран
-            boolean isEmailLogin = radioEmail.isChecked();
-            String loginCredential = isEmailLogin ? email : phone;
-
-            //Проверка, введен ли email или телефон
-            if (TextUtils.isEmpty(loginCredential)) {
-                if (isEmailLogin) {
-                    emailEditText.setError("Введите email"); //Устанавливает ошибку в
-                    //поле ввода email, если оно пустое.
-                    emailEditText.requestFocus(); //Устанавливает фокус на поле ввода
-                    //email
-                } else {
-                    phoneEditText.setError("Введите номер телефона");
-                    phoneEditText.requestFocus();
-                }
-                return;
-            } else if (TextUtils.isEmpty(password)) { //Проверка, введен ли пароль.
-                passwordEditText.setError("Введите пароль"); //Устанавливает ошибку
-                //в поле ввода пароля, если оно пустое
-                passwordEditText.requestFocus(); //Устанавливает фокус на
-                //поле ввода пароля.
-            } else if (password.length() <= 6) { //Проверка, достаточно ли
-                //длинный пароль
-                passwordEditText.setError("Пароль должен содержать не менее 6 символов"); //Устанавливает
-                //ошибку, если пароль слишком короткий.
-                passwordEditText.requestFocus(); //Устанавливает фокус на поле ввода пароля.
-            } else if (!containsDigit(password)) { //Проверка, содержит ли пароль хотя
-                //бы одну цифру.
-                passwordEditText.setError("Пароль должен содержать хотя бы одну цифру"); //Устанавливает
-                //ошибку, если пароль не содержит цифр.
-                passwordEditText.requestFocus(); //Устанавливает фокус на поле ввода пароля.
-            } else { //Проверка на правильность введенных данных.
-                //Проверка для администратора (только по email)
-                if (isEmailLogin && email.equals(ADMIN_EMAIL) && password.equals(ADMIN_PASSWORD)) {
-                    Intent intent = new Intent(LoginActivity.this, AdminPanel.class); //Переход
-                    //на AdminPanel для администратора
-                    startActivity(intent);
-                }
-                else if (isEmailLogin && email.equals(COACH_EMAIL) && password.equals(COACH_PASSWORD)) {
-                    Intent intent = new Intent(LoginActivity.this, CoachActivity.class);
-                    startActivity(intent);
-                }
-                //Проверка для обычного пользователя по email
-                else if (isEmailLogin && email.equals(CORRECT_EMAIL) && isValidPassword(password)) { //Если введенный
-                    //email и пароль корректны...
-                    Intent intent = new Intent(LoginActivity.this, MainActivity.class); //Создает
-                    //Intent для перехода на MainActivity.
-                    startActivity(intent); //Запускает MainActivity.
-                    //finish(); //Завершает текущую активность (LoginActivity), чтобы пользователь
-                    //не мог вернуться назад.
-                }
-                //Проверка для входа по номеру телефона
-                else if (!isEmailLogin && isValidPhoneNumber(phone) && isValidPassword(password)) {
-                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                    startActivity(intent);
-                } else {
-                    if (isEmailLogin) {
-                        Toast.makeText(LoginActivity.this, "Неверный email или пароль", Toast.LENGTH_SHORT).show();
-                    } else {
-                        Toast.makeText(LoginActivity.this, "Неверный номер телефона или пароль", Toast.LENGTH_SHORT).show();
-                    }
-                    //Показывает сообщение об ошибке в случае неверного ввода данных.
-                }
+            //ПРОВЕРКА EMAIL (ВАЛИДАЦИЯ)
+            //TextUtils.isEmpty() — проверяет, является ли строка пустой или null
+            if (TextUtils.isEmpty(email)) {
+                //setError() — устанавливает сообщение об ошибке под полем ввода
+                emailEditText.setError("Введите email");
+                //requestFocus() — устанавливает фокус на это поле (курсор начинает мигать там)
+                emailEditText.requestFocus();
+                return; //Прерываем выполнение метода, не идём дальше
             }
+
+            //ПРОВЕРКА ПАРОЛЯ НА ПУСТОТУ
+            if (TextUtils.isEmpty(password)) {
+                passwordEditText.setError("Введите пароль");
+                passwordEditText.requestFocus();
+                return; //Прерываем выполнение
+            }
+
+            // ПРОВЕРКА ДЛИНЫ ПАРОЛЯ
+            // Firebase требует, чтобы пароль содержал минимум 6 символов
+            // length() — возвращает количество символов в строке
+            if (password.length() < 6) {
+                passwordEditText.setError("Пароль должен содержать не менее 6 символов");
+                passwordEditText.requestFocus();
+                return; // Прерываем выполнение
+            }
+
+            //ПРОВЕРКА НАЛИЧИЯ ЦИФРЫ В ПАРОЛЕ
+            //containsDigit() — пользовательский метод, проверяющий наличие цифр
+            //! — оператор отрицания (если НЕТ цифр)
+            if (!containsDigit(password)) {
+                passwordEditText.setError("Пароль должен содержать хотя бы одну цифру");
+                passwordEditText.requestFocus();
+                return; //Прерываем выполнение
+            }
+
+            //ПРОВЕРКА НА АДМИНИСТРАТОРА (ЛОКАЛЬНАЯ)
+            //equals() — сравнивает строки на равенство
+            //Если введённый email и пароль совпадают с данными администратора
+            if (email.equals(ADMIN_EMAIL) && password.equals(ADMIN_PASSWORD)) {
+                //Создаём Intent для перехода на панель администратора
+                Intent intent = new Intent(LoginActivity.this, AdminPanel.class);
+                startActivity(intent); // Запускаем AdminPanel
+                return; //Прерываем выполнение, чтобы не проверять дальше
+            }
+
+            //ПРОВЕРКА НА ТРЕНЕРА (ЛОКАЛЬНАЯ)
+            //Если введённый email и пароль совпадают с данными тренера
+            if (email.equals(COACH_EMAIL) && password.equals(COACH_PASSWORD)) {
+                //Создаём Intent для перехода на экран тренера
+                Intent intent = new Intent(LoginActivity.this, CoachActivity.class);
+                startActivity(intent); // Запускаем CoachActivity
+                return; //Прерываем выполнение, чтобы не проверять через Firebase
+            }
+
+            //ВХОД ОБЫЧНОГО ПОЛЬЗОВАТЕЛЯ ЧЕРЕЗ FIREBASE
+            //signInWithEmailAndPassword() — выполняет вход существующего пользователя
+            //Этот метод работает асинхронно (не блокирует UI поток)
+            //addOnCompleteListener() — добавляет слушатель, который сработает,
+            //когда операция завершится (успешно или с ошибкой)
+            firebaseAuth.signInWithEmailAndPassword(email, password)
+                    .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+                            //Этот код выполнится ПОСЛЕ того, как Firebase завершит проверку
+
+                            //ПРОВЕРКА: УСПЕШЕН ЛИ ВХОД?
+                            //task.isSuccessful() — возвращает true, если операция прошла успешно
+                            if (task.isSuccessful()) {
+                                //Показываем всплывающее сообщение об успехе
+                                Toast.makeText(LoginActivity.this, "Вход выполнен успешно!", Toast.LENGTH_SHORT).show();
+
+                                //Создаём Intent для перехода на главный экран пользователя
+                                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+
+                                //Запускаем MainActivity
+                                startActivity(intent);
+
+                                //finish() — завершает текущую активность (LoginActivity)
+                                //Пользователь не сможет вернуться на экран входа кнопкой "Назад"
+                                finish();
+                            } else {
+                                //ОБРАБОТКА ОШИБКИ ВХОДА
+                                //task.getException() — возвращает исключение (ошибку) от Firebase
+                                //getMessage() — возвращает текстовое описание ошибки
+                                String error = task.getException().getMessage();
+
+                                //Показываем сообщение об ошибке пользователю
+                                //Toast.LENGTH_LONG — сообщение показывается дольше
+                                Toast.makeText(LoginActivity.this, "Ошибка входа: " + error, Toast.LENGTH_LONG).show();
+                            }
+                        }
+                    });
         });
 
-        //Обработчик нажатия на текст "Регистрация".
+        //НАСТРОЙКА СЛУШАТЕЛЯ ДЛЯ ТЕКСТА "РЕГИСТРАЦИЯ"
+        //При нажатии на текст "Регистрация" пользователь переходит на экран регистрации
         signUp.setOnClickListener(v -> {
-            Intent intent = new Intent(LoginActivity.this, RegisterActivity.class); //Создает
-            //Intent для перехода на RegisterActivity.
-            startActivity(intent); //Запускает RegisterActivity.
+            //Создаём Intent для перехода на RegisterActivity
+            Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
+
+            //Запускаем активность RegisterActivity
+            startActivity(intent);
+
+            //Примечание: finish() не вызывается, чтобы пользователь мог вернуться
+            //на экран входа кнопкой "Назад" (если случайно нажал "Регистрация")
         });
     }
 
-    //Метод для проверки наличия хотя бы одной цифры в пароле.
+    //МЕТОД containsDigit() — ПРОВЕРКА НАЛИЧИЯ ЦИФРЫ В ПАРОЛЕ
+    //Назначение: проверяет, содержит ли строка пароля хотя бы одну цифру
+    //Параметры:
+    //String password - строка пароля для проверки
+    //Возвращаемое значение:
+    //boolean - true (есть цифра) или false (нет цифр)
     private boolean containsDigit(String password) {
-        for (char c : password.toCharArray()) { //Проходит по каждому символу в пароле.
-            if (Character.isDigit(c)) { //Проверяет является ли символ цифрой.
-                return true; //Возвращает true, если найдена цифра.
+        //toCharArray() — преобразует строку в массив символов
+        //Например: "abc123" → ['a','b','c','1','2','3']
+        for (char c : password.toCharArray()) {
+            //Character.isDigit(c) — проверяет, является ли символ цифрой
+            //Возвращает true для '0','1','2','3','4','5','6','7','8','9'
+            if (Character.isDigit(c)) {
+                return true; //Нашли цифру — сразу возвращаем true
             }
         }
-        return false; //Возвращает false, если цифр не найдено.
-    }
-
-    //Метод для проверки валидности пароля.
-    private boolean isValidPassword(String password) {
-        return password.equals(CORRECT_PASSWORD); //Возвращает true,
-        //если введенный пароль соответствует корректному паролю.
-    }
-
-    private boolean isValidPhoneNumber(String phone) {
-        //Убираем все пробелы, дефисы и скобки для сравнения
-        String cleanPhone = phone.replaceAll("[\\\\s\\\\-\\\\(\\\\)]", "");
-        return cleanPhone.equals("71234567890"); //Возвращает true, если номер соответствует
+        return false; //Прошли весь пароль, цифр не нашли — возвращаем false
     }
 }
