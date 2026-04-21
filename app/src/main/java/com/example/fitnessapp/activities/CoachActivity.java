@@ -204,6 +204,7 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
@@ -212,6 +213,12 @@ import androidx.core.content.ContextCompat;
 import com.example.fitnessapp.R;
 import com.example.fitnessapp.chat.ChatActivity;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.example.fitnessapp.models.Student;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -307,20 +314,25 @@ public class CoachActivity extends AppCompatActivity {
 
         btnStudents = findViewById(R.id.btn_Students); //Нахождение кнопки по его идентификатору
 
-        //Устанавливаем слушатель клика на кнопку
         btnStudents.setOnClickListener(v -> {
-            AlertDialog.Builder builder = new AlertDialog.Builder(CoachActivity.this);
-            builder.setTitle("Список зарегистрированных учеников")
-                    //Устанавливаем список и слушатель нажатий
-                    .setItems(students, (dialog, which) -> {
-                        //which - это индекс нажатого элемента (от 0 до 14)
-                        String selectedStudent = students[which];
-                        Toast.makeText(CoachActivity.this, "Выбран: " + selectedStudent, Toast.LENGTH_SHORT).show();
-                    }).setNegativeButton("Закрыть", (dialog, id) -> dialog.dismiss());
-
-            AlertDialog alert = builder.create();
-            alert.show();
+            Intent intent = new Intent(CoachActivity.this, StudentsListActivity.class);
+            startActivity(intent);
         });
+
+        //Устанавливаем слушатель клика на кнопку
+//        btnStudents.setOnClickListener(v -> {
+//            AlertDialog.Builder builder = new AlertDialog.Builder(CoachActivity.this);
+//            builder.setTitle("Список зарегистрированных учеников")
+//                    //Устанавливаем список и слушатель нажатий
+//                    .setItems(students, (dialog, which) -> {
+//                        //which - это индекс нажатого элемента (от 0 до 14)
+//                        String selectedStudent = students[which];
+//                        Toast.makeText(CoachActivity.this, "Выбран: " + selectedStudent, Toast.LENGTH_SHORT).show();
+//                    }).setNegativeButton("Закрыть", (dialog, id) -> dialog.dismiss());
+//
+//            AlertDialog alert = builder.create();
+//            alert.show();
+//        });
 
         workBtn = findViewById(R.id.workBtn);
 
@@ -360,6 +372,43 @@ public class CoachActivity extends AppCompatActivity {
         settBtn.setOnClickListener(v -> {
             Intent intent = new Intent(this, SettingsActivity.class);
             startActivity(intent);
+        });
+
+        initializeStudentsIfEmpty();
+    }
+
+    private void initializeStudentsIfEmpty() {
+        DatabaseReference studentsRef = FirebaseDatabase.getInstance().getReference("students");
+        studentsRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                // Проверяем, есть ли уже ученики
+                if (snapshot.getChildrenCount() == 0) {
+                    // Нет ни одного ученика — добавляем
+                    String[] names = {
+                            "Артем Барковский", "Рамазан Беджаше", "Артур Бутырев", "Руслан Гасанов",
+                            "Никита Говорко", "Владислав Ивашенцев", "Владимир Ишутин", "Альберто Карамови",
+                            "Дмитрий Кладько", "Егор Корюхов", "Сергей Матюхов", "Михаил Мелихов",
+                            "Дмитрий Осадчий", "Богдан Пакарев", "Андрей Приймак", "Кирилл Сасин",
+                            "Алексей Семячкин", "Вячеслав Соболевский", "Степан Списивцев", "Владимир Чебанов"
+                    };
+                    for (String name : names) {
+                        String key = studentsRef.push().getKey();
+                        Student student = new Student(name, ""); // группа пока не выбрана
+                        if (key != null) {
+                            studentsRef.child(key).setValue(student);
+                        }
+                    }
+                    Toast.makeText(CoachActivity.this, "Список учеников добавлен (" + names.length + ")", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(CoachActivity.this, "Ученики уже есть (" + snapshot.getChildrenCount() + ")", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Toast.makeText(CoachActivity.this, "Ошибка: " + error.getMessage(), Toast.LENGTH_SHORT).show();
+            }
         });
     }
 

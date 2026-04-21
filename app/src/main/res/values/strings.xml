@@ -49,4 +49,11 @@
     <string name="settings">Настройки</string>
     <string name="about">О приложении</string>
     <string name="passConfirm">Подтвердите пароль</string>
+
+    <string name="title_students">Ученики</string>
+    <string name="title_group_plans">Планы тренировок по группам</string>
+    <string name="main_group">Основная группа</string>
+    <string name="subgroup">Подгруппа</string>
+    <string name="exempt">Освобождённые</string>
+    <string name="save">Сохранить</string>
 </resources>

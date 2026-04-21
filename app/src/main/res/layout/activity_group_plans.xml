@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activities.GroupPlansActivity">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <EditText
+                android:id="@+id/editMainPlan"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="План для основной группы"
+                android:inputType="textMultiLine"
+                android:minLines="3"/>
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/saveMainPlan"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Сохранить"
+                android:background="@drawable/red_button_background"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="24dp"/>
+
+            <EditText
+                android:id="@+id/editSubgroupPlan"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="План для подгруппы"
+                android:inputType="textMultiLine"
+                android:minLines="3"/>
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/saveSubgroupPlan"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Сохранить"
+                android:background="@drawable/red_button_background"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="24dp"/>
+
+            <EditText
+                android:id="@+id/editExemptPlan"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="План для освобождённых"
+                android:inputType="textMultiLine"
+                android:minLines="3"/>
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/saveExemptPlan"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/red_button_background"
+                android:text="Сохранить"
+                android:layout_marginTop="8dp"/>
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>
