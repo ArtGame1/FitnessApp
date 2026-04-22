@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:fitsSystemWindows="true"
+    android:orientation="vertical"
     tools:context=".activities.RegisterActivity">
 
     <ScrollView
@@ -22,7 +21,8 @@
                 android:id="@+id/imageView"
                 android:layout_width="115dp"
                 android:layout_height="110dp"
-                android:layout_marginTop="36dp"
+                android:layout_marginTop="20dp"
+                android:scaleType="centerCrop"
                 android:layout_gravity="center"
                 android:src="@drawable/fitness"/>
 
@@ -52,12 +52,12 @@
                     android:textSize="45sp"/>
             </LinearLayout>
 
-            <!-- Поле Email (без глаза) -->
+            <!-- Поле Email -->
             <EditText
                 android:id="@+id/emailEdt"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:layout_marginTop="50dp"
+                android:layout_marginTop="40dp"
                 android:layout_marginEnd="32dp"
                 android:layout_marginStart="32dp"
                 android:hint="@string/email"
@@ -68,8 +68,30 @@
                 android:background="@drawable/edittext_background"
                 android:inputType="textEmailAddress"/>
 
+            <!-- Поле Телефон -->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/phoneLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="18dp"
+                android:layout_marginEnd="32dp"
+                android:layout_marginStart="32dp"
+                app:passwordToggleEnabled="true"
+                app:passwordToggleTint="@color/blue_grey">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/phoneEdt"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:hint="@string/phone_user"
+                    android:textSize="16sp"
+                    android:background="@drawable/edittext_background"
+                    android:inputType="phone"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
             <!-- Поле Пароль с глазом -->
             <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/passwordLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="18dp"
@@ -83,7 +105,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:hint="@string/pass"
-                    android:layout_gravity="center"
                     android:textSize="16sp"
                     android:background="@drawable/edittext_background"
                     android:inputType="textPassword"/>
@@ -93,7 +114,7 @@
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="18dp"
+                android:layout_marginTop="12dp"
                 android:layout_marginEnd="32dp"
                 android:layout_marginStart="32dp"
                 app:passwordToggleEnabled="true"
@@ -104,12 +125,12 @@
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:hint="@string/passConfirm"
-                    android:layout_gravity="center"
                     android:textSize="16sp"
                     android:background="@drawable/edittext_background"
                     android:inputType="textPassword"/>
             </com.google.android.material.textfield.TextInputLayout>
 
+            <!-- Кнопка регистрации -->
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/signupBtn"
                 android:layout_width="match_parent"
@@ -117,25 +138,24 @@
                 android:text="@string/signUp"
                 android:background="@drawable/red_button_background"
                 android:layout_margin="32dp"
-                android:layout_marginTop="80dp"
                 style="@android:style/Widget.Button"
                 android:textColor="@color/white"
                 android:textSize="16sp"
-                android:textStyle="bold"/>
+                android:textStyle="bold"
+                android:textAllCaps="false"/>
 
+            <!-- Ссылка на логин -->
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_marginTop="20dp"
                 android:orientation="horizontal">
 
                 <TextView
-                    android:id="@+id/textView3"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/are_you_member"
-                    android:layout_marginTop="15dp"
+                    android:layout_marginTop="30dp"
                     android:textSize="15sp"
                     android:textColor="@color/blue_grey"/>
 
@@ -144,18 +164,20 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/logg"
-                    android:textStyle="bold"
-                    android:layout_marginTop="15dp"
+                    android:layout_marginTop="30dp"
                     android:textColor="@color/black"
-                    android:textSize="15sp"/>
+                    android:textStyle="bold"
+                    android:textSize="15sp"
+                    android:layout_marginStart="4dp"/>
             </LinearLayout>
 
+            <!-- Политика безопасности -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:gravity="center_horizontal"
-                android:layout_marginTop="40dp"
+                android:layout_marginTop="27dp"
                 android:layout_marginBottom="16dp"
                 android:paddingHorizontal="24dp">
 
@@ -163,7 +185,7 @@
                     android:id="@+id/textViewPolitics"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Политика безопасности.\n Мы гарантируем защиту ваших данных\n и не передаем их третьим лицам."
+                    android:text="@string/privacy_policy"
                     android:textColor="@android:color/darker_gray"
                     android:textSize="10sp"
                     android:gravity="center"
@@ -171,4 +193,4 @@
             </LinearLayout>
         </LinearLayout>
     </ScrollView>
-</androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>

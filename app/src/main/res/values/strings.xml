@@ -25,6 +25,7 @@
     <string name="add_new_user">Добавить нового пользователя</string>
     <string name="name_user">Имя пользователя</string>
     <string name="email_user">Email пользователя</string>
+    <string name="phone_user">Телефон пользователя</string>
     <string name="password_user">Пароль</string>
     <string name="list_users">Список пользователей</string>
     <string name="add_user">Добавить пользователя</string>
@@ -34,7 +35,9 @@
     <string name="facebook_app_id">YOUR_FACEBOOK_APP_ID</string>
     <string name="facebook_client_token">YOUR_FACEBOOK_CLIENT_TOKEN</string>
     <string name="open_navigation_drawer">Open navigation drawer</string>
-
+    <string name="privacy_policy">Политика безопасности.\n Мы гарантируем защиту ваших данных\n и не передаем их третьим лицам.</string>
+    <string name="show_phone">Показать номер телефона</string>
+    <string name="show_password">Показать пароль</string>
 
     <string name="openNavigationDrawer">Открыть меню навигации</string>
     <string name="notifications">Уведомления</string>

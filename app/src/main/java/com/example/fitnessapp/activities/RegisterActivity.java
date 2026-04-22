@@ -15,12 +15,11 @@ package com.example.fitnessapp.activities;
  *
  * Этот экран позволяет новому пользователю:
  * - Ввести адрес электронной почты
- * - Создать пароль
+ * - Ввести номер телефона (для возможности входа по телефону в будущем)
+ * - Создать пароль и подтвердить его
  * - Зарегистрироваться в Firebase Authentication
- * - После успешной регистрации перейти на экран входа
- *
- * В отличие от предыдущей версии, здесь регистрация происходит через Firebase,
- * что позволяет сохранять пользователей в облачной базе данных Firebase.
+ * - После успешной регистрации данные (включая телефон) сохраняются в
+ *   Realtime Database для последующего входа по телефону
  *
  *
  * ЧАСТЬ 2. СТРУКТУРА ЭКРАНА
@@ -30,10 +29,10 @@ package com.example.fitnessapp.activities;
  *
  * Поля ввода:
  * - Email (emailEditText / emailEdt) — поле для ввода электронной почты
+ * - Телефон (phoneEditText / phoneEdit) — поле для ввода номера телефона
  * - Пароль (passwordEditText / passEdt) — поле для ввода пароля
- *
- * Примечание: Поля для имени и телефона закомментированы, так как в текущей
- * версии используется только email и пароль для аутентификации Firebase.
+ * - Подтверждение пароля (passwordConfirmEditText / passConfirm) — поле для
+ *   повторного ввода пароля (проверка на совпадение)
  *
  * Кнопки и ссылки:
  * - Кнопка "Зарегистрироваться" (registerButton / signupBtn) — выполняет
@@ -56,61 +55,95 @@ package com.example.fitnessapp.activities;
  * - createUserWithEmailAndPassword() — создание нового пользователя
  * - signInWithEmailAndPassword() — вход существующего пользователя
  *
+ * ДОПОЛНИТЕЛЬНО: Для хранения телефона используется Realtime Database.
+ * Это позволяет в дальнейшем реализовать вход по телефону через поиск
+ * email, ассоциированного с номером телефона.
+ *
  *
  * ЧАСТЬ 4. ПРОЦЕСС РЕГИСТРАЦИИ (ДЕТАЛЬНО)
  * -----------------------------------------
  *
- * 1. Пользователь вводит email и пароль
+ * 1. Пользователь вводит email, телефон, пароль и подтверждение пароля
  * 2. Нажимает кнопку "Зарегистрироваться"
- * 3. Выполняется валидация введённых данных
- * 4. Firebase проверяет:
- *    - Не существует ли уже пользователь с таким email
- *    - Соответствует ли пароль требованиям безопасности
- * 5. При успехе — пользователь сохраняется в Firebase
+ * 3. Выполняется валидация всех введённых данных
+ * 4. Firebase Auth создаёт пользователя с email и паролем
+ * 5. При успехе — дополнительные данные (телефон, роль, дата создания)
+ *    сохраняются в Realtime Database
  * 6. При ошибке — показывается сообщение с причиной
  *
  *
  * ЧАСТЬ 5. ВАЛИДАЦИЯ ВВОДИМЫХ ДАННЫХ (ДЕТАЛЬНО)
  * ----------------------------------------------
  *
- * Перед отправкой данных в Firebase выполняется проверка:
+ * Перед отправкой данных в Firebase выполняется последовательная проверка:
  *
  * 5.1. Проверка email:
  * - Проверяется, что поле email не пустое
  * - Если поле пустое, показывается ошибка "Введите email"
  * - Фокус устанавливается на поле email
  *
- * 5.2. Проверка пароля на пустоту:
+ * 5.2. Проверка телефона:
+ * - Проверяется, что поле телефона не пустое
+ * - Если поле пустое, показывается ошибка "Введите номер телефона"
+ * - Проверяется, что номер начинается со знака "+" (международный формат)
+ * - Фокус устанавливается на поле телефона
+ *
+ * 5.3. Проверка пароля на пустоту:
  * - Проверяется, что поле пароля не пустое
  * - Если поле пустое, показывается ошибка "Введите пароль"
  * - Фокус устанавливается на поле пароля
  *
- * 5.3. Проверка длины пароля:
+ * 5.4. Проверка совпадения паролей:
+ * - Сравнивается введённый пароль и подтверждение
+ * - Если не совпадают, показывается ошибка "Пароли не совпадают"
+ * - Фокус устанавливается на поле подтверждения пароля
+ *
+ * 5.5. Проверка длины пароля:
  * - Пароль должен содержать не менее 6 символов
  * - Firebase требует минимум 6 символов
  * - Если пароль короче, показывается ошибка
  *
- * 5.4. Проверка наличия цифры в пароле:
+ * 5.6. Проверка наличия цифры в пароле:
  * - Пароль должен содержать хотя бы одну цифру
  * - Если цифр нет, показывается ошибка
  *
  *
- * ЧАСТЬ 6. ОБРАБОТКА ОШИБОК FIREBASE (ДЕТАЛЬНО)
+ * ЧАСТЬ 6. СОХРАНЕНИЕ ДАННЫХ В REALTIME DATABASE (НОВОВВЕДЕНИЕ)
+ * -------------------------------------------------------------
+ *
+ * При успешной регистрации в Firebase Auth, дополнительные данные
+ * сохраняются в Realtime Database в узле "Users":
+ *
+ * Структура базы данных:
+ * Users/
+ *   └── {userId}/
+ *       ├── email: "user@example.com"
+ *       ├── phone: "+79001234567"
+ *       ├── role: "user"
+ *       └── createdAt: "1703318400000"
+ *
+ * Это позволяет:
+ * - В дальнейшем реализовать вход по телефону
+ * - Хранить дополнительную информацию о пользователе
+ * - Управлять ролями пользователей
+ *
+ *
+ * ЧАСТЬ 7. ОБРАБОТКА ОШИБОК FIREBASE (ДЕТАЛЬНО)
  * ----------------------------------------------
  *
  * Firebase может вернуть следующие ошибки при регистрации:
  *
- | Ошибка | Описание | Решение |
- |--------|----------|---------|
- | ERROR_EMAIL_ALREADY_IN_USE | Email уже используется | Использовать другой email |
- | ERROR_INVALID_EMAIL | Неверный формат email | Ввести корректный email |
- | ERROR_WEAK_PASSWORD | Слишком слабый пароль | Использовать более сложный пароль |
- | ERROR_NETWORK_REQUEST_FAILED | Нет интернета | Проверить подключение |
+ * | Ошибка | Описание | Решение |
+ * |--------|----------|---------|
+ * | ERROR_EMAIL_ALREADY_IN_USE | Email уже используется | Использовать другой email |
+ * | ERROR_INVALID_EMAIL | Неверный формат email | Ввести корректный email |
+ * | ERROR_WEAK_PASSWORD | Слишком слабый пароль | Использовать более сложный пароль |
+ * | ERROR_NETWORK_REQUEST_FAILED | Нет интернета | Проверить подключение |
  *
  * Все ошибки выводятся пользователю через Toast.
  *
  *
- * ЧАСТЬ 7. ПОЛНОЭКРАННЫЙ РЕЖИМ
+ * ЧАСТЬ 8. ПОЛНОЭКРАННЫЙ РЕЖИМ
  * -----------------------------
  *
  * При запуске RegisterActivity скрываются системные панели:
@@ -120,302 +153,409 @@ package com.example.fitnessapp.activities;
  * Это создаёт иммерсивный опыт и делает экран регистрации более красивым.
  *
  *
- * ЧАСТЬ 8. МЕТОД containsDigit() (ДЕТАЛЬНО)
- * -----------------------------------------
- *
- * Назначение:
- * Проверяет, содержит ли строка пароля хотя бы одну цифру.
- *
- * Реализация:
- * - Преобразует строку пароля в массив символов
- * - Проходит по каждому символу в цикле
- * - Для каждого символа проверяет, является ли он цифрой через Character.isDigit()
- * - Если найдена хотя бы одна цифра, метод возвращает true
- * - Если после прохода всех символов цифра не найдена, возвращает false
- *
- * Примеры:
- * - "password123" → true (содержит цифры 1, 2, 3)
- * - "mypassword" → false (не содержит цифр)
- * - "pass123word" → true (содержит цифры)
- *
- *
- * ЧАСТЬ 9. НАВИГАЦИЯ (ДЕТАЛЬНО)
- * ------------------------------
- *
- * 9.1. Переход после успешной регистрации:
- *
- * При успешной регистрации создаётся Intent для перехода на LoginActivity.
- * Текущая активность завершается через finish(), чтобы пользователь
- * не мог вернуться на экран регистрации кнопкой "Назад".
- *
- * 9.2. Переход по ссылке "Войти":
- *
- * При нажатии на текст "Войти" (loginTextView) создаётся Intent для перехода
- * на LoginActivity. Это удобно для пользователей, у которых уже есть аккаунт.
- *
- *
- * ЧАСТЬ 10. ОСОБЕННОСТИ РЕАЛИЗАЦИИ
+ * ЧАСТЬ 9. МЕТОДЫ КЛАССА (ДЕТАЛЬНО)
  * ---------------------------------
  *
- * 10.1. Закомментированные поля:
+ * 9.1. onCreate()
+ * - Инициализирует активность
+ * - Устанавливает полноэкранный режим
+ * - Инициализирует Firebase Auth и Database Reference
+ * - Привязывает UI компоненты из XML
+ * - Настраивает обработчики нажатий
  *
- * Поля для имени и телефона закомментированы, потому что:
- * - Firebase Authentication по умолчанию работает только с email и паролем
- * - Имя и телефон можно добавить позже через Firebase Firestore
+ * 9.2. registerUser()
+ * - Получает данные из всех полей ввода
+ * - Выполняет последовательную валидацию
+ * - Отправляет запрос на создание пользователя в Firebase Auth
+ * - При успехе вызывает saveUserToDatabase()
  *
- * 10.2. Последовательная валидация:
+ * 9.3. saveUserToDatabase()
+ * - Создаёт HashMap с данными пользователя
+ * - Сохраняет данные в Realtime Database по пути Users/{userId}
+ * - При успехе показывает сообщение и переходит на LoginActivity
+ * - При ошибке показывает сообщение об ошибке
  *
- * Валидация выполняется с использованием цепочки if-else, где каждое следующее
- * условие проверяется только после того, как предыдущее было пройдено.
+ * 9.4. containsDigit()
+ * - Проверяет, содержит ли строка пароля хотя бы одну цифру
+ * - Возвращает true, если цифра найдена
  *
- * 10.3. Асинхронная регистрация:
+ *
+ * ЧАСТЬ 10. НАВИГАЦИЯ (ДЕТАЛЬНО)
+ * -------------------------------
+ *
+ * 10.1. Переход после успешной регистрации:
+ *
+ * При успешной регистрации и сохранении данных создаётся Intent для перехода
+ * на LoginActivity. Текущая активность завершается через finish(), чтобы
+ * пользователь не мог вернуться на экран регистрации кнопкой "Назад".
+ *
+ * 10.2. Переход по ссылке "Войти":
+ *
+ * При нажатии на текст "Войти" (loginTextView) создаётся Intent для перехода
+ * на LoginActivity. finish() не вызывается, чтобы пользователь мог вернуться
+ * на экран регистрации (например, если случайно нажал).
+ *
+ *
+ * ЧАСТЬ 11. ОСОБЕННОСТИ РЕАЛИЗАЦИИ
+ * ---------------------------------
+ *
+ * 11.1. Двойное сохранение:
+ *
+ * Данные пользователя сохраняются в двух местах:
+ * - Firebase Auth: email и пароль (для аутентификации)
+ * - Realtime Database: телефон, роль, дата создания (для дополнительных данных)
+ *
+ * 11.2. Асинхронная регистрация:
  *
  * Firebase работает асинхронно через addOnCompleteListener.
  * Это значит, что регистрация не блокирует UI поток.
  *
+ * 11.3. Последовательная валидация:
  *
- * ЧАСТЬ 11. ОСНОВНЫЕ МЕТОДЫ (КРАТКОЕ ОПИСАНИЕ)
+ * Валидация выполняется с использованием цепочки if-else, где каждое следующее
+ * условие проверяется только после того, как предыдущее было пройдено.
+ *
+ *
+ * ЧАСТЬ 12. ОСНОВНЫЕ МЕТОДЫ (КРАТКОЕ ОПИСАНИЕ)
  * --------------------------------------------
  *
- * onCreate() — инициализация активности: установка полноэкранного режима,
- *              поиск View-компонентов, установка слушателей для кнопки
- *              регистрации и текста "Войти"
+ * | Метод | Назначение |
+ * |-------|-------------|
+ * | onCreate() | Инициализация активности и UI компонентов |
+ * | registerUser() | Главная логика регистрации и валидации |
+ * | saveUserToDatabase() | Сохранение телефона и данных в БД |
+ * | containsDigit() | Проверка наличия цифры в пароле |
  *
- * containsDigit() — проверяет наличие хотя бы одной цифры в пароле
+ *
+ * ЧАСТЬ 13. ТРЕБОВАНИЯ К ФОРМАТУ ТЕЛЕФОНА
+ * ----------------------------------------
+ *
+ * Телефон должен вводиться в международном формате:
+ * - Начинаться со знака "+"
+ * - Пример: +79001234567 (Россия)
+ * - Пример: +380123456789 (Украина)
+ * - Пример: +375123456789 (Беларусь)
+ *
+ * Это требование проверяется через startsWith("+") при валидации.
  *
  *
- * ЧАСТЬ 12. ИЗВЕСТНЫЕ ОГРАНИЧЕНИЯ И ПЛАНЫ ПО ДОРАБОТКЕ
+ * ЧАСТЬ 14. ИЗВЕСТНЫЕ ОГРАНИЧЕНИЯ И ПЛАНЫ ПО ДОРАБОТКЕ
  * -----------------------------------------------------
  *
- * 1. Нет сохранения имени и телефона:
- *    - В Firebase сохраняется только email и пароль
- *    - Нужно добавить Firebase Firestore для хранения дополнительных данных
+ * 1. Нет проверки формата телефона:
+ *    - Проверяется только наличие знака "+"
+ *    - Нужно добавить проверку количества цифр
  *
- * 2. Нет подтверждения пароля:
- *    - Нет поля "Повторите пароль"
- *    - Нужно добавить второе поле и проверку совпадения паролей
- *
- * 3. Нет проверки формата email:
+ * 2. Нет проверки формата email:
  *    - Firebase сам проверяет формат, но можно добавить свою проверку
  *
- * 4. Нет индикатора загрузки:
+ * 3. Нет индикатора загрузки:
  *    - При регистрации нет прогресс-бара
- *    - Нужно добавить ProgressBar
+ *    - Нужно добавить ProgressBar и блокировать кнопку на время регистрации
+ *
+ * 4. Нет верификации телефона:
+ *    - Телефон сохраняется без подтверждения
+ *    - Можно добавить SMS-верификацию через PhoneAuthProvider
+ *
+ * 5. Нет проверки уникальности телефона:
+ *    - Один телефон могут использовать несколько аккаунтов
+ *    - Нужно добавить проверку перед регистрацией
  *
  *
- * ЧАСТЬ 13. ЗАВИСИМОСТИ И ТРЕБОВАНИЯ
+ * ЧАСТЬ 15. ЗАВИСИМОСТИ И ТРЕБОВАНИЯ
  * -----------------------------------
  *
  * Для работы модуля необходимы следующие библиотеки:
  * - AndroidX AppCompat (для совместимости с разными версиями Android)
  * - Firebase Authentication (com.google.firebase:firebase-auth)
+ * - Firebase Realtime Database (com.google.firebase:firebase-database)
+ * - Material Design (com.google.android.material:material) — для TextInputLayout
  *
  * Минимальная версия Android: API 21 (Android 5.0 Lollipop)
  *
  *
- * ЧАСТЬ 14. ИТОГИ
+ * ЧАСТЬ 16. ИТОГИ
  * ----------------
  *
  * RegisterActivity — это экран регистрации нового пользователя с интеграцией
- * Firebase Authentication. Он выполняет все необходимые проверки вводимых данных:
- * email, длина пароля (не менее 6 символов), наличие цифры в пароле.
+ * Firebase Authentication и Realtime Database.
  *
- * При успешной регистрации пользователь сохраняется в Firebase и перенаправляется
- * на экран входа. При ошибке показывается конкретная причина.
+ * Ключевые возможности:
+ * - Регистрация по email и паролю
+ * - Сохранение номера телефона в базу данных
+ * - Подтверждение пароля
+ * - Полная валидация всех полей
+ * - Обработка всех ошибок Firebase
+ *
+ * Он выполняет все необходимые проверки вводимых данных:
+ * - Email (не пустой)
+ * - Телефон (не пустой, начинается с +)
+ * - Пароль (не пустой, не менее 6 символов, содержит цифру)
+ * - Подтверждение пароля (совпадает с паролем)
+ *
+ * При успешной регистрации:
+ * 1. Пользователь создаётся в Firebase Authentication
+ * 2. Телефон и роль сохраняются в Realtime Database
+ * 3. Пользователь перенаправляется на экран входа
+ *
+ * При ошибке показывается конкретная причина через Toast.
  *
  * =============================================================================
  */
 
-import android.content.Intent;          // Импорт для создания Intent (переходов между экранами)
-import android.os.Bundle;              // Импорт для сохранения состояния активности
-import android.text.TextUtils;         // Импорт для проверки строк на пустоту
-import android.view.View;              // Импорт для работы с системными панелями (скрытие статус-бара)
-import android.widget.Button;          // Импорт для работы с кнопкой
-import android.widget.EditText;        // Импорт для работы с полем ввода текста
-import android.widget.TextView;        // Импорт для работы с текстовым полем (TextView)
-import android.widget.Toast;           // Импорт для показа всплывающих сообщений
+import android.content.Intent;
+import android.os.Bundle;
+import android.text.TextUtils;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.Toast;
 
-import androidx.annotation.NonNull;     // Импорт для аннотации NonNull (указывает, что параметр не может быть null)
-import androidx.appcompat.app.AppCompatActivity; // Импорт базового класса для активности с поддержкой ActionBar
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.fitnessapp.R;       // Импорт ресурсов приложения (R.java)
-import com.google.android.gms.tasks.OnCompleteListener; // Импорт слушателя завершения задачи Firebase
-import com.google.android.gms.tasks.Task;              // Импорт класса Task для асинхронных операций Firebase
-import com.google.firebase.auth.AuthResult;           // Импорт результата аутентификации Firebase
-import com.google.firebase.auth.FirebaseAuth;         // Импорт главного класса для аутентификации Firebase
+import com.example.fitnessapp.R;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class RegisterActivity extends AppCompatActivity {
 
-    //private EditText nameEditText;     //Поле для ввода имени (ЗАКОММЕНТИРОВАНО, так как не используется в Firebase Auth)
-    private EditText emailEditText;      //Поле для ввода email — основной идентификатор пользователя в Firebase
-    //private EditText phoneEditText;    //Поле для ввода телефона (ЗАКОММЕНТИРОВАНО, будет использоваться позже с Firestore)
-    private EditText passwordEditText;   //Поле для ввода пароля — секретный ключ для доступа к аккаунту
+    //ОБЪЯВЛЕНИЕ ПЕРЕМЕННЫХ (UI компоненты)
 
-    private EditText passwordConfirmEditText; //Поле для ввода подтверждения пароля
-    private Button registerButton;       //Кнопка "Зарегистрироваться" — запускает процесс регистрации
-    private TextView loginTextView;      //Текст "Войти" — ссылка для перехода на экран входа
+    private EditText emailEditText;           //Поле для ввода Email
+    private TextInputEditText phoneEditText;           //Поле для ввода Телефона
+    private EditText passwordEditText;        //Поле для ввода Пароля
+    private EditText passwordConfirmEditText; //Поле для подтверждения пароля
+    private Button registerButton;            //Кнопка "Зарегистрироваться"
+    private TextView loginTextView;           //Текст "Уже есть аккаунт? Войти"
 
-    //Объект FirebaseAuth — главный класс для работы с аутентификацией
-    //getInstance() возвращает единственный экземпляр (Singleton) для всего приложения
-    private FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+    //ОБЪЯВЛЕНИЕ ПЕРЕМЕННЫХ (Firebase)
 
+    private FirebaseAuth firebaseAuth;        //Объект для аутентификации пользователей
+    private DatabaseReference databaseReference; //Ссылка на базу данных (Realtime Database)
+
+    //МЕТОД onCreate() - ВЫЗЫВАЕТСЯ ПРИ СОЗДАНИИ АКТИВНОСТИ
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        //Вызов родительского метода onCreate для корректной работы активности
-        //Bundle savedInstanceState содержит сохранённое состояние (если активность пересоздаётся)
-        super.onCreate(savedInstanceState);
+        super.onCreate(savedInstanceState);  //Обязательный вызов родительского метода
 
-        //Установка макета (layout) для этой активности
-        //R.layout.activity_register — это XML файл с интерфейсом экрана регистрации
+        //Устанавливаем XML-макет для этой активности
         setContentView(R.layout.activity_register);
 
-        //СКРЫТИЕ СТАТУС-БАРА И НАВИГАЦИОННОЙ ПАНЕЛИ (ПОЛНОЭКРАННЫЙ РЕЖИМ)
+        //ИНИЦИАЛИЗАЦИЯ FIREBASE
+
+        //Получаем экземпляр FirebaseAuth (один на всё приложение)
+        firebaseAuth = FirebaseAuth.getInstance();
+
+        //Получаем ссылку на узел "Users" в Realtime Database
+        //Все пользователи будут храниться внутри этого узла
+        databaseReference = FirebaseDatabase.getInstance().getReference("Users");
+
+        //НАСТРОЙКА ПОЛНОЭКРАННОГО РЕЖИМА
+
+        //Получаем корневое представление окна и скрываем системные панели
         getWindow().getDecorView().setSystemUiVisibility(
-                // SYSTEM_UI_FLAG_FULLSCREEN — скрывает статус-бар (часы, батарея, сигнал)
+                // SYSTEM_UI_FLAG_FULLSCREEN - скрывает статус-бар (часы, батарея)
                 View.SYSTEM_UI_FLAG_FULLSCREEN |
-                        // SYSTEM_UI_FLAG_HIDE_NAVIGATION — скрывает навигационную панель (кнопки Назад, Домой)
+                        // SYSTEM_UI_FLAG_HIDE_NAVIGATION - скрывает навигационные кнопки (Назад, Домой)
                         View.SYSTEM_UI_FLAG_HIDE_NAVIGATION |
-                        // SYSTEM_UI_FLAG_LAYOUT_STABLE — стабилизирует макет при скрытии/показе панелей
+                        // SYSTEM_UI_FLAG_LAYOUT_STABLE - стабилизирует макет при скрытии панелей
                         View.SYSTEM_UI_FLAG_LAYOUT_STABLE
         );
 
-        //nameEditText = findViewById(R.id.userEdt);     //Поиск поля для ввода имени (ЗАКОММЕНТИРОВАНО)
-        emailEditText = findViewById(R.id.emailEdt);      //Поиск поля для ввода email по ID "emailEdt"
-        //phoneEditText = findViewById(R.id.phoneEdt);   //Поиск поля для ввода телефона (ЗАКОММЕНТИРОВАНО)
-        passwordEditText = findViewById(R.id.passEdt);    //Поиск поля для ввода пароля по ID "passEdt"
-        passwordConfirmEditText = findViewById(R.id.passConfirm); //Поиск поля для ввода подтверждения пароля по ID "passConfirm"
-        registerButton = findViewById(R.id.signupBtn);    //Поиск кнопки регистрации по ID "signupBtn"
-        loginTextView = findViewById(R.id.textView4);     //Поиск текста "Войти" по ID "textView4"
+        //ПРИВЯЗКА UI КОМПОНЕНТОВ (СВЯЗЫВАЕМ JAVA КОД С XML)
 
+        //findViewById() - находит элемент по ID из XML и возвращает его как Java-объект
+        emailEditText = findViewById(R.id.emailEdt);              //Поле Email
+        phoneEditText = findViewById(R.id.phoneEdt);            //Поле Телефон
+        passwordEditText = findViewById(R.id.passEdt);           //Поле Пароль
+        passwordConfirmEditText = findViewById(R.id.passConfirm); //Поле Подтверждение пароля
+        registerButton = findViewById(R.id.signupBtn);           //Кнопка регистрации
+        loginTextView = findViewById(R.id.textView4);            //Текст для перехода на вход
 
-        registerButton.setOnClickListener(v -> {
-            //ПОЛУЧЕНИЕ ВВЕДЁННЫХ ДАННЫХ ИЗ ПОЛЕЙ
-            //String name = nameEditText.getText().toString().trim(); //Получение имени (ЗАКОММЕНТИРОВАНО)
+        //НАСТРОЙКА ОБРАБОТЧИКОВ СОБЫТИЙ
 
-            //getText() — возвращает Editable объект с текстом из поля
-            //toString() — преобразует Editable в String
-            //trim() — удаляет пробелы в начале и конце строки
-            String email = emailEditText.getText().toString().trim();   //Получение email
+        //setOnClickListener() - устанавливаем действие при нажатии на кнопку
+        //v -> {} - это лямбда-выражение (короткая запись обработчика)
+        registerButton.setOnClickListener(v -> registerUser());
 
-            //String phone = phoneEditText.getText().toString().trim(); //Получение телефона (ЗАКОММЕНТИРОВАНО)
-            String password = passwordEditText.getText().toString().trim(); //Получение пароля
-
-            String passwordConfirm = passwordConfirmEditText.getText().toString().trim(); //Подтверждение пароля
-
-            //ПРОВЕРКА EMAIL (ВАЛИДАЦИЯ)
-            //TextUtils.isEmpty() — проверяет, является ли строка пустой или null
-            if (TextUtils.isEmpty(email)) {
-                //setError() — устанавливает сообщение об ошибке под полем ввода
-                emailEditText.setError("Введите email");
-                //requestFocus() — устанавливает фокус на это поле (курсор начинает мигать там)
-                emailEditText.requestFocus();
-                return; //Прерываем выполнение метода, не идём дальше
-            }
-
-            //ПРОВЕРКА ПАРОЛЯ (ВАЛИДАЦИЯ)
-            //Проверка, что поле пароля не пустое
-            if (TextUtils.isEmpty(password)) {
-                passwordEditText.setError("Введите пароль");
-                passwordEditText.requestFocus();
-                return; //Прерываем выполнение
-            }
-
-            //ПРОВЕРКА СОВПАДЕНИЯ ПАРОЛЕЙ
-            if (!password.equals(passwordConfirm)) {
-                passwordConfirmEditText.setError("Пароли не совпадают");
-                passwordConfirmEditText.requestFocus();
-                return;
-            }
-
-            //ПРОВЕРКА ДЛИНЫ ПАРОЛЯ
-            //Firebase требует, чтобы пароль содержал минимум 6 символов
-            //length() — возвращает количество символов в строке
-            if (password.length() < 6) {
-                passwordEditText.setError("Пароль должен содержать не менее 6 символов");
-                passwordEditText.requestFocus();
-                return; //Прерываем выполнение
-            }
-
-            //ПРОВЕРКА НАЛИЧИЯ ЦИФРЫ В ПАРОЛЕ
-            //containsDigit() — пользовательский метод, проверяющий наличие цифр
-            //! — оператор отрицания (если НЕТ цифр)
-            if (!containsDigit(password)) {
-                passwordEditText.setError("Пароль должен содержать хотя бы одну цифру");
-                passwordEditText.requestFocus();
-                return; //Прерываем выполнение
-            }
-
-            //РЕГИСТРАЦИЯ В FIREBASE
-            //createUserWithEmailAndPassword() — создаёт нового пользователя в Firebase
-            //Этот метод работает асинхронно (не блокирует UI поток)
-            //addOnCompleteListener() — добавляет слушатель, который сработает,
-            //когда операция завершится (успешно или с ошибкой)
-            firebaseAuth.createUserWithEmailAndPassword(email, password)
-                    .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                        @Override
-                        public void onComplete(@NonNull Task<AuthResult> task) {
-                            //Этот код выполнится ПОСЛЕ того, как Firebase завершит регистрацию
-
-                            //ПРОВЕРКА: УСПЕШНА ЛИ РЕГИСТРАЦИЯ?
-                            //task.isSuccessful() — возвращает true, если операция прошла успешно
-                            if (task.isSuccessful()) {
-                                //Показываем всплывающее сообщение об успехе
-                                //Toast.LENGTH_SHORT — сообщение показывается на короткое время
-                                Toast.makeText(RegisterActivity.this, "Регистрация успешна!", Toast.LENGTH_SHORT).show();
-
-                                //Создаём Intent для перехода на экран входа (LoginActivity)
-                                Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
-
-                                //Запускаем активность LoginActivity
-                                startActivity(intent);
-
-                                //finish() — завершает текущую активность (RegisterActivity)
-                                //Пользователь не сможет вернуться на экран регистрации кнопкой "Назад"
-                                finish();
-                            } else {
-                                //ОБРАБОТКА ОШИБКИ РЕГИСТРАЦИИ
-                                //task.getException() — возвращает исключение (ошибку) от Firebase
-                                //getMessage() — возвращает текстовое описание ошибки
-                                String error = task.getException().getMessage();
-
-                                //Показываем сообщение об ошибке пользователю
-                                //Toast.LENGTH_LONG — сообщение показывается дольше
-                                Toast.makeText(RegisterActivity.this, "Ошибка регистрации: " + error, Toast.LENGTH_LONG).show();
-                            }
-                        }
-                    });
-        });
-
-        //НАСТРОЙКА СЛУШАТЕЛЯ ДЛЯ ТЕКСТА "ВОЙТИ"
-        //При нажатии на текст "Войти" пользователь переходит на экран входа
+        // При нажатии на текст "Войти" переходим на экран входа
         loginTextView.setOnClickListener(v -> {
-            //Создаём Intent для перехода на LoginActivity
-            Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
-
-            //Запускаем активность LoginActivity
-            startActivity(intent);
-
-            //Примечание: finish() не вызывается, чтобы пользователь мог вернуться
-            //на экран регистрации кнопкой "Назад" (если случайно нажал "Войти")
+            //Создаем Intent для перехода от текущей активности к LoginActivity
+            startActivity(new Intent(RegisterActivity.this, LoginActivity.class));
         });
     }
 
-    //МЕТОД containsDigit() — ПРОВЕРКА НАЛИЧИЯ ЦИФРЫ В ПАРОЛЕ
-    //Назначение: проверяет, содержит ли строка пароля хотя бы одну цифру
+    //МЕТОД registerUser() - ГЛАВНАЯ ЛОГИКА РЕГИСТРАЦИИ
+    private void registerUser() {
+
+        //ПОЛУЧАЕМ ДАННЫЕ ИЗ ПОЛЕЙ ВВОДА
+        //getText() - получает текст из поля
+        //toString() - преобразует в строку
+        //trim() - удаляет пробелы в начале и конце
+
+        String email = emailEditText.getText().toString().trim();       //Email
+        String phone = phoneEditText.getText().toString().trim();       //Телефон
+        String password = passwordEditText.getText().toString().trim(); //Пароль
+        String passwordConfirm = passwordConfirmEditText.getText().toString().trim(); //Подтверждение
+
+        //ВАЛИДАЦИЯ EMAIL
+        //TextUtils.isEmpty() - проверяет, пустая ли строка
+        if (TextUtils.isEmpty(email)) {
+            emailEditText.setError("Введите email");  //Показываем красную ошибку под полем
+            emailEditText.requestFocus();              //Ставим курсор в это поле
+            return;                                    //Выходим из метода, дальше не идём
+        }
+
+        //ВАЛИДАЦИЯ ТЕЛЕФОНА
+        if (TextUtils.isEmpty(phone)) {
+            phoneEditText.setError("Введите номер телефона");
+            phoneEditText.requestFocus();
+            return;
+        }
+
+        //Проверяем, что номер начинается со знака +
+        //startsWith() - проверяет начало строки
+        if (!phone.startsWith("+")) {
+            phoneEditText.setError("Номер должен начинаться с + (например: +79001234567)");
+            phoneEditText.requestFocus();
+            return;
+        }
+
+        //ВАЛИДАЦИЯ ПАРОЛЯ
+        if (TextUtils.isEmpty(password)) {
+            passwordEditText.setError("Введите пароль");
+            passwordEditText.requestFocus();
+            return;
+        }
+
+        //ПРОВЕРКА СОВПАДЕНИЯ ПАРОЛЕЙ
+        //equals() - сравнивает строки на равенство
+        if (!password.equals(passwordConfirm)) {
+            passwordConfirmEditText.setError("Пароли не совпадают");
+            passwordConfirmEditText.requestFocus();
+            return;
+        }
+
+        //ПРОВЕРКА ДЛИНЫ ПАРОЛЯ (Firebase требует минимум 6 символов)
+        if (password.length() < 6) {
+            passwordEditText.setError("Пароль должен содержать не менее 6 символов");
+            passwordEditText.requestFocus();
+            return;
+        }
+
+        //ПРОВЕРКА НАЛИЧИЯ ЦИФРЫ В ПАРОЛЕ
+        //! - оператор отрицания (если НЕТ цифр)
+        if (!containsDigit(password)) {
+            passwordEditText.setError("Пароль должен содержать хотя бы одну цифру");
+            passwordEditText.requestFocus();
+            return;
+        }
+
+        //РЕГИСТРАЦИЯ В FIREBASE AUTH
+        //createUserWithEmailAndPassword() - создаёт нового пользователя в Firebase
+        //Этот метод работает АСИНХРОННО (не блокирует экран, выполняется в фоне)
+        firebaseAuth.createUserWithEmailAndPassword(email, password)
+                .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                    @Override
+                    //Этот метод вызовется, когда Firebase закончит регистрацию (успех или ошибка)
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+
+                        //task.isSuccessful() - true, если регистрация прошла успешно
+                        if (task.isSuccessful()) {
+
+                            //Получаем текущего пользователя (только что созданного)
+                            //getCurrentUser() - возвращает объект FirebaseUser
+                            FirebaseUser user = firebaseAuth.getCurrentUser();
+
+                            //Проверяем, что пользователь не null (существует)
+                            if (user != null) {
+                                // Сохраняем телефон и другие данные в Realtime Database
+                                saveUserToDatabase(user.getUid(), email, phone);
+                            }
+                        } else {
+                            //Если регистрация не удалась - показываем ошибку
+                            //getException() - получает исключение
+                            //getMessage() - получает текст ошибки
+                            String error = task.getException().getMessage();
+                            Toast.makeText(RegisterActivity.this, "Ошибка: " + error, Toast.LENGTH_LONG).show();
+                        }
+                    }
+                });
+    }
+
+    //МЕТОД saveUserToDatabase() - СОХРАНЯЕТ ДАННЫЕ ПОЛЬЗОВАТЕЛЯ В БД
     //Параметры:
-    //String password - строка пароля для проверки
-    //Возвращаемое значение:
-    //boolean - true (есть цифра) или false (нет цифр)
+    //- userId: уникальный ID пользователя из Firebase Auth
+    //- email: email пользователя
+    //- phone: телефон пользователя
+    private void saveUserToDatabase(String userId, String email, String phone) {
+
+        //HashMap - коллекция для хранения пар "ключ-значение"
+        //Это как словарь: по ключу "email" можно получить значение email
+        Map<String, String> userData = new HashMap<>();
+
+        //put() - добавляем данные в коллекцию
+        userData.put("email", email);      //Сохраняем email
+        userData.put("phone", phone);      //Сохраняем телефон
+        userData.put("role", "user");      //Роль по умолчанию (обычный пользователь)
+
+        //String.valueOf() - преобразует число в строку
+        //System.currentTimeMillis() - текущее время в миллисекундах (для истории)
+        userData.put("createdAt", String.valueOf(System.currentTimeMillis()));
+
+        //Сохраняем в Firebase Realtime Database
+        //child(userId) - создаём узел с именем = ID пользователя
+        //setValue() - записываем данные в этот узел
+        databaseReference.child(userId).setValue(userData)
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+
+                        //Если данные успешно сохранились
+                        if (task.isSuccessful()) {
+                            //Показываем сообщение об успехе
+                            Toast.makeText(RegisterActivity.this, "Регистрация успешна!", Toast.LENGTH_SHORT).show();
+
+                            //Переходим на экран входа
+                            Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
+                            startActivity(intent);
+
+                            //finish() - закрываем текущую активность
+                            //Пользователь не сможет вернуться на регистрацию кнопкой "Назад"
+                            finish();
+                        } else {
+                            //Если данные не сохранились - ошибка
+                            Toast.makeText(RegisterActivity.this, "Ошибка сохранения данных", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+    }
+
+    //МЕТОД containsDigit() - ПРОВЕРЯЕТ, ЕСТЬ ЛИ В ПАРОЛЕ ХОТЯ БЫ ОДНА ЦИФРА
+    //Параметр: String password - пароль для проверки
+    //Возвращает: true (есть цифра) или false (нет цифр)
     private boolean containsDigit(String password) {
-        //toCharArray() — преобразует строку в массив символов
+
+        //toCharArray() - преобразует строку в массив символов
         //Например: "abc123" → ['a','b','c','1','2','3']
         for (char c : password.toCharArray()) {
-            //Character.isDigit(c) — проверяет, является ли символ цифрой
-            //Возвращает true для '0','1','2','3','4','5','6','7','8','9'
+
+            //Character.isDigit(c) - проверяет, является ли символ цифрой (0-9)
             if (Character.isDigit(c)) {
-                return true; //Нашли цифру — сразу возвращаем true
+                return true;  //Нашли цифру - сразу возвращаем true
             }
         }
-        return false; //Прошли весь пароль, цифр не нашли — возвращаем false
+        return false;  //Прошли весь пароль, цифр нет - возвращаем false
     }
 }

@@ -6,7 +6,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:fitsSystemWindows="true"
     android:orientation="vertical"
-    android:padding="16dp"
     tools:context=".activities.LoginActivity">
 
     <ScrollView
@@ -33,17 +32,6 @@
                 android:scaleType="centerCrop"
                 android:layout_gravity="center"
                 android:src="@drawable/fitness"/>
-
-            <!--
-            <ImageView
-                android:id="@+id/imageView"
-                android:layout_width="115dp"
-                android:layout_height="110dp"
-                android:layout_marginTop="48dp"
-                android:scaleType="centerCrop"
-                android:layout_gravity="center"
-                android:src="@drawable/fitness"/>
-                -->
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -72,68 +60,52 @@
             </LinearLayout>
 
             <!-- ПЕРЕКЛЮЧАТЕЛЬ МЕЖДУ EMAIL И ТЕЛЕФОНОМ -->
-<!--            <LinearLayout-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:orientation="horizontal"-->
-<!--                android:gravity="center"-->
-<!--                android:layout_marginTop="20dp"-->
-<!--                android:layout_marginStart="32dp"-->
-<!--                android:layout_marginEnd="32dp">-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center"
+                android:layout_marginTop="20dp"
+                android:layout_marginStart="32dp"
+                android:layout_marginEnd="32dp">
 
-<!--                <RadioGroup-->
-<!--                    android:id="@+id/loginTypeGroup"-->
-<!--                    android:layout_width="wrap_content"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:orientation="horizontal">-->
+                <RadioGroup
+                    android:id="@+id/loginTypeGroup"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
 
-<!--                    <RadioButton-->
-<!--                        android:id="@+id/radioEmail"-->
-<!--                        android:layout_width="wrap_content"-->
-<!--                        android:layout_height="wrap_content"-->
-<!--                        android:text="Email"-->
-<!--                        android:checked="true"/>-->
+                    <RadioButton
+                        android:id="@+id/radioEmail"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Email"
+                        android:checked="true"/>
 
-<!--                    <RadioButton-->
-<!--                        android:id="@+id/radioPhone"-->
-<!--                        android:layout_width="wrap_content"-->
-<!--                        android:layout_height="wrap_content"-->
-<!--                        android:text="Телефон"-->
-<!--                        android:layout_marginStart="20dp"/>-->
-<!--                </RadioGroup>-->
-<!--            </LinearLayout>-->
+                    <RadioButton
+                        android:id="@+id/radioPhone"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Телефон"
+                        android:layout_marginStart="20dp"/>
+                </RadioGroup>
+            </LinearLayout>
 
+            <!-- ЕДИНОЕ ПОЛЕ ДЛЯ ВВОДА (Email ИЛИ Телефон) -->
             <EditText
-                android:id="@+id/userEdt"
+                android:id="@+id/editTextUserInput"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:layout_marginTop="40dp"
                 android:layout_marginEnd="32dp"
                 android:layout_marginStart="32dp"
+                android:textAlignment="center"
+                android:textColorHint="@color/blue_grey"
+                android:textSize="16sp"
+                android:ems="10"
+                android:background="@drawable/edittext_background"
                 android:hint="@string/email"
-                android:textAlignment="center"
-                android:textColorHint="@color/blue_grey"
-                android:textSize="16sp"
-                android:ems="10"
-                android:background="@drawable/edittext_background"
                 android:inputType="textEmailAddress"/>
-
-            <!-- ПОЛЕ ДЛЯ ТЕЛЕФОНА -->
-            <EditText
-                android:id="@+id/phoneEdt"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_marginTop="20dp"
-                android:layout_marginEnd="32dp"
-                android:layout_marginStart="32dp"
-                android:hint="Номер телефона"
-                android:textAlignment="center"
-                android:textColorHint="@color/blue_grey"
-                android:textSize="16sp"
-                android:ems="10"
-                android:background="@drawable/edittext_background"
-                android:inputType="phone"
-                android:visibility="gone"/>
 
             <!-- Поле Пароль с глазом -->
             <com.google.android.material.textfield.TextInputLayout
@@ -179,14 +151,14 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_marginEnd="32dp"
                 android:layout_marginStart="32dp"
                 android:orientation="horizontal">
 
                 <View
                     android:id="@+id/view2"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="1dp"
                     android:layout_gravity="center_vertical"
                     android:layout_weight="1"
@@ -201,7 +173,7 @@
 
                 <View
                     android:id="@+id/view3"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="1dp"
                     android:layout_gravity="center_vertical"
                     android:layout_weight="1"
@@ -246,34 +218,11 @@
                     android:id="@+id/textViewPolitics"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Политика безопасности.\n Мы гарантируем защиту ваших данных\n и не передаем их третьим лицам."
+                    android:text="@string/privacy_policy"
                     android:textColor="@android:color/darker_gray"
                     android:textSize="10sp"
                     android:gravity="center"
                     android:background="@android:color/white"/>
-
-                <!--
-                <de.hdodenhof.circleimageview.CircleImageView
-                    android:id="@+id/btn_login_vk"
-                    android:layout_width="48dp"
-                    android:layout_height="48dp"
-                    android:layout_marginHorizontal="8dp"
-                    android:src="@drawable/vk"/>
-
-                <de.hdodenhof.circleimageview.CircleImageView
-                    android:id="@+id/btn_login_max"
-                    android:layout_width="48dp"
-                    android:layout_height="48dp"
-                    android:layout_marginHorizontal="8dp"
-                    android:src="@drawable/max"/>
-
-                <de.hdodenhof.circleimageview.CircleImageView
-                    android:id="@+id/btn_login_telegram"
-                    android:layout_width="48dp"
-                    android:layout_height="48dp"
-                    android:layout_marginHorizontal="8dp"
-                    android:src="@drawable/telegram"/>
-                    -->
             </LinearLayout>
         </LinearLayout>
     </ScrollView>
