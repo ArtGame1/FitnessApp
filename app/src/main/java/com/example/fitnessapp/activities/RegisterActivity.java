@@ -417,6 +417,12 @@ public class RegisterActivity extends AppCompatActivity {
             return;                                    //Выходим из метода, дальше не идём
         }
 
+        if (!isValidEmail(email)) {
+            emailEditText.setError("Введите корректный email (пример: user@mail.ru)");
+            emailEditText.requestFocus();
+            return;
+        }
+
         //ВАЛИДАЦИЯ ТЕЛЕФОНА
         if (TextUtils.isEmpty(phone)) {
             phoneEditText.setError("Введите номер телефона");
@@ -428,6 +434,12 @@ public class RegisterActivity extends AppCompatActivity {
         //startsWith() - проверяет начало строки
         if (!phone.startsWith("+")) {
             phoneEditText.setError("Номер должен начинаться с + (например: +79001234567)");
+            phoneEditText.requestFocus();
+            return;
+        }
+
+        if (!isValidPhone(phone)) {
+            phoneEditText.setError("Номер телефона должен содержать 10-15 цифр после +");
             phoneEditText.requestFocus();
             return;
         }
@@ -540,6 +552,18 @@ public class RegisterActivity extends AppCompatActivity {
                         }
                     }
                 });
+    }
+
+    // Добавь этот метод для проверки email
+    private boolean isValidEmail(String email) {
+        if (email == null || email.isEmpty()) return false;
+        return email.contains("@") && email.contains(".");
+    }
+
+    // Добавь этот метод для проверки телефона
+    private boolean isValidPhone(String phone) {
+        if (phone == null || phone.isEmpty()) return false;
+        return phone.startsWith("+") && phone.length() >= 10 && phone.length() <= 15;
     }
 
     //МЕТОД containsDigit() - ПРОВЕРЯЕТ, ЕСТЬ ЛИ В ПАРОЛЕ ХОТЯ БЫ ОДНА ЦИФРА
