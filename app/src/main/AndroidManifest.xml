@@ -4,6 +4,7 @@
     package="com.example.fitnessapp">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
     <uses-permission android:name="android.permission.USE_EXACT_ALARM" />
@@ -11,10 +12,11 @@
 
     <application
         android:allowBackup="true"
+        android:usesCleartextTraffic="true"
         android:fullBackupContent="@xml/backup_rules"
-        android:icon="@mipmap/ic_fitness"
+        android:icon="@mipmap/ic_fitness1"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_fitness"
+        android:roundIcon="@mipmap/ic_fitness1"
         android:supportsRtl="true"
         android:theme="@style/Theme.FitnessApp">
         <activity

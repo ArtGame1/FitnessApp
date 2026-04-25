@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+
+    <!-- Фон: раскрытая книга (символ колледжа/академии) -->
+    <path d="M4 4.5L12 8L20 4.5V17.5L12 21L4 17.5V4.5Z" fill="#1A2B4C" stroke="#FF6B35" stroke-width="1.2"/>
+
+    <!-- Линии страниц книги -->
+    <line x1="12" y1="8" x2="12" y2="21" stroke="#FF6B35" stroke-width="1.2"/>
+    <line x1="7" y1="10" x2="7" y2="18" stroke="#FFFFFF" stroke-opacity="0.4" stroke-width="0.8"/>
+    <line x1="17" y1="10" x2="17" y2="18" stroke="#FFFFFF" stroke-opacity="0.4" stroke-width="0.8"/>
+
+    <!-- Гантеля в центре (на книге) -->
+    <rect x="5.5" y="9.5" width="2.5" height="5" rx="1" fill="#FF6B35"/>
+    <rect x="16" y="9.5" width="2.5" height="5" rx="1" fill="#FF6B35"/>
+    <rect x="7" y="10.5" width="10" height="3" rx="1.5" fill="#FFFFFF"/>
+
+</svg>
