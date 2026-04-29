@@ -12,13 +12,16 @@
 
     <application
         android:allowBackup="true"
-        android:usesCleartextTraffic="true"
         android:fullBackupContent="@xml/backup_rules"
         android:icon="@mipmap/ic_fitness1"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_fitness1"
         android:supportsRtl="true"
-        android:theme="@style/Theme.FitnessApp">
+        android:theme="@style/Theme.FitnessApp"
+        android:usesCleartextTraffic="true">
+        <activity
+            android:name=".activities.EditProfileActivity"
+            android:exported="false" />
         <activity
             android:name=".activities.StudentsListActivity"
             android:exported="false" />

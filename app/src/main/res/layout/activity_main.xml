@@ -86,7 +86,7 @@
             android:id="@+id/welcomeText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Добро пожаловать в FitnessApp!"
+            android:text="@string/welcome_fit"
             android:textSize="18sp"
             android:textStyle="bold"
             android:textColor="@color/white"

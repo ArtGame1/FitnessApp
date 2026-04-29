@@ -352,6 +352,8 @@ public class RegisterActivity extends AppCompatActivity {
         //Устанавливаем XML-макет для этой активности
         setContentView(R.layout.activity_register);
 
+        FirebaseAuth.getInstance().getFirebaseAuthSettings().forceRecaptchaFlowForTesting(true);
+
         //ИНИЦИАЛИЗАЦИЯ FIREBASE
 
         //Получаем экземпляр FirebaseAuth (один на всё приложение)
@@ -511,48 +513,89 @@ public class RegisterActivity extends AppCompatActivity {
     //- userId: уникальный ID пользователя из Firebase Auth
     //- email: email пользователя
     //- phone: телефон пользователя
+
+
     private void saveUserToDatabase(String userId, String email, String phone) {
 
-        //HashMap - коллекция для хранения пар "ключ-значение"
-        //Это как словарь: по ключу "email" можно получить значение email
-        Map<String, String> userData = new HashMap<>();
+        Map<String, Object> userData = new HashMap<>();
 
-        //put() - добавляем данные в коллекцию
-        userData.put("email", email);      //Сохраняем email
-        userData.put("phone", phone);      //Сохраняем телефон
-        userData.put("role", "user");      //Роль по умолчанию (обычный пользователь)
+        userData.put("email", email);
+        userData.put("phone", phone);
+        userData.put("role", "user");
+        userData.put("createdAt", System.currentTimeMillis());
+        userData.put("name", "");
+        userData.put("nickname", "");
+        userData.put("bio", "");
+        userData.put("birthDate", "");
 
-        //String.valueOf() - преобразует число в строку
-        //System.currentTimeMillis() - текущее время в миллисекундах (для истории)
-        userData.put("createdAt", String.valueOf(System.currentTimeMillis()));
 
-        //Сохраняем в Firebase Realtime Database
-        //child(userId) - создаём узел с именем = ID пользователя
-        //setValue() - записываем данные в этот узел
+        userData.put("photoUrl", "");
+
         databaseReference.child(userId).setValue(userData)
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
-
-                        //Если данные успешно сохранились
                         if (task.isSuccessful()) {
-                            //Показываем сообщение об успехе
                             Toast.makeText(RegisterActivity.this, "Регистрация успешна!", Toast.LENGTH_SHORT).show();
-
-                            //Переходим на экран входа
                             Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
                             startActivity(intent);
-
-                            //finish() - закрываем текущую активность
-                            //Пользователь не сможет вернуться на регистрацию кнопкой "Назад"
                             finish();
                         } else {
-                            //Если данные не сохранились - ошибка
                             Toast.makeText(RegisterActivity.this, "Ошибка сохранения данных", Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
     }
+
+
+//    private void saveUserToDatabase(String userId, String email, String phone) {
+//
+//        //HashMap - коллекция для хранения пар "ключ-значение"
+//        //Это как словарь: по ключу "email" можно получить значение email
+//        Map<String, Object> userData = new HashMap<>();
+//
+//        //put() - добавляем данные в коллекцию
+//        userData.put("email", email);      //Сохраняем email
+//        userData.put("phone", phone);      //Сохраняем телефон
+//        userData.put("role", "user");      //Роль по умолчанию (обычный пользователь)
+//
+//        //String.valueOf() - преобразует число в строку
+//        //System.currentTimeMillis() - текущее время в миллисекундах (для истории)
+//        userData.put("createdAt", System.currentTimeMillis());
+//
+//        userData.put("name", "");           //Имя пользователя (пустое)
+//        userData.put("nickname", "");       //Никнейм (пустой)
+//        userData.put("bio", "");            //О себе (пустое)
+//        userData.put("birthDate", "");      //Дата рождения (пустая)
+//        userData.put("avatarUrl", "");      //Ссылка на аватар (пустая)
+//
+//        //Сохраняем в Firebase Realtime Database
+//        //child(userId) - создаём узел с именем = ID пользователя
+//        //setValue() - записываем данные в этот узел
+//        databaseReference.child(userId).setValue(userData)
+//                .addOnCompleteListener(new OnCompleteListener<Void>() {
+//                    @Override
+//                    public void onComplete(@NonNull Task<Void> task) {
+//
+//                        //Если данные успешно сохранились
+//                        if (task.isSuccessful()) {
+//                            //Показываем сообщение об успехе
+//                            Toast.makeText(RegisterActivity.this, "Регистрация успешна!", Toast.LENGTH_SHORT).show();
+//
+//                            //Переходим на экран входа
+//                            Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
+//                            startActivity(intent);
+//
+//                            //finish() - закрываем текущую активность
+//                            //Пользователь не сможет вернуться на регистрацию кнопкой "Назад"
+//                            finish();
+//                        } else {
+//                            //Если данные не сохранились - ошибка
+//                            Toast.makeText(RegisterActivity.this, "Ошибка сохранения данных", Toast.LENGTH_SHORT).show();
+//                        }
+//                    }
+//                });
+//    }
 
     // Добавь этот метод для проверки email
     private boolean isValidEmail(String email) {

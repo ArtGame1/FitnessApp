@@ -82,29 +82,116 @@ package com.example.fitnessapp.activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.bumptech.glide.Glide;
 import com.example.fitnessapp.R;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 public class AccountActivity extends AppCompatActivity {
 
-    private Button btn_back_to_main_page; //Объявляем переменную для кнопки
-    //"Вернуться на главную страницу"
+    private Button btn_back_to_main_page;
+    private Button btnEditProfile;      //кнопка "Редактировать профиль"
+    private Button btnSettings;          //Кнопка "Настройки учетной записи"
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_account);
 
-        //Ищет кнопку по её ID в макете и присваивает её переменной btn_back_to_main_page.
+        //Кнопка "Вернуться на главную страницу"
         btn_back_to_main_page = findViewById(R.id.btn_back_to_main_page);
-
-        btn_back_to_main_page.setOnClickListener(v -> { //Устанавливает слушатель нажатия
-            //для кнопки "Вернуться на главную страницу"
+        btn_back_to_main_page.setOnClickListener(v -> {
             Intent intent = new Intent(AccountActivity.this, MainActivity.class);
-            //Создает новый Intent для перехода на MainActivity.
-            startActivity(intent); //Запускает активность MainActivity.
+            startActivity(intent);
         });
+
+        //КНОПКА "РЕДАКТИРОВАТЬ ПРОФИЛЬ"
+        btnEditProfile = findViewById(R.id.btn_edit_profile);
+        if (btnEditProfile != null) {
+            btnEditProfile.setOnClickListener(v -> {
+                Intent intent = new Intent(AccountActivity.this, EditProfileActivity.class);
+                startActivity(intent);
+            });
+        }
+
+        //КНОПКА "НАСТРОЙКИ УЧЕТНОЙ ЗАПИСИ" — тоже открывает редактирование
+        btnSettings = findViewById(R.id.button2);
+        if (btnSettings != null) {
+            btnSettings.setOnClickListener(v -> {
+                Intent intent = new Intent(AccountActivity.this, EditProfileActivity.class);
+                startActivity(intent);
+            });
+        }
+    }
+
+    private void loadUserData() {
+        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+
+        if (currentUser != null) {
+            String userId = currentUser.getUid();
+            String email = currentUser.getEmail();
+
+            TextView userName = findViewById(R.id.textView);
+            TextView userEmail = findViewById(R.id.textView2);
+            ImageView userAvatar = findViewById(R.id.imageView2);  // ← ВАЖНО: такой ID есть в твоём XML
+
+            if (userEmail != null) {
+                userEmail.setText(email);
+            }
+
+            DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("Users");
+            databaseReference.child(userId).addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    if (snapshot.exists() && userName != null) {
+                        String name = snapshot.child("name").getValue(String.class);
+                        if (name != null && !name.isEmpty()) {
+                            userName.setText(name);
+                        } else {
+                            String defaultName = email.split("@")[0];
+                            userName.setText(defaultName);
+                        }
+
+                        // ✅ ЗАГРУЖАЕМ АВАТАРКУ
+                        String photoUrl = snapshot.child("photoUrl").getValue(String.class);
+                        if (photoUrl != null && !photoUrl.isEmpty()) {
+                            Glide.with(AccountActivity.this)
+                                    .load(photoUrl)
+                                    .circleCrop()
+                                    .placeholder(R.drawable.profile)
+                                    .error(R.drawable.profile)
+                                    .into(userAvatar);
+                        } else if (currentUser.getPhotoUrl() != null) {
+                            Glide.with(AccountActivity.this)
+                                    .load(currentUser.getPhotoUrl())
+                                    .circleCrop()
+                                    .into(userAvatar);
+                        }
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+                    // Ошибка
+                }
+            });
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        loadUserData();
     }
 }
