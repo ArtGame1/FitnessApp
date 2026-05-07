@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
@@ -81,21 +83,25 @@ public class StudentsListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_students_list);
 
-        // настраиваем recyclerview
+        //настраиваем recyclerview
         recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         adapter = new StudentAdapter();
         recyclerView.setAdapter(adapter);
 
-        // подключаемся к firebase
+        //подключаемся к firebase
         studentsRef = FirebaseDatabase.getInstance().getReference("students");
         assignmentsRef = FirebaseDatabase.getInstance().getReference("assignments");
 
-        // загружаем учеников
+        //кнопка "Назад"
+        ImageView btnBack = findViewById(R.id.btnBack);
+        btnBack.setOnClickListener(v -> finish());
+
+        //загружаем учеников
         loadStudents();
     }
 
-    // загрузка учеников из firebase
+    //загрузка учеников из firebase
     private void loadStudents() {
         studentsRef.addValueEventListener(new ValueEventListener() {
             @Override
