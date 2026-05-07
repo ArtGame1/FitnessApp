@@ -3,38 +3,51 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:padding="8dp">
+    android:background="@android:color/white"
+    android:layout_margin="8dp"
+    android:padding="12dp"
+    android:elevation="2dp">
 
     <TextView
         android:id="@+id/studentName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:text="Иван Иванов"
         android:textSize="16sp"
-        android:textStyle="bold"/>
+        android:textStyle="bold"
+        android:textColor="#333"
+        android:layout_marginBottom="12dp" />
 
     <RadioGroup
         android:id="@+id/radioGroup"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
         <RadioButton
             android:id="@+id/radioMain"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="Основная" />
+            android:layout_weight="1"
+            android:text="Основная"
+            android:textColor="#2196F3" />
 
         <RadioButton
             android:id="@+id/radioSubgroup"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="Подгруппа" />
+            android:layout_weight="1"
+            android:text="Подгруппа"
+            android:textColor="#4CAF50" />
 
         <RadioButton
             android:id="@+id/radioExempt"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="Освобождён" />
+            android:layout_weight="1"
+            android:text="Освобожден"
+            android:textColor="#FF9800" />
+
     </RadioGroup>
 
 </LinearLayout>
