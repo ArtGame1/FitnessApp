@@ -97,7 +97,7 @@ databaseReference.orderByChild("phone").equalTo(phone)
 **Экран регистрации**
 ![Экран регистрации](register.jpg)
 
-**Список тренировок**
+**Главный экран**
 ![Список тренировок](main.jpg)
 
 
