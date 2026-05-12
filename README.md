@@ -91,13 +91,8 @@ databaseReference.orderByChild("phone").equalTo(phone)
 
 ### 📱 Скриншоты приложения
 
-**Экран входа**
-<img src="login.jpg" width="300">
-
-**Экран регистрации**
-<img src="register.jpg" width="300">
-
-**Список тренировок**
-<img src="main.jpg" width="300">
-
+| |
+|:---:|
+| **Экран входа** | **Экран регистрации** | **Список тренировок** |
+| <img src="login.jpg" width="200"> | <img src="register.jpg" width="200"> | <img src="workout.jpg" width="200"> |
 
