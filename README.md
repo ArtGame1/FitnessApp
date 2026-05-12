@@ -85,6 +85,7 @@ databaseReference.orderByChild("phone").equalTo(phone)
     .addListenerForSingleValueEvent(new ValueEventListener() {
         // ... находит email → вызывает signInWithEmailAndPassword()
     });
+```
 
 
 
