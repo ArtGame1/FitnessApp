@@ -88,14 +88,15 @@ databaseReference.orderByChild("phone").equalTo(phone)
 
 
 
-
 ### 📱 Скриншоты приложения
 
 **Экран входа**
-![Экран входа](https://github.com/ArtGame1/FitnessApp/blob/master/login.jpg?raw=true)
+![Экран входа](login.jpg)
 
 **Экран регистрации**
-![Экран регистрации](https://github.com/ArtGame1/FitnessApp/blob/master/register.jpg?raw=true)
+![Экран регистрации](register.jpg)
 
 **Список тренировок**
-![Список тренировок](https://github.com/ArtGame1/FitnessApp/blob/master/main.jpg?raw=true)
+![Список тренировок](workout.jpg)
+
+
