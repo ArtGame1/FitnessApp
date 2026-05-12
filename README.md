@@ -96,7 +96,7 @@ databaseReference.orderByChild("phone").equalTo(phone)
 | | | |
 |:---:|:---:|:---:|
 | **Экран входа** | **Экран регистрации** | **Список тренировок** |
-| <img src="login.jpg" width="200"> | <img src="register.jpg" width="200"> | <img src="workout.jpg" width="300"> |
+| <img src="login.jpg" width="200"> | <img src="register.jpg" width="200"> | <img src="main.jpg" width="200"> |
 
 </div>
 
