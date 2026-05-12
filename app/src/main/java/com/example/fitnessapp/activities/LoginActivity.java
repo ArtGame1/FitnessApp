@@ -334,6 +334,7 @@ package com.example.fitnessapp.activities;
  * =============================================================================
  */
 
+//Импорт библиотек
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.InputType;
@@ -357,20 +358,20 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import de.hdodenhof.circleimageview.CircleImageView;
-
 public class LoginActivity extends AppCompatActivity {
 
-    private EditText editTextUserInput;  //Единое поле для ввода
-    private EditText passwordEditText; //Поле для ввода пароля
-    private Button loginButton; //Кнопка "Войти"
-    private TextView signUp; //Текстовое поле "Зарегистрироваться"
+    //UI компоненты экрана авторизации
+    private EditText editTextUserInput;
+    private EditText passwordEditText;
+    private Button loginButton;
+    private TextView signUp;
     private RadioGroup loginTypeGroup;
-    private RadioButton radioEmail; //Радиокнопка "Email"
-    private RadioButton radioPhone; //Радиокнопка "Телефон"
+    private RadioButton radioEmail;
+    private RadioButton radioPhone;
 
-    private FirebaseAuth firebaseAuth; //Объект для аутентификации пользователей
-    private DatabaseReference databaseReference; //Ссылка на базу данных (Realtime Database)
+    //Firebase сервисы
+    private FirebaseAuth firebaseAuth;
+    private DatabaseReference databaseReference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -392,18 +393,18 @@ public class LoginActivity extends AppCompatActivity {
         radioEmail = findViewById(R.id.radioEmail);
         radioPhone = findViewById(R.id.radioPhone);
 
-        //НАСТРОЙКА ПЕРЕКЛЮЧАТЕЛЯ
+        //Настройка переключателя
         loginTypeGroup.setOnCheckedChangeListener((group, checkedId) -> {
             if (checkedId == R.id.radioEmail) {
                 // Режим Email
                 editTextUserInput.setHint("Email");
                 editTextUserInput.setInputType(InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS);
-                editTextUserInput.setText(""); // Очищаем поле
+                editTextUserInput.setText(""); //Очищаем поле
             } else {
-                // Режим Телефон
+                // Режим телефон
                 editTextUserInput.setHint("Номер телефона");
                 editTextUserInput.setInputType(InputType.TYPE_CLASS_PHONE);
-                editTextUserInput.setText(""); // Очищаем поле
+                editTextUserInput.setText(""); //Очищаем поле
             }
         });
 
@@ -454,12 +455,12 @@ public class LoginActivity extends AppCompatActivity {
             //Вход по EMAIL
             loginWithEmail(userInput, password);
         } else {
-            //Вход по ТЕЛЕФОНУ
+            //Вход по телефону
             loginWithPhone(userInput, password);
         }
     }
 
-    //Вход по EMAIL
+    //Вход по email
     private void loginWithEmail(String email, String password) {
         //Проверка на админа
         if (email.equals("admin@fitnessapp.com") && password.equals("admin123")) {
@@ -467,7 +468,7 @@ public class LoginActivity extends AppCompatActivity {
             return;
         }
 
-        //Проверка на тренера
+        //Проверка на преподавателя
         if (email.equals("coach@fitnessapp.com") && password.equals("coach123")) {
             startActivity(new Intent(LoginActivity.this, CoachActivity.class));
             return;
@@ -486,9 +487,9 @@ public class LoginActivity extends AppCompatActivity {
                 });
     }
 
-    //Вход по ТЕЛЕФОНУ
+    //Вход по телефону
     private void loginWithPhone(String phone, String password) {
-        // Ищем пользователя с таким телефоном в базе данных
+        //Ищем пользователя с таким телефоном в базе данных
         databaseReference.orderByChild("phone").equalTo(phone)
                 .addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
