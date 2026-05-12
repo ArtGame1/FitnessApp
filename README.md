@@ -85,3 +85,17 @@ databaseReference.orderByChild("phone").equalTo(phone)
     .addListenerForSingleValueEvent(new ValueEventListener() {
         // ... находит email → вызывает signInWithEmailAndPassword()
     });
+
+
+
+
+### 📱 Скриншоты приложения
+
+**Экран входа**
+![Вход](https://github.com/user-attachments/assets/bb7508df-ad6f-4b22-aba8-35e39c359d8d)
+
+**Экран регистрации**
+![Регистрация](https://github.com/user-attachments/assets/57c63022-1120-47b4-9f19-bcfee4d4880d)
+
+**Список тренировок**
+![Тренировки](https://github.com/user-attachments/assets/5c5516b4-34b1-4c62-8ece-1faa715f4678)
