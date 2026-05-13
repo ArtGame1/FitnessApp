@@ -355,36 +355,20 @@ package com.example.fitnessapp.activities;
  */
 
 
-// Импорт класса для работы с SharedPreferences (хранение настроек)
 import android.content.SharedPreferences;
-// Импорт класса для проверки версии Android
 import android.os.Build;
-// Импорт класса для работы с жизненным циклом активности
 import android.os.Bundle;
-// Импорт класса для кнопки
 import android.widget.Button;
-// Импорт класса для переключателя Switch
 import android.widget.Switch;
-// Импорт класса для текстового поля
 import android.widget.TextView;
-// Импорт класса для всплывающих сообщений
 import android.widget.Toast;
-
-// Импорт класса для создания диалоговых окон
 import androidx.appcompat.app.AlertDialog;
-// Импорт базового класса для всех активностей
 import androidx.appcompat.app.AppCompatActivity;
-// Импорт класса для верхней панели инструментов
 import androidx.appcompat.widget.Toolbar;
-// Импорт класса для работы с цветами
 import androidx.core.content.ContextCompat;
-
-// Импорт ресурсов приложения (R - автоматический класс)
 import com.example.fitnessapp.R;
-// Импорт нашего класса для работы с уведомлениями
 import com.example.fitnessapp.utils.NotificationHelper;
 
-// Объявление класса SettingsActivity, который наследуется от AppCompatActivity
 public class SettingsActivity extends AppCompatActivity {
 
     // Объявление переменной для хранения настроек
@@ -393,25 +377,23 @@ public class SettingsActivity extends AppCompatActivity {
     private static final String PREFS_NAME = "FitnessAppSettings";
 
     // Ключи для настроек (константы, чтобы не ошибиться в написании)
-    private static final String KEY_NOTIFICATIONS = "notifications";  // Ключ для уведомлений
-    private static final String KEY_SOUND = "sound";                  // Ключ для звука
-    private static final String KEY_AUTO_PAUSE = "auto_pause";        // Ключ для автопаузы
-    private static final String KEY_REST_TIME = "rest_time";          // Ключ для времени отдыха
-    private static final String KEY_DEFAULT_REPS = "default_reps";    // Ключ для повторений
+    private static final String KEY_NOTIFICATIONS = "notifications";
+    private static final String KEY_SOUND = "sound";
+    private static final String KEY_AUTO_PAUSE = "auto_pause";
+    private static final String KEY_REST_TIME = "rest_time";
+    private static final String KEY_DEFAULT_REPS = "default_reps";
 
     // UI элементы (экранные компоненты)
-    private Switch switchNotifications, switchSound, switchAutoPause;  // Переключатели
-    private Button btnSetRestTime, btnSetReps, btnResetExercises, btnExportData, btnSaveSettings, btnCancelSettings; // Кнопки
-    private TextView tvRestTime, tvDefaultReps;  // Текстовые поля для отображения значений
+    private Switch switchNotifications, switchSound, switchAutoPause;
+    private Button btnSetRestTime, btnSetReps, btnResetExercises, btnExportData, btnSaveSettings, btnCancelSettings;
+    private TextView tvRestTime, tvDefaultReps;
 
     // Временные переменные для хранения НЕСОХРАНЕННЫХ изменений
     private boolean tempNotifications, tempSound, tempAutoPause;  // Булевы значения
     private String tempRestTime, tempDefaultReps;                 // Строковые значения
 
-    // Метод onCreate - вызывается при создании активности
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        // Вызов родительского метода (обязательно)
         super.onCreate(savedInstanceState);
 
         // Проверка: если версия Android 5.0 (Lollipop) или выше
@@ -644,12 +626,12 @@ public class SettingsActivity extends AppCompatActivity {
                     // Создаем диалог запроса разрешения
                     new AlertDialog.Builder(this)
                             .setTitle("Разрешение на уведомления")  // Заголовок
-                            .setMessage("Для точных напоминаний о тренировках нужно разрешение. Хотите его включить?")  // Текст
-                            .setPositiveButton("Включить", (dialog, which) -> {  // Кнопка "Включить"
+                            .setMessage("Для точных напоминаний о тренировках нужно разрешение. Хотите его включить?")
+                            .setPositiveButton("Включить", (dialog, which) -> {
                                 // Открываем настройки для разрешения
                                 NotificationHelper.requestExactAlarmPermission(this);
                             })
-                            .setNegativeButton("Отмена", null)  // Кнопка "Отмена"
+                            .setNegativeButton("Отмена", null)
                             .show();  // Показываем диалог
                 }
             }
@@ -664,8 +646,8 @@ public class SettingsActivity extends AppCompatActivity {
         // Создаем диалог
         new AlertDialog.Builder(this)
                 .setTitle("Сброс прогресса")  // Заголовок
-                .setMessage("Вы уверены? Все данные о тренировках будут удалены безвозвратно.")  // Сообщение
-                .setPositiveButton("Сбросить", (dialog, which) -> {  // Кнопка "Сбросить"
+                .setMessage("Вы уверены? Все данные о тренировках будут удалены безвозвратно.")
+                .setPositiveButton("Сбросить", (dialog, which) -> {
                     // Получаем доступ к хранилищу прогресса
                     SharedPreferences progressPrefs = getSharedPreferences("WorkoutProgress", MODE_PRIVATE);
                     // Очищаем все данные
@@ -673,8 +655,8 @@ public class SettingsActivity extends AppCompatActivity {
                     // Показываем сообщение
                     Toast.makeText(this, "Прогресс сброшен", Toast.LENGTH_SHORT).show();
                 })
-                .setNegativeButton("Отмена", null)  // Кнопка "Отмена"
-                .show();  // Показываем диалог
+                .setNegativeButton("Отмена", null)
+                .show();
     }
 
     // Метод экспорта данных тренировок
@@ -687,34 +669,30 @@ public class SettingsActivity extends AppCompatActivity {
     private void showUnsavedChangesDialog() {
         // Создаем диалог
         new AlertDialog.Builder(this)
-                .setTitle("Несохраненные изменения")  // Заголовок
-                .setMessage("Сохранить изменения?")   // Сообщение
-                .setPositiveButton("Сохранить", (dialog, which) -> saveAllSettings())  // Сохранить и закрыть
-                .setNegativeButton("Не сохранять", (dialog, which) -> finish())  // Закрыть без сохранения
-                .setNeutralButton("Отмена", null)  // Отмена (ничего не делать)
-                .show();  // Показываем диалог
+                .setTitle("Несохраненные изменения")
+                .setMessage("Сохранить изменения?")
+                .setPositiveButton("Сохранить", (dialog, which) -> saveAllSettings())
+                .setNegativeButton("Не сохранять", (dialog, which) -> finish())
+                .setNeutralButton("Отмена", null)
+                .show();
     }
 
     // Метод, вызываемый при нажатии кнопки "Назад" (системной)
     @Override
     public void onBackPressed() {
-        // Если есть несохраненные изменения
         if (hasUnsavedChanges()) {
-            // Показываем диалог
             showUnsavedChangesDialog();
         } else {
-            // Если изменений нет - вызываем родительский метод (закрытие)
             super.onBackPressed();
         }
     }
 
     // Метод проверки наличия несохраненных изменений
     private boolean hasUnsavedChanges() {
-        // Сравниваем временные значения с сохраненными
-        return tempNotifications != sharedPreferences.getBoolean(KEY_NOTIFICATIONS, true) ||  // Уведомления изменились?
-                tempSound != sharedPreferences.getBoolean(KEY_SOUND, true) ||  // Звук изменился?
-                tempAutoPause != sharedPreferences.getBoolean(KEY_AUTO_PAUSE, true) ||  // Автопауза изменилась?
-                !tempRestTime.equals(sharedPreferences.getString(KEY_REST_TIME, "30 секунд")) ||  // Время отдыха изменилось?
-                !tempDefaultReps.equals(sharedPreferences.getString(KEY_DEFAULT_REPS, "15 повторений"));  // Повторения изменились?
+        return tempNotifications != sharedPreferences.getBoolean(KEY_NOTIFICATIONS, true) ||
+                tempSound != sharedPreferences.getBoolean(KEY_SOUND, true) ||
+                tempAutoPause != sharedPreferences.getBoolean(KEY_AUTO_PAUSE, true) ||
+                !tempRestTime.equals(sharedPreferences.getString(KEY_REST_TIME, "30 секунд")) ||
+                !tempDefaultReps.equals(sharedPreferences.getString(KEY_DEFAULT_REPS, "15 повторений"));
     }
-}  // Конец класса SettingsActivity
+}

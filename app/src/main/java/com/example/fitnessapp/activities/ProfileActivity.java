@@ -310,13 +310,14 @@ import java.util.List;
 
 public class ProfileActivity extends AppCompatActivity {
 
-    private ImageView arrowBackBtn; //Объявляет переменную для кнопки "Назад" (стрелка)
-    private TextView edtProfile; //Объявляет переменную для текста "Редактировать профиль"
-    private TextView chgPassword; //Объявляет переменную для текста "Сменить пароль"
-    private TextView exitView; //Объявляет переменную для кнопки "Выйти"
-    private EditText nameEdtText, surnameEdtText, emailEdtText; //Объявляет переменные для полей ввода имени, фамилии и email
-    private String name, surname, email; //Объявляет переменные для хранения имени, фамилии и email
-    private Button saveBtn; //Объявляет переменную для кнопки "Сохранить"
+    //Объявляет переменных для кнопок
+    private ImageView arrowBackBtn;
+    private TextView edtProfile;
+    private TextView chgPassword;
+    private TextView exitView;
+    private EditText nameEdtText, surnameEdtText, emailEdtText;
+    private String name, surname, email;
+    private Button saveBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -326,22 +327,21 @@ public class ProfileActivity extends AppCompatActivity {
         //Скрытие статус-бара и навигационной панели
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_FULLSCREEN | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
 
-        arrowBackBtn = findViewById(R.id.arrow_back); //Ищет кнопку "Назад" по её ID и присваивает переменной
-        edtProfile = findViewById(R.id.edtProfile); //Ищет текст "Редактировать профиль" по его ID и присваивает переменной
-        chgPassword = findViewById(R.id.chgPassword); //Ищет текст "Сменить пароль" по его ID и присваивает переменной
+        //Ищет значения по её ID и присваивает переменной
+        arrowBackBtn = findViewById(R.id.arrow_back);
+        edtProfile = findViewById(R.id.edtProfile);
+        chgPassword = findViewById(R.id.chgPassword);
 
-        nameEdtText = findViewById(R.id.nameEdtText); //Ищет поле ввода имени по его ID и присваивает переменной
-        surnameEdtText = findViewById(R.id.surnameEdtText); //Ищет поле ввода фамилии по его ID и присваивает переменной
-        emailEdtText = findViewById(R.id.emailEdtText); //Ищет поле ввода email по его ID и присваивает переменной
+        nameEdtText = findViewById(R.id.nameEdtText);
+        surnameEdtText = findViewById(R.id.surnameEdtText);
+        emailEdtText = findViewById(R.id.emailEdtText);
 
-        saveBtn = findViewById(R.id.saveBtn); //Ищет кнопку "Сохранить" по её ID и присваивает переменной
+        saveBtn = findViewById(R.id.saveBtn);
 
-        exitView = findViewById(R.id.exit); //Ищет кнопку "Выйти" по её ID и присваивает переменной.
-        exitView.setOnClickListener(new View.OnClickListener() { //Устанавливает слушатель нажатия на кнопку "Выйти".
-            @Override
-            public void onClick(View v) { //Переопределяет метод onClick для обработки нажатия.
-                exitApplication(); //Вызывает метод для выхода из приложения.
-            }
+        exitView = findViewById(R.id.exit);
+        //Устанавливает слушатель нажатия на кнопку "Выйти".
+        exitView.setOnClickListener(v -> {
+            exitApplication(); //Вызывает метод для выхода из приложения.
         });
 
         saveBtn.setOnClickListener(v -> saveUserData()); //Устанавливает слушатель нажатия на кнопку "Сохранить", который вызывает метод сохранения данных.
@@ -351,41 +351,41 @@ public class ProfileActivity extends AppCompatActivity {
             startActivity(intent); //Запускает MainActivity.
         });
 
-        edtProfile.setOnClickListener(v -> { //Устанавливает слушатель нажатия на текст "Редактировать профиль".
-            Intent intent = new Intent(ProfileActivity.this, UserManagementActivity.class); //Создает Intent для перехода на SettingsActivity.
-            intent.putExtra("MODE", "EDIT_PROFILE"); //Передает дополнительную информацию о режиме редактирования профиля.
-            startActivityForResult(intent, 1); //Запускает SettingsActivity с ожиданием результата.
+        edtProfile.setOnClickListener(v -> {
+            Intent intent = new Intent(ProfileActivity.this, UserManagementActivity.class);
+            intent.putExtra("MODE", "EDIT_PROFILE");
+            startActivityForResult(intent, 1);
         });
 
-        chgPassword.setOnClickListener(v -> { //Устанавливает слушатель нажатия на текст "Сменить пароль".
-            Intent intent = new Intent(ProfileActivity.this, UserManagementActivity.class); //Создает Intent для перехода на SettingsActivity.
-            intent.putExtra("MODE", "CHANGE_PASSWORD"); //Передает дополнительную информацию о режиме смены пароля.
-            startActivity(intent); // Запускает SettingsActivity.
+        chgPassword.setOnClickListener(v -> {
+            Intent intent = new Intent(ProfileActivity.this, UserManagementActivity.class);
+            intent.putExtra("MODE", "CHANGE_PASSWORD");
+            startActivity(intent);
         });
         loadProfileData(); //Загружает данные профиля при создании активности.
     }
 
     //Метод для выхода из приложения.
     private void exitApplication() {
-        new AlertDialog.Builder(this) //Создает новый диалог.
-                .setTitle("Выход приложения") //Устанавливает заголовок диалога.
-                .setMessage("Вы уверены, что хотите выйти?") //Устанавливает сообщение диалога.
+        new AlertDialog.Builder(this)
+                .setTitle("Выход приложения")
+                .setMessage("Вы уверены, что хотите выйти?")
                 .setPositiveButton("Exit", (dialog, which) -> { //Устанавливает кнопку "Выход" с обработчиком нажатия.
                     finishAffinity(); //Завершает все активности в текущем приложении.
-                    System.exit(0); //Закрывает приложение.
+                    System.exit(0);
                 })
                 .setNegativeButton("Cancel", null) //Устанавливает кнопку "Отмена" и ничего не делает при нажатии.
                 .show(); //Показывает диалог.
     }
 
     private void saveUserData() { //Метод для сохранения данных пользователя.
-        String firstName = nameEdtText.getText().toString(); //Получает введенное имя из поля ввода.
-        String lastName = surnameEdtText.getText().toString(); //Получает введенную фамилию из поля ввода.
-        String email = emailEdtText.getText().toString(); //Получает введенный email из поля ввода.
+        String firstName = nameEdtText.getText().toString();
+        String lastName = surnameEdtText.getText().toString();
+        String email = emailEdtText.getText().toString();
 
         //Проверка, заполнены ли все обязательные поля.
         if (firstName.isEmpty() || lastName.isEmpty() || email.isEmpty()) {
-            Toast.makeText(this, "Пожалуйста, заполните все обязательные поля.", Toast.LENGTH_SHORT).show(); //Показывает сообщение, если поля пустые.
+            Toast.makeText(this, "Пожалуйста, заполните все обязательные поля.", Toast.LENGTH_SHORT).show();
             return; //Выходит из метода, если есть пустые поля.
         }
 
@@ -420,47 +420,47 @@ public class ProfileActivity extends AppCompatActivity {
 
     private void loadProfileData() {
         name = "Mickey"; //Устанавливает имя (возможно, загруженное из источника данных).
-        surname = "Faisal"; //Устанавливает фамилию (возможно, загруженную из источника данных).
-        email = "fpecial3@gmail.com"; //Устанавливает email (возможно, загруженный из источника данных).
+        surname = "Faisal";
+        email = "fpecial3@gmail.com";
 
         //nameEdtText.setText(name); //Устанавливает текст поля ввода имени (пока закомментировано).
-        //surnameEdtText.setText(surname); //Устанавливает текст поля ввода фамилии (пока закомментировано).
-        //emailEdtText.setText(email); //Устанавливает текст поля ввода email (пока закомментировано).
+        //surnameEdtText.setText(surname);
+        //emailEdtText.setText(email);
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) { //Переопределяет метод для обработки результатов активностей.
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == 1) { // Проверяет, соответствует ли код запроса ожидаемому значению.
             if (resultCode == RESULT_OK) { //Проверяет, был ли результат успешным.
-                String newName = data.getStringExtra("NAME"); //Получает новое имя из возвращенных данных.
-                String newSurname = data.getStringExtra("SURNAME"); //Получает новую фамилию из возвращенных данных.
-                String newEmail = data.getStringExtra("EMAIL"); //Получает новый email из возвращенных данных.
+                String newName = data.getStringExtra("NAME");
+                String newSurname = data.getStringExtra("SURNAME");
+                String newEmail = data.getStringExtra("EMAIL");
 
                 nameEdtText.setText(newName); //Устанавливает новое имя в поле ввода.
-                surnameEdtText.setText(newSurname); //Устанавливает новую фамилию в поле ввода.
-                emailEdtText.setText(newEmail); //Устанавливает новый email в поле ввода.
+                surnameEdtText.setText(newSurname);
+                emailEdtText.setText(newEmail);
 
-                Toast.makeText(this, "Успешное обновление профиля!", Toast.LENGTH_SHORT).show(); //Показывает сообщение об успешном обновлении профиля.
+                Toast.makeText(this, "Успешное обновление профиля!", Toast.LENGTH_SHORT).show();
 
                 name = newName; //Сохраняет новое имя в переменную экземпляра.
-                surname = newSurname; //Сохраняет новую фамилию в переменную экземпляра.
-                email = newEmail; //Сохраняет новый email в переменную экземпляра.
-                saveProfileData(); //Вызывает метод для сохранения обновленных данных профиля.
+                surname = newSurname;
+                email = newEmail;
+                saveProfileData();
             } else {
-                Toast.makeText(this, "Обновление профиля отменено!", Toast.LENGTH_SHORT).show(); //Показывает сообщение, если обновление было отменено.
+                Toast.makeText(this, "Обновление профиля отменено!", Toast.LENGTH_SHORT).show();
             }
         }
     }
 
-    private void saveProfileData() { //Метод для сохранения данных профиля (пока не реализован).
-        //В этом методе можно сохранить данные профиля пользователя, если это необходимо.
+    private void saveProfileData() {
+
     }
 
     @Override
     protected void onResume() { // Переопределяет метод onResume, который вызывается, когда активность становится видимой для пользователя.
-        super.onResume(); // Вызывает родительский метод.
+        super.onResume();
     }
 
     @Override

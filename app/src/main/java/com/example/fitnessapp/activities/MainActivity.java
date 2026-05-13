@@ -391,19 +391,17 @@ public class MainActivity extends AppCompatActivity {
     //Панель инструментов (замена ActionBar)
     private Toolbar toolbar;
 
-    //Кнопка-иконка для открытия бокового меню
+    //Кнопка-иконки для открытия бокового меню
     private ImageButton navButton;
-
-    //Кнопка-иконка для уведомлений
     private ImageButton notificationsBtn;
-
-    //Кнопка-иконка для поиска (лупа)
     private ImageButton searchBtn;
 
-    private Button workoutBtn; //Объявляем переменную для кнопки "Тренировки"
-    private Button profileBtn; //Объявляем переменную для кнопки "Профиль"
-    private Button settingsBtn; //Объявляем переменную для кнопки "Настройки"
-    private Button addAccountBtn; //Объявляем переменную для кнопки "Добавить аккаунт"
+
+    //Объявляем переменные для кнопок
+    private Button workoutBtn;
+    private Button profileBtn;
+    private Button settingsBtn;
+    private Button addAccountBtn;
     private AdminManager adminManager;
 
     //Менеджер уведомлений
@@ -455,25 +453,23 @@ public class MainActivity extends AppCompatActivity {
             //finish(); //Завершает текущую активность
         });
 
-        profileBtn.setOnClickListener(v -> { //Устанавливает слушатель нажатия для кнопки "Профиль".
-            Intent intent = new Intent(MainActivity.this, ProfileActivity.class); //Создает новый Intent для перехода на ProfileActivity.
-            startActivity(intent); //Запускает активность ProfileActivity.
-            //finish(); //Завершает текущую активность
+        profileBtn.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, ProfileActivity.class);
+            startActivity(intent);
+            //finish();
         });
 
-        settingsBtn.setOnClickListener(v -> { //Устанавливает слушатель нажатия для кнопки "Настройки".
-            Intent intent = new Intent(MainActivity.this, UserManagementActivity.class); //Создает новый Intent для перехода на SettingsActivity.
-            startActivity(intent); //Запускает активность SettingsActivity.
-            //finish(); //Завершает текущую активность
+        settingsBtn.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, UserManagementActivity.class);
+            startActivity(intent);
+            //finish();
         });
 
         bottomNavigationView = findViewById(R.id.bottomNavigationView); //Находим нижнюю панель
-        //навигации по ID из макета
-        //Отключаем обработку оконных inset'ов (отступов системных элементов). Это предотвращает
-        //автоматические отступы для системных панелей
+
         bottomNavigationView.setOnApplyWindowInsetsListener(null);
         bottomNavigationView.setSelectedItemId(R.id.nav_home); //Устанавливаем пункт "Главная"
-        //как выбранный по умолчанию. Показывает пользователю, что он находится на главном экране
+
 
         /*Устанавливаем обработчик выбора пунктов в нижней панели навигации*/
         bottomNavigationView.setOnItemSelectedListener(item -> {
@@ -558,21 +554,20 @@ public class MainActivity extends AppCompatActivity {
 
         //Устанавливаем соответствующую тему в зависимости от сохраненных настроек
         if (isNightMode) {
-            setTheme(R.style.AppTheme_Night); //Устанавливаем ночную тему
+            setTheme(R.style.AppTheme_Night);
         } else {
-            setTheme(R.style.AppTheme); //Устанавливаем дневную тему
+            setTheme(R.style.AppTheme);
         }
     }
 
     private void initViews() {
         //Находим и инициализируем все View-компоненты по их ID из макета
-
-        drawerLayout = findViewById(R.id.drawer_layout); //Контейнер бокового меню
-        navigationView = findViewById(R.id.nav_view); //Само боковое навигационное меню
-        toolbar = findViewById(R.id.my_toolbar); //Панель инструментов
-        navButton = findViewById(R.id.nav_button); //Кнопка для открытия бокового меню
-        notificationsBtn = findViewById(R.id.notifications_btn); //Кнопка для уведомлений
-        searchBtn = findViewById(R.id.search_btn); //Кнопка поиска
+        drawerLayout = findViewById(R.id.drawer_layout);
+        navigationView = findViewById(R.id.nav_view);
+        toolbar = findViewById(R.id.my_toolbar);
+        navButton = findViewById(R.id.nav_button);
+        notificationsBtn = findViewById(R.id.notifications_btn);
+        searchBtn = findViewById(R.id.search_btn);
 
         //Инициализируем менеджер уведомлений
         notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
@@ -595,7 +590,6 @@ public class MainActivity extends AppCompatActivity {
         }
 
         //Устанавливаем кастомный Toolbar в качестве ActionBar для активности
-        //Это позволяет использовать стандартные функции ActionBar с кастомным видом
         setSupportActionBar(toolbar);
     }
 
@@ -660,15 +654,15 @@ public class MainActivity extends AppCompatActivity {
 
             // Логика обработки пунктов меню
             if (id == R.id.nav_my_profile) {
-                openMyProfile(); //Открыть мой профиль
+                openMyProfile();
             } else if (id == R.id.nav_workouts) {
-                openWorkouts(); //Открыть раздел тренировок
+                openWorkouts();
             } else if (id == R.id.nav_statistics) {
-                openStatistics(); //Открыть статистику
+                openStatistics();
             } else if (id == R.id.nav_settings) {
-                openSettings(); //Открыть настройки
+                openSettings();
             } else if (id == R.id.nav_night_mode) {
-                toggleNightMode(); //Переключить ночной режим
+                toggleNightMode();
             } else if (id == R.id.nav_about) {
                 //Показываем диалоговое окно "О приложении"
                 new AlertDialog.Builder(this)
@@ -693,7 +687,6 @@ public class MainActivity extends AppCompatActivity {
             }*/
 
             //Закрываем боковое меню после выбора пункта
-            //GravityCompat.START - закрывает меню с начала (слева для LTR, справа для RTL)
             drawerLayout.closeDrawer(GravityCompat.START);
 
             return true; //Возвращаем true, указывая что событие обработано
@@ -707,33 +700,23 @@ public class MainActivity extends AppCompatActivity {
 
         //Добавление обработчика для кнопки уведомлений
         notificationsBtn.setOnClickListener(v -> {
-            showFitnessNotification(); //Показываем уведомление при клике
+            showFitnessNotification();
         });
 
         //Добавление обработчика для кнопки поиска
-        searchBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showFitnessSearch();
-            }
-        });
+        searchBtn.setOnClickListener(v -> showFitnessSearch());
 
         //Обработчик для кнопки "Добавить аккаунт"
         if (addAccountBtn != null)
         {
-            addAccountBtn.setOnClickListener(new View.OnClickListener()
-            {
-                @Override
-                public void onClick(View v)
+            addAccountBtn.setOnClickListener(v -> {
+                //Закрываем боковое меню при нажатии
+                if (drawerLayout.isDrawerOpen(GravityCompat.START))
                 {
-                    //Закрываем боковое меню при нажатии
-                    if (drawerLayout.isDrawerOpen(GravityCompat.START))
-                    {
-                        drawerLayout.closeDrawer(GravityCompat.START);
-                    }
-                    //Вызываем метод для показа диалога добавления аккаунта
-                    showAddAccountDialog();
+                    drawerLayout.closeDrawer(GravityCompat.START);
                 }
+                //Вызываем метод для показа диалога добавления аккаунта
+                showAddAccountDialog();
             });
         } else {
             Log.e("MainActivity", "addAccountBtn is null, не удалось установить обработчик");
@@ -797,7 +780,6 @@ public class MainActivity extends AppCompatActivity {
 
         //Проверяем существование тренировки
         if (isWorkoutExists(searchQuery)) {
-            //Если тренировка найдена - переходим
             Intent intent = new Intent(MainActivity.this, WorkoutActivity.class);
             intent.putExtra("search_query", searchQuery);
             startActivity(intent);
@@ -805,23 +787,17 @@ public class MainActivity extends AppCompatActivity {
             //Если тренировка не найдена - показываем сообщение
             Toast.makeText(MainActivity.this, "Тренировка '" + searchQuery + "' не найдена", Toast.LENGTH_LONG).show();
 
-            //Можно предложить похожие тренировки
             showSimilarWorkouts(searchQuery);
         }
     }
 
     //Метод для проверки существования тренировки
     private boolean isWorkoutExists(String searchQuery) {
-        //Здесь должна быть ваша реальная логика проверки
-        //Например, поиск в базе данных, списке тренировок и т.д.
-
-        //Временный пример - список существующих тренировок
         List<String> availableWorkouts = Arrays.asList(
                 "Скручивание согнутой ноги", "Велосипедные скручивания", "Ягодичный мостик", "Планка", "Скручивания с хлопком",
                 "Скручивания со скрещенными руками", "Упражнение мертвый жук", "Бег в упоре лежа", "Упражнение для пресса", "Скручивание согнутых ног"
         );
 
-        //Проверяем совпадение (можно сделать более сложную логику)
         for (String workout : availableWorkouts) {
             if (workout.toLowerCase().contains(searchQuery.toLowerCase())) {
                 return true;
@@ -830,7 +806,6 @@ public class MainActivity extends AppCompatActivity {
         return false;
     }
 
-    //Дополнительный метод для показа похожих тренировок
     private void showSimilarWorkouts(String searchQuery) {
         List<String> similarWorkouts = findSimilarWorkouts(searchQuery);
 
@@ -840,7 +815,6 @@ public class MainActivity extends AppCompatActivity {
 
             String[] workoutsArray = similarWorkouts.toArray(new String[0]);
             builder.setItems(workoutsArray, (dialog, which) -> {
-                //При выборе похожей тренировки переходим на неё
                 Intent intent = new Intent(MainActivity.this, WorkoutActivity.class);
                 intent.putExtra("search_query", similarWorkouts.get(which));
                 startActivity(intent);
@@ -871,13 +845,11 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        //Проверяем, открыто ли в данный момент боковое меню
         if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
             //Если меню открыто - закрываем его при нажатии кнопки "Назад"
             drawerLayout.closeDrawer(GravityCompat.START);
         } else {
             //Если меню закрыто - выполняем стандартное поведение кнопки "Назад"
-            //(закрытие текущей активности или возврат к предыдущей)
             super.onBackPressed();
         }
     }
@@ -946,7 +918,6 @@ public class MainActivity extends AppCompatActivity {
      * Применение цветов для динамических элементов
      */
     private void applyDynamicColors() {
-        //Пример применения цветов к элементам, которые не меняются через тему
         if (isNightMode) {
             //Устанавливаем темные цвета для конкретных элементов
             toolbar.setBackgroundColor(ContextCompat.getColor(this, R.color.dark_surface));

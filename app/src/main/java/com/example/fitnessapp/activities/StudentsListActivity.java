@@ -30,12 +30,12 @@ import java.util.Map;
 public class StudentsListActivity extends AppCompatActivity {
 
     //переменные класса
-    private RecyclerView recyclerView; // список учеников
-    private StudentAdapter adapter; // адаптер для списка
-    private DatabaseReference studentsRef; // ссылка на students в firebase
-    private DatabaseReference assignmentsRef; // ссылка на assignments в firebase (задания)
-    private List<Student> studentList = new ArrayList<>(); // список учеников
-    private List<String> studentIdList = new ArrayList<>(); // список id учеников
+    private RecyclerView recyclerView;
+    private StudentAdapter adapter;
+    private DatabaseReference studentsRef;
+    private DatabaseReference assignmentsRef;
+    private List<Student> studentList = new ArrayList<>();
+    private List<String> studentIdList = new ArrayList<>();
 
     // массив упражнений для основной группы (10 штук)
     private final String[] MAIN_GROUP_EXERCISES = {

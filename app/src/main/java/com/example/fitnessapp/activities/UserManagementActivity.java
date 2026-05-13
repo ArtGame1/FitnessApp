@@ -378,13 +378,14 @@ import java.util.List;
 
 public class UserManagementActivity extends AppCompatActivity implements UserListAdapter.OnUserActionListener{
 
-    private EditText edtNewUserFirstName; //Поле ввода для имени нового пользователя.
-    private EditText edtNewUserLastName; //Поле ввода для фамилии нового пользователя.
-    private EditText edtNewUserEmail; //Поле ввода для email нового пользователя.
-    private EditText edtNewUserAdditional; //Поле ввода для дополнительной информации о новом пользователе.
-    private Button btnAddUser; //Кнопка для добавления нового пользователя.
-    private RecyclerView recyclerViewUsers; //RecyclerView для отображения списка пользователей.
-    private UserListAdapter userListAdapter; //Адаптер для работы со списком пользователей.
+    //переменные класса
+    private EditText edtNewUserFirstName;
+    private EditText edtNewUserLastName;
+    private EditText edtNewUserEmail;
+    private EditText edtNewUserAdditional;
+    private Button btnAddUser;
+    private RecyclerView recyclerViewUsers;
+    private UserListAdapter userListAdapter;
 
     private List<User> userList = new ArrayList<>(); //Список для хранения пользователей.
     private Gson gson = new Gson(); //Объект Gson для работы с JSON.
@@ -395,31 +396,30 @@ public class UserManagementActivity extends AppCompatActivity implements UserLis
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_usermanagement); //Устанавливает макет для этой активности.
+        setContentView(R.layout.activity_usermanagement);
 
         //Скрытие статус-бара и навигационной панели
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_FULLSCREEN | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
 
         //Привязывает элементы пользовательского интерфейса к переменным.
-        edtNewUserFirstName = findViewById(R.id.edtNewUserName); //Поле ввода имени.
-        edtNewUserLastName = findViewById(R.id.edtNewLastName); //Поле ввода фамилии.
-        edtNewUserEmail = findViewById(R.id.edtNewUserEmail); //Поле ввода email.
-        edtNewUserAdditional = findViewById(R.id.edtNewUserPassword); //Поле ввода дополнительной информации.
-        btnAddUser = findViewById(R.id.btnAddUser); //Кнопка для добавления пользователя.
-        recyclerViewUsers = findViewById(R.id.recyclerViewUsers); //RecyclerView для списка пользователей.
+        edtNewUserFirstName = findViewById(R.id.edtNewUserName);
+        edtNewUserLastName = findViewById(R.id.edtNewLastName);
+        edtNewUserEmail = findViewById(R.id.edtNewUserEmail);
+        edtNewUserAdditional = findViewById(R.id.edtNewUserPassword);
+        btnAddUser = findViewById(R.id.btnAddUser);
+        recyclerViewUsers = findViewById(R.id.recyclerViewUsers);
 
         loadUsers(); //Загружает пользователей из SharedPreferences.
 
-        userListAdapter = new UserListAdapter(userList, this); //Инициализирует адаптер с текущим списком пользователей и текущей активностью в качестве слушателя.
-        recyclerViewUsers.setLayoutManager(new LinearLayoutManager(this)); //Устанавливает LinearLayoutManager для RecyclerView.
-        recyclerViewUsers.setAdapter(userListAdapter); //Устанавливает адаптер для RecyclerView.
+        userListAdapter = new UserListAdapter(userList, this);
+        recyclerViewUsers.setLayoutManager(new LinearLayoutManager(this));
+        recyclerViewUsers.setAdapter(userListAdapter);
 
         //Устанавливает слушатель на кнопку добавления пользователя.
-        btnAddUser.setOnClickListener(v -> addNewUser()); //Вызывает метод добавления нового пользователя при нажатии на кнопку.
+        btnAddUser.setOnClickListener(v -> addNewUser());
     }
 
     private void addNewUser() { //Метод для добавления нового пользователя.
-        //Получает данные пользователя из полей ввода.
         String firstName = edtNewUserFirstName.getText().toString().trim();
         String lastName = edtNewUserLastName.getText().toString().trim();
         String email = edtNewUserEmail.getText().toString().trim();
@@ -427,15 +427,15 @@ public class UserManagementActivity extends AppCompatActivity implements UserLis
 
         //Проверяет, заполнены ли все обязательные поля.
         if (firstName.isEmpty() || lastName.isEmpty() || email.isEmpty()) {
-            Toast.makeText(this, "Пожалуйста, заполните все обязательные поля.", Toast.LENGTH_SHORT).show();//Сообщает пользователю о необходимости заполнить поля.
-            return; //Выходит из метода, если поля пустые.
+            Toast.makeText(this, "Пожалуйста, заполните все обязательные поля.", Toast.LENGTH_SHORT).show();
+            return;
         }
 
         String userId = String.valueOf(System.currentTimeMillis()); //Генерирует уникальный идентификатор для нового пользователя.
-        User newUser = new User(userId, firstName, lastName, email, additionalInfo); //Создает нового пользователя.
+        User newUser = new User(userId, firstName, lastName, email, additionalInfo);
 
-        userList.add(newUser); //Добавляет нового пользователя в список.
-        userListAdapter.notifyItemInserted(userList.size() - 1); //Уведомляет адаптер о добавлении нового пользователя.
+        userList.add(newUser);
+        userListAdapter.notifyItemInserted(userList.size() - 1);
         saveUsers(); //Сохраняет обновленный список пользователей.
 
         //Очищает поля ввода.
@@ -444,17 +444,17 @@ public class UserManagementActivity extends AppCompatActivity implements UserLis
         edtNewUserEmail.setText("");
         edtNewUserAdditional.setText("");
 
-        Toast.makeText(this, "Пользователь успешно добавлен!", Toast.LENGTH_SHORT).show(); //Сообщает о успешном добавлении пользователя.
+        Toast.makeText(this, "Пользователь успешно добавлен!", Toast.LENGTH_SHORT).show();
     }
 
     private void loadUsers() { //Метод для загрузки пользователей из SharedPreferences.
-        SharedPreferences prefs = getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE); //Получает SharedPreferences.
-        String jsonUsers = prefs.getString(USER_LIST_KEY, null); //Получает строку JSON со списком пользователей.
+        SharedPreferences prefs = getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+        String jsonUsers = prefs.getString(USER_LIST_KEY, null);
 
         if (jsonUsers != null) { //Если данные пользователей существуют...
-            Type type = new TypeToken<ArrayList<User>>() {}.getType(); //Определяет тип для десериализации списка пользователей.
-            userList = gson.fromJson(jsonUsers, type); //Преобразует JSON-строку в список пользователей.
-            if (userList == null) { //Если результат null, инициализирует пустой список.
+            Type type = new TypeToken<ArrayList<User>>() {}.getType();
+            userList = gson.fromJson(jsonUsers, type);
+            if (userList == null) {
                 userList = new ArrayList<>();
             }
         } else {
@@ -463,16 +463,16 @@ public class UserManagementActivity extends AppCompatActivity implements UserLis
     }
 
     private void saveUsers() { //Метод для сохранения пользователей в SharedPreferences.
-        SharedPreferences prefs = getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE); //Получает SharedPreferences.
-        SharedPreferences.Editor editor = prefs.edit(); //Получает редактор для изменения SharedPreferences.
-        String jsonUsers = gson.toJson(userList); //Преобразует список пользователей в JSON-строку.
-        editor.putString(USER_LIST_KEY, jsonUsers); //Сохраняет JSON-строку в SharedPreferences.
-        editor.apply(); //Применяет изменения.
+        SharedPreferences prefs = getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+        String jsonUsers = gson.toJson(userList);
+        editor.putString(USER_LIST_KEY, jsonUsers);
+        editor.apply();
     }
 
     @Override
     public void onEditUser(int position) { //Метод для обработки редактирования пользователя.
-        User user = userList.get(position); //Получает пользователя по позиции.
+        User user = userList.get(position);
 
         //Устанавливает данные пользователя в соответствующие поля ввода.
         edtNewUserFirstName.setText(user.getFirstName());
@@ -486,10 +486,10 @@ public class UserManagementActivity extends AppCompatActivity implements UserLis
 
     @Override
     public void onDeleteUser(int position) { //Метод для обработки удаления пользователя.
-        userList.remove(position); //Удаляет пользователя из списка.
-        userListAdapter.notifyItemRemoved(position); //Уведомляет адаптер о удалении.
-        saveUsers(); //Сохраняет обновленный список пользователей.
-        Toast.makeText(this, "Пользователь удален!", Toast.LENGTH_SHORT).show(); //Сообщает о успешном удалении.
+        userList.remove(position);
+        userListAdapter.notifyItemRemoved(position);
+        saveUsers();
+        Toast.makeText(this, "Пользователь удален!", Toast.LENGTH_SHORT).show();
     }
 
     @Override

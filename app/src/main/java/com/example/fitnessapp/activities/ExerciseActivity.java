@@ -237,8 +237,8 @@ public class ExerciseActivity extends AppCompatActivity {
         View decorView = getWindow().getDecorView(); //Получаем DecorView окна
 
         //Устанавливаем флаги для скрытия навигационной панели и перевода приложения в полноэкранный режим
-        int uiOptions = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION //Флаг для скрытия навигационной панели
-                | View.SYSTEM_UI_FLAG_FULLSCREEN; //Флаг для перевода приложения в полноэкранный режим
+        int uiOptions = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                | View.SYSTEM_UI_FLAG_FULLSCREEN;
 
         //Применяем указанные UI опции к DecorView
         decorView.setSystemUiVisibility(uiOptions);
@@ -301,7 +301,6 @@ public class ExerciseActivity extends AppCompatActivity {
             //Устанавливаем начальное время
             timePicker.setHour(0);
             timePicker.setMinute(30);
-            //К сожалению, стандартный TimePicker не имеет setSecond, но покажет 3 колонки
 
             //Слушатель изменений TimePicker
             timePicker.setOnTimeChangedListener((view, hourOfDay, minute) -> updateTimeFromTimePicker());
@@ -468,7 +467,7 @@ public class ExerciseActivity extends AppCompatActivity {
         numberPickerSeconds.setOnValueChangedListener(valueChangeListener);
     }
 
-    //МЕТОД ДЛЯ ОБНОВЛЕНИЯ ВРЕМЕНИ ИЗ NUMBERPICKERS (ДОБАВЛЕНО)
+    //МЕТОД ДЛЯ ОБНОВЛЕНИЯ ВРЕМЕНИ ИЗ NUMBERPICKERS
     private void updateTimeFromNumberPickers() {
         int hours = numberPickerHours.getValue();
         int minutes = numberPickerMinutes.getValue();
@@ -482,7 +481,7 @@ public class ExerciseActivity extends AppCompatActivity {
         saveTimerStateToPreferences();
     }
 
-    //МЕТОДЫ ДЛЯ МОТИВАЦИОННОГО ОКНА (ДОБАВЛЕНО)
+    //МЕТОДЫ ДЛЯ МОТИВАЦИОННОГО ОКНА
     /**
      * ПОКАЗ МОТИВАЦИОННОГО ОКНА
      * -------------------------
@@ -513,13 +512,13 @@ public class ExerciseActivity extends AppCompatActivity {
      */
     private void hideMotivationWindow() {
         //АНИМАЦИЯ ИСЧЕЗНОВЕНИЯ ОКНА: уменьшение масштаба + прозрачность
-        ObjectAnimator scaleX = ObjectAnimator.ofFloat(motivationLayout, "scaleX", 1f, 0f); // Уменьшение по X до 0
-        ObjectAnimator scaleY = ObjectAnimator.ofFloat(motivationLayout, "scaleY", 1f, 0f); // Уменьшение по Y до 0
-        ObjectAnimator alpha = ObjectAnimator.ofFloat(motivationLayout, "alpha", 1f, 0f);   // Плавное исчезновение
+        ObjectAnimator scaleX = ObjectAnimator.ofFloat(motivationLayout, "scaleX", 1f, 0f);
+        ObjectAnimator scaleY = ObjectAnimator.ofFloat(motivationLayout, "scaleY", 1f, 0f);
+        ObjectAnimator alpha = ObjectAnimator.ofFloat(motivationLayout, "alpha", 1f, 0f);
 
         AnimatorSet animatorSet = new AnimatorSet();
         animatorSet.playTogether(scaleX, scaleY, alpha);
-        animatorSet.setDuration(400); // Длительность анимации: 400ms (быстрее чем появление)
+        animatorSet.setDuration(400); // Длительность анимации: 400ms
         animatorSet.start();
 
         //СЛУШАТЕЛЬ ЗАВЕРШЕНИЯ АНИМАЦИИ: скрываем окно после завершения анимации
@@ -539,13 +538,13 @@ public class ExerciseActivity extends AppCompatActivity {
      */
     private void animateStar() {
         //КОМБИНИРОВАННАЯ АНИМАЦИЯ ЗВЕЗДЫ:
-        ObjectAnimator rotation = ObjectAnimator.ofFloat(starImageView, "rotation", 0f, 360f);      // Полное вращение на 360 градусов
-        ObjectAnimator scaleX = ObjectAnimator.ofFloat(starImageView, "scaleX", 0f, 1.2f, 1f);      // Масштабирование по X с "перескакиванием"
-        ObjectAnimator scaleY = ObjectAnimator.ofFloat(starImageView, "scaleY", 0f, 1.2f, 1f);      // Масштабирование по Y с "перескакиванием"
+        ObjectAnimator rotation = ObjectAnimator.ofFloat(starImageView, "rotation", 0f, 360f);
+        ObjectAnimator scaleX = ObjectAnimator.ofFloat(starImageView, "scaleX", 0f, 1.2f, 1f);
+        ObjectAnimator scaleY = ObjectAnimator.ofFloat(starImageView, "scaleY", 0f, 1.2f, 1f);
 
         AnimatorSet starAnimator = new AnimatorSet();
-        starAnimator.playTogether(rotation, scaleX, scaleY); //Все анимации запускаются одновременно
-        starAnimator.setDuration(800); //Длительность анимации: 800ms
+        starAnimator.playTogether(rotation, scaleX, scaleY);
+        starAnimator.setDuration(800);
         starAnimator.start();
     }
 
@@ -651,8 +650,8 @@ public class ExerciseActivity extends AppCompatActivity {
     // ИСПРАВЛЕННЫЙ МЕТОД ДЛЯ ПЕРЕРЫВА
     private void startBreakTimer() {
         int breakDuration = 300; //Устанавливает продолжительность перерыва в секундах.
-        seconds = breakDuration; //Инициализирует переменную seconds с длительностью перерыва.
-        setTimer(breakDuration); //Устанавливает текст таймера на значение продолжительности перерыва.
+        seconds = breakDuration;
+        setTimer(breakDuration);
 
         //Создает новый CountDownTimer для обратного отсчета перерыва.
         countDownTimer = new CountDownTimer(breakDuration * 1000, 1000) {
@@ -667,8 +666,6 @@ public class ExerciseActivity extends AppCompatActivity {
                 isExerciseCompleted = true; //Упражнение завершено полностью
                 setTimer(0);
                 showMotivationWindow();
-
-                //УБРАТЬ отсюда сохранение звезды: saveStarToStats();
 
                 Toast.makeText(ExerciseActivity.this, "Перерыв завершен!", Toast.LENGTH_SHORT).show();
 
@@ -728,7 +725,7 @@ public class ExerciseActivity extends AppCompatActivity {
             seconds = initialSeconds;
             remainingSeconds = 0;
             starAlreadySaved = false; // Сбрасываем флаг сохранения звезды
-            // ДОБАВЛЕНО: Очищаем сохраненное состояние при полном сбросе
+
             clearTimerStateFromPreferences();
         } else {
             //Иначе продолжаем с оставшегося времени

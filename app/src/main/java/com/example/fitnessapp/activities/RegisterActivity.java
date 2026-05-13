@@ -332,35 +332,30 @@ public class RegisterActivity extends AppCompatActivity {
 
     //ОБЪЯВЛЕНИЕ ПЕРЕМЕННЫХ (UI компоненты)
 
-    private EditText emailEditText;           //Поле для ввода Email
-    private TextInputEditText phoneEditText;           //Поле для ввода Телефона
-    private EditText passwordEditText;        //Поле для ввода Пароля
-    private EditText passwordConfirmEditText; //Поле для подтверждения пароля
-    private Button registerButton;            //Кнопка "Зарегистрироваться"
-    private TextView loginTextView;           //Текст "Уже есть аккаунт? Войти"
+    private EditText emailEditText;
+    private TextInputEditText phoneEditText;
+    private EditText passwordEditText;
+    private EditText passwordConfirmEditText;
+    private Button registerButton;
+    private TextView loginTextView;
 
     //ОБЪЯВЛЕНИЕ ПЕРЕМЕННЫХ (Firebase)
 
-    private FirebaseAuth firebaseAuth;        //Объект для аутентификации пользователей
-    private DatabaseReference databaseReference; //Ссылка на базу данных (Realtime Database)
+    private FirebaseAuth firebaseAuth;
+    private DatabaseReference databaseReference;
 
-    //МЕТОД onCreate() - ВЫЗЫВАЕТСЯ ПРИ СОЗДАНИИ АКТИВНОСТИ
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);  //Обязательный вызов родительского метода
-
-        //Устанавливаем XML-макет для этой активности
+        super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
         FirebaseAuth.getInstance().getFirebaseAuthSettings().forceRecaptchaFlowForTesting(true);
 
-        //ИНИЦИАЛИЗАЦИЯ FIREBASE
 
         //Получаем экземпляр FirebaseAuth (один на всё приложение)
         firebaseAuth = FirebaseAuth.getInstance();
 
         //Получаем ссылку на узел "Users" в Realtime Database
-        //Все пользователи будут храниться внутри этого узла
         databaseReference = FirebaseDatabase.getInstance().getReference("Users");
 
         //НАСТРОЙКА ПОЛНОЭКРАННОГО РЕЖИМА
@@ -378,17 +373,14 @@ public class RegisterActivity extends AppCompatActivity {
         //ПРИВЯЗКА UI КОМПОНЕНТОВ (СВЯЗЫВАЕМ JAVA КОД С XML)
 
         //findViewById() - находит элемент по ID из XML и возвращает его как Java-объект
-        emailEditText = findViewById(R.id.emailEdt);              //Поле Email
-        phoneEditText = findViewById(R.id.phoneEdt);            //Поле Телефон
-        passwordEditText = findViewById(R.id.passEdt);           //Поле Пароль
-        passwordConfirmEditText = findViewById(R.id.passConfirm); //Поле Подтверждение пароля
-        registerButton = findViewById(R.id.signupBtn);           //Кнопка регистрации
-        loginTextView = findViewById(R.id.textView4);            //Текст для перехода на вход
+        emailEditText = findViewById(R.id.emailEdt);
+        phoneEditText = findViewById(R.id.phoneEdt);
+        passwordEditText = findViewById(R.id.passEdt);
+        passwordConfirmEditText = findViewById(R.id.passConfirm);
+        registerButton = findViewById(R.id.signupBtn);
+        loginTextView = findViewById(R.id.textView4);
 
         //НАСТРОЙКА ОБРАБОТЧИКОВ СОБЫТИЙ
-
-        //setOnClickListener() - устанавливаем действие при нажатии на кнопку
-        //v -> {} - это лямбда-выражение (короткая запись обработчика)
         registerButton.setOnClickListener(v -> registerUser());
 
         // При нажатии на текст "Войти" переходим на экран входа
@@ -406,10 +398,10 @@ public class RegisterActivity extends AppCompatActivity {
         //toString() - преобразует в строку
         //trim() - удаляет пробелы в начале и конце
 
-        String email = emailEditText.getText().toString().trim();       //Email
-        String phone = phoneEditText.getText().toString().trim();       //Телефон
-        String password = passwordEditText.getText().toString().trim(); //Пароль
-        String passwordConfirm = passwordConfirmEditText.getText().toString().trim(); //Подтверждение
+        String email = emailEditText.getText().toString().trim();
+        String phone = phoneEditText.getText().toString().trim();
+        String password = passwordEditText.getText().toString().trim();
+        String passwordConfirm = passwordConfirmEditText.getText().toString().trim();
 
         //ВАЛИДАЦИЯ EMAIL
         //TextUtils.isEmpty() - проверяет, пустая ли строка
@@ -532,17 +524,14 @@ public class RegisterActivity extends AppCompatActivity {
         userData.put("photoUrl", "");
 
         databaseReference.child(userId).setValue(userData)
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        if (task.isSuccessful()) {
-                            Toast.makeText(RegisterActivity.this, "Регистрация успешна!", Toast.LENGTH_SHORT).show();
-                            Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
-                            startActivity(intent);
-                            finish();
-                        } else {
-                            Toast.makeText(RegisterActivity.this, "Ошибка сохранения данных", Toast.LENGTH_SHORT).show();
-                        }
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        Toast.makeText(RegisterActivity.this, "Регистрация успешна!", Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
+                        startActivity(intent);
+                        finish();
+                    } else {
+                        Toast.makeText(RegisterActivity.this, "Ошибка сохранения данных", Toast.LENGTH_SHORT).show();
                     }
                 });
     }
