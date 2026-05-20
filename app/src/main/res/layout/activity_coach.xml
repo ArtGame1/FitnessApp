@@ -32,9 +32,9 @@
                 android:id="@+id/tvWelcome"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Добро пожаловать, Тренер!"
+                android:text="Добро пожаловать, Преподаватель!"
                 android:textColor="#FFFFFF"
-                android:textSize="20sp"
+                android:textSize="16sp"
                 android:textStyle="bold" />
 
             <TextView
