@@ -339,6 +339,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.InputType;
 import android.text.TextUtils;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioButton;
@@ -392,6 +393,16 @@ public class LoginActivity extends AppCompatActivity {
         loginTypeGroup = findViewById(R.id.loginTypeGroup);
         radioEmail = findViewById(R.id.radioEmail);
         radioPhone = findViewById(R.id.radioPhone);
+
+        //Получаем корневое представление окна и скрываем системные панели
+//        getWindow().getDecorView().setSystemUiVisibility(
+//                // SYSTEM_UI_FLAG_FULLSCREEN - скрывает статус-бар (часы, батарея)
+//                View.SYSTEM_UI_FLAG_FULLSCREEN |
+//                        // SYSTEM_UI_FLAG_HIDE_NAVIGATION - скрывает навигационные кнопки (Назад, Домой)
+//                        View.SYSTEM_UI_FLAG_HIDE_NAVIGATION |
+//                        // SYSTEM_UI_FLAG_LAYOUT_STABLE - стабилизирует макет при скрытии панелей
+//                        View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+//        );
 
         //Настройка переключателя
         loginTypeGroup.setOnCheckedChangeListener((group, checkedId) -> {
