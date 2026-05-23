@@ -340,6 +340,7 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
@@ -358,6 +359,18 @@ import com.example.fitnessapp.admin.AdminRegisterDialog;
 import com.example.fitnessapp.utils.NotificationHelper;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
+
+import android.widget.TextView;
+import com.bumptech.glide.Glide;
+import de.hdodenhof.circleimageview.CircleImageView;
+
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -408,6 +421,8 @@ public class MainActivity extends AppCompatActivity {
     private NotificationManager notificationManager;
     private static final String CHANNEL_ID = "fitness_app_channel";
     private static final int NOTIFICATION_ID = 1;
+
+    private FirebaseAuth firebaseAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -540,6 +555,82 @@ public class MainActivity extends AppCompatActivity {
         } else {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         }
+
+        //Инициализация Firebase Auth
+        firebaseAuth = FirebaseAuth.getInstance();
+
+        //Загрузка данных пользователя в заголовок меню
+        loadUserData();
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            getWindow().setStatusBarColor(getColor(android.R.color.holo_blue_light));
+        }
+    }
+
+    //Загрузка данных пользователя из Firebase
+    private void loadUserData() {
+        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+
+        if (currentUser != null) {
+            String userId = currentUser.getUid();
+            String email = currentUser.getEmail();
+
+            //Получаем заголовок меню
+            View headerView = navigationView.getHeaderView(0);
+            TextView userName = headerView.findViewById(R.id.nav_user_name);
+            TextView userEmail = headerView.findViewById(R.id.nav_user_email);
+            CircleImageView userAvatar = headerView.findViewById(R.id.nav_avatar);
+
+            //Устанавливаем email
+            if (userEmail != null && email != null) {
+                userEmail.setText(email);
+            }
+
+            //Загружаем данные из Realtime Database
+            DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("Users").child(userId);
+            userRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    if (snapshot.exists()) {
+                        // Загружаем имя
+                        String name = snapshot.child("name").getValue(String.class);
+                        if (userName != null) {
+                            if (name != null && !name.isEmpty()) {
+                                userName.setText(name);
+                            } else if (email != null) {
+                                userName.setText(email.split("@")[0]);
+                            }
+                        }
+
+                        // Загружаем аватар
+                        String photoUrl = snapshot.child("photoUrl").getValue(String.class);
+                        if (photoUrl != null && !photoUrl.isEmpty() && userAvatar != null) {
+                            Glide.with(MainActivity.this)
+                                    .load(photoUrl)
+                                    .circleCrop()
+                                    .placeholder(R.drawable.profile)
+                                    .error(R.drawable.profile)
+                                    .into(userAvatar);
+                        }
+                    } else {
+                        //Если нет данных в БД, показываем часть email
+                        if (userName != null && email != null) {
+                            userName.setText(email.split("@")[0]);
+                        }
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+                    Log.e("MainActivity", "Ошибка загрузки: " + error.getMessage());
+                }
+            });
+        }
+    }
+
+    //Получение экземпляра FirebaseAuth
+    private FirebaseAuth getFirebaseAuth() {
+        return FirebaseAuth.getInstance();
     }
 
     /**
@@ -1017,7 +1108,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        applyDynamicColors();
+        //applyDynamicColors();
         updateNightModeIcon();
+        loadUserData();
     }
 }

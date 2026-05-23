@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="180dp"
+    android:layout_height="wrap_content"
     android:background="@color/white"
     android:orientation="vertical"
     android:padding="16dp"
-    android:gravity="bottom">
+    android:gravity="center">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -13,12 +13,11 @@
         android:orientation="horizontal"
         android:gravity="center_vertical">
 
-        <ImageView
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/nav_avatar"
             android:layout_width="60dp"
             android:layout_height="60dp"
-            android:src="@drawable/ic_person"
-            android:background="@drawable/circle_background"
-            android:padding="12dp"
+            android:src="@drawable/baseline_account_circle_24"
             android:layout_marginEnd="16dp"/>
 
         <LinearLayout
@@ -28,20 +27,21 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/profile_name"
+                android:id="@+id/nav_user_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Артур Бутырев"
+                android:text="Загрузка..."
                 android:textColor="@color/black"
                 android:textSize="18sp"
                 android:textStyle="bold"/>
 
             <TextView
+                android:id="@+id/nav_user_email"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="+7 123 456 78 90"
+                android:text=""
                 android:textColor="@color/gray"
-                android:textSize="14sp"
+                android:textSize="12sp"
                 android:layout_marginTop="4dp"/>
 
         </LinearLayout>

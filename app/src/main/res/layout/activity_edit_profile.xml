@@ -18,8 +18,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Редактирование профиля"
+            android:layout_gravity="center"
             android:textSize="24sp"
             android:textStyle="bold"
+            android:textColor="@color/black"
             android:layout_marginBottom="24dp"/>
 
         <!-- Аватар -->
@@ -34,72 +36,103 @@
                 android:id="@+id/iv_avatar"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
-                android:src="@drawable/profile"
+                android:src="@drawable/baseline_account_circle_24"
                 android:elevation="4dp"/>
 
-            <Button
+            <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btn_change_avatar"
                 android:layout_width="wrap_content"
-                android:layout_height="32dp"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
                 android:text="Сменить фото"
-                android:textSize="12sp"
-                android:layout_marginTop="8dp"
-                android:backgroundTint="#4CAF50"/>
+                android:textSize="16sp"
+                android:textAllCaps="false"
+                android:fontFamily="sans-serif-medium"
+                android:textColor="@color/white"
+                android:background="@drawable/red_button_background"
+                android:layout_marginTop="12dp"/>
         </LinearLayout>
 
         <!-- Имя -->
-        <EditText
-            android:id="@+id/etName"
+        <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Ваше имя"
-            android:padding="12dp"
             android:layout_marginBottom="12dp"
-            android:background="@android:drawable/editbox_background"/>
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+
+            <EditText
+                android:id="@+id/etName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Ваше имя"
+                android:padding="12dp"
+                android:inputType="textPersonName"/>
+        </com.google.android.material.textfield.TextInputLayout>
 
         <!-- Никнейм -->
-        <EditText
-            android:id="@+id/etNickname"
+        <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Никнейм (например, @john)"
-            android:padding="12dp"
             android:layout_marginBottom="12dp"
-            android:background="@android:drawable/editbox_background"/>
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+
+            <EditText
+                android:id="@+id/etNickname"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Никнейм (например, @john)"
+                android:padding="12dp"
+                android:inputType="textPersonName"/>
+        </com.google.android.material.textfield.TextInputLayout>
 
         <!-- Телефон -->
-        <EditText
-            android:id="@+id/etPhone"
+        <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Номер телефона"
-            android:padding="12dp"
             android:layout_marginBottom="12dp"
-            android:background="@android:drawable/editbox_background"
-            android:inputType="phone"/>
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+
+            <EditText
+                android:id="@+id/etPhone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Номер телефона"
+                android:padding="12dp"
+                android:inputType="phone"/>
+        </com.google.android.material.textfield.TextInputLayout>
 
         <!-- Дата рождения -->
-        <EditText
-            android:id="@+id/etBirthDate"
+        <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Дата рождения (ДД.ММ.ГГГГ)"
-            android:padding="12dp"
             android:layout_marginBottom="12dp"
-            android:background="@android:drawable/editbox_background"
-            android:inputType="date"/>
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+
+            <EditText
+                android:id="@+id/etBirthDate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Дата рождения (ДД.ММ.ГГГГ)"
+                android:padding="12dp"
+                android:inputType="date"/>
+        </com.google.android.material.textfield.TextInputLayout>
 
         <!-- О себе -->
-        <EditText
-            android:id="@+id/etBio"
+        <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
-            android:layout_height="120dp"
-            android:hint="О себе"
-            android:padding="12dp"
+            android:layout_height="wrap_content"
             android:layout_marginBottom="24dp"
-            android:background="@android:drawable/editbox_background"
-            android:gravity="top"
-            android:inputType="textMultiLine"/>
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+
+            <EditText
+                android:id="@+id/etBio"
+                android:layout_width="match_parent"
+                android:layout_height="120dp"
+                android:hint="О себе"
+                android:padding="12dp"
+                android:gravity="top"
+                android:inputType="textMultiLine"/>
+        </com.google.android.material.textfield.TextInputLayout>
 
         <!-- Кнопка Сохранить -->
         <androidx.appcompat.widget.AppCompatButton
@@ -108,7 +141,7 @@
             android:layout_height="56dp"
             android:text="Сохранить"
             android:textColor="@color/white"
-            android:textSize="18sp"
+            android:textSize="16sp"
             android:textAllCaps="false"
             android:fontFamily="sans-serif-medium"
             android:background="@drawable/red_button_background"/>

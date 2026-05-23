@@ -298,6 +298,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.AppCompatButton;
 
 import com.example.fitnessapp.R;
 import com.example.fitnessapp.models.User;
@@ -317,7 +318,7 @@ public class ProfileActivity extends AppCompatActivity {
     private TextView exitView;
     private EditText nameEdtText, surnameEdtText, emailEdtText;
     private String name, surname, email;
-    private Button saveBtn;
+    private AppCompatButton saveBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

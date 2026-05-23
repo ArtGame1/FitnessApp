@@ -11,9 +11,9 @@
         android:orientation="vertical">
 
         <RelativeLayout
-            android:background="@color/menuColor"
+            android:background="@android:color/holo_blue_light"
             android:layout_width="match_parent"
-            android:layout_height="55dp">
+            android:layout_height="?attr/actionBarSize">
             <ImageView
                 android:id="@+id/btnBackArrowWorkout"
                 android:src="@drawable/ic_arrow_back"
@@ -26,7 +26,7 @@
             <TextView
                 android:id="@+id/textViewDayOfExercise"
                 android:text="Программа тренировок"
-                android:textColor="@color/black"
+                android:textColor="@color/white"
                 android:textSize="22sp"
                 android:layout_centerInParent="true"
                 android:textAlignment="center"
@@ -39,7 +39,8 @@
                 android:layout_width="60dp"
                 android:layout_height="60dp"
                 android:layout_alignParentEnd="true"
-                android:padding="12dp"/>
+                android:padding="12dp"
+                app:tint="@color/white" />
         </RelativeLayout>
 
         <!-- Карточка 1 - Running -->

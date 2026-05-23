@@ -336,6 +336,7 @@ package com.example.fitnessapp.activities;
 
 //Импорт библиотек
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.InputType;
 import android.text.TextUtils;
@@ -426,6 +427,11 @@ public class LoginActivity extends AppCompatActivity {
         signUp.setOnClickListener(v -> {
             startActivity(new Intent(LoginActivity.this, RegisterActivity.class));
         });
+
+        //Установка цвета статус-бара (верхней строки с часами, батареей, сигналом)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            getWindow().setStatusBarColor(getColor(android.R.color.black));
+        }
     }
 
     private void loginUser() {

@@ -167,9 +167,9 @@
     <!-- Верхняя панель поверх всего -->
     <RelativeLayout
         android:id="@+id/topBar"
-        android:background="@color/menuColor"
+        android:background="@android:color/holo_blue_light"
         android:layout_width="match_parent"
-        android:layout_height="60dp"
+        android:layout_height="?attr/actionBarSize"
         android:layout_alignParentTop="true">
 
         <ImageView
@@ -185,7 +185,7 @@
         <TextView
             android:id="@+id/textViewDayOfExercise"
             android:text="День 0"
-            android:textColor="@color/black"
+            android:textColor="@color/white"
             android:textSize="26sp"
             android:layout_centerInParent="true"
             android:layout_width="wrap_content"

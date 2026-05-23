@@ -35,6 +35,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Сохранить"
+                android:textColor="@color/white"
+                android:textAllCaps="false"
                 android:background="@drawable/red_button_background"
                 android:layout_marginTop="8dp"
                 android:layout_marginBottom="24dp"/>
@@ -52,6 +54,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Сохранить"
+                android:textColor="@color/white"
+                android:textAllCaps="false"
                 android:background="@drawable/red_button_background"
                 android:layout_marginTop="8dp"
                 android:layout_marginBottom="24dp"/>
@@ -70,6 +74,8 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/red_button_background"
                 android:text="Сохранить"
+                android:textColor="@color/white"
+                android:textAllCaps="false"
                 android:layout_marginTop="8dp"/>
         </LinearLayout>
     </ScrollView>

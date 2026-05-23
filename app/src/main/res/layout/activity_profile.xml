@@ -171,19 +171,20 @@
         android:layout_marginLeft="15dp"
         android:layout_marginRight="15dp"/>
 
-    <Button
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/saveBtn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginTop="20dp"
+        android:padding="12dp"
         android:text="Сохранить"
-        android:textAllCaps="true"
-        android:textColor="@android:color/white"
-        android:backgroundTint="#F75564"
-        android:padding="10dp"
-        android:textSize="15sp"
-        android:fontFamily="sans-serif-medium"
-        android:layout_gravity="center"
-        android:layout_marginTop="20dp"/>
+        android:background="@drawable/red_button_background"
+        android:textColor="@color/white"
+        android:textSize="18sp"
+        android:textAllCaps="false"
+        android:fontFamily="sans-serif-medium"/>
 
     <LinearLayout
         android:layout_width="match_parent"

@@ -363,6 +363,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.AppCompatButton;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -383,7 +384,7 @@ public class UserManagementActivity extends AppCompatActivity implements UserLis
     private EditText edtNewUserLastName;
     private EditText edtNewUserEmail;
     private EditText edtNewUserAdditional;
-    private Button btnAddUser;
+    private AppCompatButton btnAddUser;
     private RecyclerView recyclerViewUsers;
     private UserListAdapter userListAdapter;
 

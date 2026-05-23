@@ -102,7 +102,7 @@ public class AccountActivity extends AppCompatActivity {
 
     private Button btn_back_to_main_page;
     private Button btnEditProfile;      //кнопка "Редактировать профиль"
-    private Button btnSettings;          //Кнопка "Настройки учетной записи"
+    private Button btnSettings;         //Кнопка "Настройки учетной записи"
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -144,7 +144,7 @@ public class AccountActivity extends AppCompatActivity {
 
             TextView userName = findViewById(R.id.textView);
             TextView userEmail = findViewById(R.id.textView2);
-            ImageView userAvatar = findViewById(R.id.imageView2);  // ← ВАЖНО: такой ID есть в твоём XML
+            ImageView userAvatar = findViewById(R.id.imageView2);
 
             if (userEmail != null) {
                 userEmail.setText(email);

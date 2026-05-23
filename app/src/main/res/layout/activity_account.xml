@@ -33,13 +33,15 @@
                 <!-- Аватар -->
                 <ImageView
                     android:id="@+id/imageView2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="120dp"
+                    android:layout_height="120dp"
+                    android:scaleType="centerCrop"
+                    app:circleCrop="true"
                     app:layout_constraintBottom_toBottomOf="@id/imageView"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="@id/imageView"
                     app:layout_constraintTop_toBottomOf="@id/imageView"
-                    app:srcCompat="@drawable/profile"/>
+                    app:srcCompat="@drawable/baseline_account_circle_24"/>
 
                 <!-- Имя пользователя (загружается из Firebase) -->
                 <TextView

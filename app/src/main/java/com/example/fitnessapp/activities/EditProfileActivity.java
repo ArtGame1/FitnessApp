@@ -10,6 +10,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.AppCompatButton;
 
 import com.example.fitnessapp.R;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -30,7 +31,7 @@ public class EditProfileActivity extends AppCompatActivity {
     private EditText etName, etNickname, etPhone, etBirthDate, etBio;
     private Button btnSave;
     private ImageView ivAvatar;
-    private Button btnChangeAvatar;
+    private AppCompatButton btnChangeAvatar;
     private DatabaseReference databaseReference;
     private StorageReference storageReference;
     private String userId;

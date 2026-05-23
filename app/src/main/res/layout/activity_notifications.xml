@@ -11,13 +11,13 @@
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="@color/menuColor"
+        android:background="@android:color/holo_blue_light"
         android:theme="?attr/actionBarTheme"
         android:elevation="4dp">
 
         <!-- LinearLayout для размещения стрелки и заголовка -->
         <RelativeLayout
-            android:background="@color/menuColor"
+            android:background="@android:color/holo_blue_light"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
