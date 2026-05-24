@@ -9,7 +9,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:592797163926:android:07b79db1ae6f96ae3dfdb7",
         "android_client_info": {
-          "package_name": "com.example.fitnessapp"
+          "package_name": "ru.imsit.fitnessapp"
         }
       },
       "oauth_client": [
@@ -17,7 +17,7 @@
           "client_id": "592797163926-epuh88ip7svkungijmdsbqa2s6ac2vrf.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.example.fitnessapp",
+            "package_name": "ru.imsit.fitnessapp",
             "certificate_hash": "dabc100c4e24503fe633f2348377821939c915a6"
           }
         },

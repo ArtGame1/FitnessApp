@@ -519,7 +519,7 @@ public class MainActivity extends AppCompatActivity {
                                 "• Отслеживать прогресс\n" +
                                 "• Достигать спортивных целей")
                         .setPositiveButton("OK", (dialog, which) -> dialog.dismiss())
-                        .setIcon(R.mipmap.ic_fitness) //Иконка приложения
+                        .setIcon(R.mipmap.ic_fitness1) //Иконка приложения
                         .show();
                 return true; //Возвращаем true, но не запускаем новую активность
             }
@@ -766,7 +766,7 @@ public class MainActivity extends AppCompatActivity {
                                 "• Отслеживать прогресс\n" +
                                 "• Достигать спортивных целей")
                         .setPositiveButton("OK", (dialog, which) -> dialog.dismiss())
-                        .setIcon(R.mipmap.ic_fitness) //Иконка приложения
+                        .setIcon(R.mipmap.ic_fitness1) //Иконка приложения
                         .show();
                 return true; //Возвращаем true, но не запускаем новую активность
             } /*else if (id == R.id.nav_achievements) {
