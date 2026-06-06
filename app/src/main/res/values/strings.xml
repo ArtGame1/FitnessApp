@@ -1,17 +1,17 @@
 <resources>
-    <string name="app_name">Study &amp; Fit</string>
-    <string name="welcome_fit">Добро пожаловать в Study &amp; Fit!</string>
+    <string name="app_name">Движение 24/7</string>
+    <string name="welcome_fit">Добро пожаловать в Движение 24/7!</string>
     <string name="username">Имя пользователя</string>
     <string name="password">Пароль</string>
     <string name="login">Войти</string>
     <string name="register">Регистрация</string>
-    <string name="app">и фитнес</string>
+    <string name="app">24/7</string>
     <string name="login1">Логин</string>
     <string name="forget_pass">Забыли пароль?</string>
     <string name="pass">Пароль</string>
     <string name="email">Email почта</string>
     <string name="or">OR</string>
-    <string name="fitness">Учёба</string>
+    <string name="fitness">Движение</string>
     <string name="sign_up">Зарегистрироваться</string>
     <string name="you_aren_t_a_user">Вы не пользователь?</string>
     <string name="log">Войти</string>
