@@ -11,7 +11,7 @@ android {
         applicationId = "ru.imsit.fitnessapp"
         minSdk = 24
         targetSdk = 35
-        versionCode = 2
+        versionCode = 7
         versionName = "1.1"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
