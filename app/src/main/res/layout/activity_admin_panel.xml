@@ -3,45 +3,57 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="16dp"
-    android:background="#f5f5f5">
+    android:background="#F5F5F5">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:padding="16dp">
 
-        <!-- Заголовок -->
-        <TextView
+        <!-- ЗАГОЛОВОК -->
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Фитнес Админ Панель"
-            android:textSize="24sp"
-            android:textStyle="bold"
-            android:textColor="#333333"
-            android:gravity="center"
-            android:layout_marginBottom="24dp"
-            android:padding="12dp"
-            android:background="@android:color/white"
-            android:elevation="4dp" />
+            android:orientation="horizontal"
+            android:background="#E53935"
+            android:padding="16dp"
+            android:layout_marginBottom="16dp">
 
-        <!-- Раздел Dashboard -->
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="🏋️ Админ панель"
+                android:textSize="22sp"
+                android:textStyle="bold"
+                android:textColor="@android:color/white" />
+
+            <Button
+                android:id="@+id/btnLogout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Выход"
+                android:backgroundTint="@color/red"
+                android:textColor="@android:color/white" />
+        </LinearLayout>
+
+        <!-- 1. СТАТИСТИКА -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:background="@android:color/white"
             android:padding="16dp"
-            android:layout_marginBottom="16dp"
-            android:elevation="2dp">
+            android:layout_marginBottom="12dp">
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="📊 Панель управления"
+                android:text="📊 Статистика"
                 android:textSize="18sp"
                 android:textStyle="bold"
-                android:textColor="#333333"
+                android:textColor="#333"
                 android:layout_marginBottom="12dp" />
 
             <LinearLayout
@@ -55,25 +67,25 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:orientation="vertical"
-                    android:padding="8dp"
-                    android:background="#e8f5e8"
+                    android:gravity="center"
+                    android:padding="12dp"
+                    android:background="#E8F5E9"
                     android:layout_margin="4dp">
 
                     <TextView
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Новые пользователи"
+                        android:text="👤 Всего"
                         android:textSize="12sp"
-                        android:textColor="#666666" />
+                        android:textColor="#666" />
                     <TextView
-                        android:id="@+id/tvNewUsers"
-                        android:layout_width="match_parent"
+                        android:id="@+id/tvTotalUsers"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="156"
-                        android:textSize="20sp"
+                        android:text="0"
+                        android:textSize="24sp"
                         android:textStyle="bold"
-                        android:textColor="#2e7d32" />
-
+                        android:textColor="#2E7D32" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -81,78 +93,128 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:orientation="vertical"
-                    android:padding="8dp"
-                    android:background="#e3f2fd"
+                    android:gravity="center"
+                    android:padding="12dp"
+                    android:background="#E3F2FD"
                     android:layout_margin="4dp">
 
                     <TextView
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Общая выручка"
+                        android:text="🏋️ Тренировки"
                         android:textSize="12sp"
-                        android:textColor="#666666" />
+                        android:textColor="#666" />
                     <TextView
-                        android:id="@+id/tvTotalRevenue"
-                        android:layout_width="match_parent"
+                        android:id="@+id/tvTotalWorkouts"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="₽45,230"
-                        android:textSize="20sp"
+                        android:text="0"
+                        android:textSize="24sp"
                         android:textStyle="bold"
-                        android:textColor="#1565c0" />
-
+                        android:textColor="#1565C0" />
                 </LinearLayout>
-
             </LinearLayout>
 
-            <Button
-                android:id="@+id/btnDashboard"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Подробная статистика"
-                android:layout_marginTop="8dp"
-                android:backgroundTint="@color/red"/>
-                <!--android:backgroundTint="#2196F3" -->
+                android:orientation="horizontal"
+                android:weightSum="2"
+                android:layout_marginTop="4dp">
 
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    android:padding="12dp"
+                    android:background="#FFF3E0"
+                    android:layout_margin="4dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="👨‍🏫 Тренеры"
+                        android:textSize="12sp"
+                        android:textColor="#666" />
+                    <TextView
+                        android:id="@+id/tvTotalTrainers"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="0"
+                        android:textSize="24sp"
+                        android:textStyle="bold"
+                        android:textColor="#E65100" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    android:padding="12dp"
+                    android:background="#F3E5F5"
+                    android:layout_margin="4dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="🏢 Залы"
+                        android:textSize="12sp"
+                        android:textColor="#666" />
+                    <TextView
+                        android:id="@+id/tvTotalHalls"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="0"
+                        android:textSize="24sp"
+                        android:textStyle="bold"
+                        android:textColor="#6A1B9A" />
+                </LinearLayout>
+            </LinearLayout>
         </LinearLayout>
 
-        <!-- Раздел Пользователи -->
+        <!-- 2. СПИСОК ПОЛЬЗОВАТЕЛЕЙ -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:background="@android:color/white"
             android:padding="16dp"
-            android:layout_marginBottom="16dp"
-            android:elevation="2dp">
+            android:layout_marginBottom="12dp">
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="👥 Управление пользователями"
+                android:text="👥 Пользователи"
                 android:textSize="18sp"
                 android:textStyle="bold"
-                android:textColor="#333333"
+                android:textColor="#333"
                 android:layout_marginBottom="12dp" />
 
             <EditText
-                android:id="@+id/etUserSearch"
+                android:id="@+id/etSearch"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Поиск пользователей..."
+                android:hint="🔍 Поиск..."
+                android:padding="12dp"
+                android:background="@android:drawable/editbox_background"
                 android:layout_marginBottom="8dp" />
 
             <ListView
                 android:id="@+id/lvUsers"
                 android:layout_width="match_parent"
-                android:layout_height="150dp"
-                android:background="#f8f9fa"
-                android:layout_marginBottom="8dp" />
+                android:layout_height="250dp"
+                android:background="#FAFAFA" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:weightSum="3">
+                android:weightSum="3"
+                android:layout_marginTop="8dp">
 
                 <Button
                     android:id="@+id/btnAddUser"
@@ -160,10 +222,10 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="Добавить"
-                    android:textSize="8sp"
+                    android:textSize="9sp"
                     android:backgroundTint="@color/red"
-                    android:textColor="@android:color/white" />
-                    <!-- android:backgroundTint="#4CAF50" -->
+                    android:textColor="@android:color/white"
+                    android:layout_marginEnd="2dp" />
 
                 <Button
                     android:id="@+id/btnEditUser"
@@ -171,234 +233,156 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="Изменить"
-                    android:textSize="8sp"
+                    android:textSize="9sp"
                     android:backgroundTint="@color/red"
-                    android:textColor="@android:color/white" />
-                    <!-- android:backgroundTint="#FF9800" -->
+                    android:textColor="@android:color/white"
+                    android:layout_marginStart="2dp"
+                    android:layout_marginEnd="2dp" />
 
                 <Button
-                    android:id="@+id/btnBlockUser"
+                    android:id="@+id/btnDeleteUser"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Блокировка"
-                    android:textSize="8sp"
+                    android:text="Удалить"
+                    android:textSize="9sp"
                     android:backgroundTint="@color/red"
-                    android:textColor="@android:color/white" />
-                    <!-- android:backgroundTint="#F44336" -->
-
+                    android:textColor="@android:color/white"
+                    android:layout_marginStart="2dp" />
             </LinearLayout>
-
         </LinearLayout>
 
-        <!-- Раздел Контент -->
+        <!-- 3. УПРАВЛЕНИЕ ТРЕНИРОВКАМИ -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:background="@android:color/white"
             android:padding="16dp"
-            android:layout_marginBottom="16dp"
-            android:elevation="2dp">
+            android:layout_marginBottom="12dp">
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="🎬 Управление контентом"
+                android:text="🏋️ Тренировки"
                 android:textSize="18sp"
                 android:textStyle="bold"
-                android:textColor="#333333"
+                android:textColor="#333"
                 android:layout_marginBottom="12dp" />
 
             <Button
                 android:id="@+id/btnManageWorkouts"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Тренировки и программы"
+                android:text="Все тренировки"
                 android:layout_marginBottom="8dp"
                 android:backgroundTint="@color/red"
                 android:textColor="@android:color/white" />
-                <!-- android:backgroundTint="#9C27B0" -->
 
             <Button
-                android:id="@+id/btnManageMaterials"
+                android:id="@+id/btnManageSchedule"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Видео и материалы"
+                android:text="Расписание"
                 android:layout_marginBottom="8dp"
                 android:backgroundTint="@color/red"
                 android:textColor="@android:color/white" />
-                <!-- android:backgroundTint="#9C27B0" -->
 
             <Button
-                android:id="@+id/btnManageArticles"
+                android:id="@+id/btnManageTrainers"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Статьи и новости"
+                android:text="Преподаватели"
                 android:backgroundTint="@color/red"
                 android:textColor="@android:color/white" />
-                <!-- android:backgroundTint="#9C27B0" -->
-
         </LinearLayout>
 
-        <!-- Раздел Платежи -->
+        <!-- 4. УПРАВЛЕНИЕ ЗАЛАМИ -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:background="@android:color/white"
             android:padding="16dp"
-            android:layout_marginBottom="16dp"
-            android:elevation="2dp">
+            android:layout_marginBottom="12dp">
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="💳 Платежи и подписки"
+                android:text="🏢 Залы"
                 android:textSize="18sp"
                 android:textStyle="bold"
-                android:textColor="#333333"
+                android:textColor="#333"
                 android:layout_marginBottom="12dp" />
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:weightSum="2">
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Активные подписки:"
-                    android:textSize="14sp" />
-                <TextView
-                    android:id="@+id/tvActiveSubscriptions"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="1,234"
-                    android:textSize="14sp"
-                    android:textStyle="bold"
-                    android:textColor="#2e7d32" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:weightSum="2">
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Последние транзакции:"
-                    android:textSize="14sp" />
-                <TextView
-                    android:id="@+id/tvRecentTransactions"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="45"
-                    android:textSize="14sp"
-                    android:textStyle="bold"
-                    android:textColor="#1565c0" />
-
-            </LinearLayout>
-
             <Button
-                android:id="@+id/btnManagePayments"
+                android:id="@+id/btnManageHalls"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Управление платежами"
-                android:layout_marginTop="8dp"
-                android:backgroundTint="@color/red" />
-                <!-- android:backgroundTint="#FF9800" -->
-
+                android:text="Управление залами"
+                android:backgroundTint="@color/red"
+                android:textColor="@android:color/white" />
         </LinearLayout>
 
-        <!-- Раздел Аналитика -->
+        <!-- 5. АНАЛИТИКА -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:background="@android:color/white"
             android:padding="16dp"
-            android:layout_marginBottom="16dp"
-            android:elevation="2dp">
+            android:layout_marginBottom="12dp">
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="📈 Аналитика и статистика"
+                android:text="📈 Аналитика"
                 android:textSize="18sp"
                 android:textStyle="bold"
-                android:textColor="#333333"
+                android:textColor="#333"
                 android:layout_marginBottom="12dp" />
 
             <Spinner
                 android:id="@+id/spinnerReports"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
-                android:entries="@array/report_types" />
+                android:layout_marginBottom="8dp" />
 
             <Button
                 android:id="@+id/btnGenerateReport"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Сгенерировать отчет"
-                android:backgroundTint="@color/red" />
-                <!-- android:backgroundTint="#607D8B" -->
-
+                android:text="Сформировать отчет"
+                android:backgroundTint="@color/red"
+                android:textColor="@android:color/white" />
         </LinearLayout>
 
-        <!-- Раздел Настройки -->
+        <!-- 6. НАСТРОЙКИ -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:background="@android:color/white"
             android:padding="16dp"
-            android:layout_marginBottom="16dp"
-            android:elevation="2dp">
+            android:layout_marginBottom="16dp">
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="⚙️ Настройки системы"
+                android:text="⚙️ Настройки"
                 android:textSize="18sp"
                 android:textStyle="bold"
-                android:textColor="#333333"
+                android:textColor="#333"
                 android:layout_marginBottom="12dp" />
-
-            <Switch
-                android:id="@+id/switchNotifications"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Уведомления"
-                android:checked="true" />
-
-            <Switch
-                android:id="@+id/switchAutoBackup"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Авто-бэкап"
-                android:checked="true" />
 
             <Button
                 android:id="@+id/btnSystemSettings"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Расширенные настройки"
-                android:layout_marginTop="8dp"
-                android:backgroundTint="@color/red" />
-                <!-- android:backgroundTint="#795548" -->
-
+                android:backgroundTint="@color/red"
+                android:textColor="@android:color/white" />
         </LinearLayout>
 
     </LinearLayout>
-
 </ScrollView>
